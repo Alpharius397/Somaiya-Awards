@@ -2,12 +2,14 @@
 
 ## Progress Report
 
-![Progress Bar](https://progress-bar.xyz/0/)
+![Progress Bar](https://progress-bar.xyz/35/)
 
 ++++++++Why-0-Progress++++++++
   1) No Security (Even in Production)
   2) TypeScript Rewrite
   3) Jwt Token only for password reset
+  4) backend done
+  5) cookies added
 
 #### DONE
 - [x] Model Rewrite and Optimization
@@ -15,7 +17,7 @@
 - [x] Middleware Rewrite and Correction
 - [x] Patching Security and implemented Access-Refresh JWT Token   
 - [x] AuthController and AdminController done 
-- [x] Zod added
+- [x] Zod added and updated
 - [x] Make it run actually (It's alive)
 
 #### TODO
@@ -25,6 +27,7 @@
 - [ ] Frontend Rewrite and Library Updation
 - [ ] Axios Updation and Customization
 - [ ] Full-Stack Type Safety
+      
 
 #### MAYBE
 - [ ] Use tRPC (Pros: More Type Safety, Cons: It has it's own configs and need special routing. TLDR: Route Rewrite v2)
@@ -92,8 +95,5 @@ npm run dev  # to start your backend development server
 npm start    # to start backend production server
 ```
 
-## TODO
-
-    1) 
 
 
