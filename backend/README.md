@@ -48,4 +48,4 @@ To run this project, you will need to add the following environment variables to
 **Server:** Node, Express , MYSQL  
 
 
-## NOTE: This project is filled with so many issues and bugs, i cannot believe this made through prod
+
