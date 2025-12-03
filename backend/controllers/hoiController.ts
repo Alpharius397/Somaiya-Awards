@@ -9,10 +9,12 @@ import {
     Teaching,
 } from "../models";
 
-//@desc get data of institution forms to hoi
-//@route GET /hoi/data/outstanding-institution
-//@access private
-
+/**
+ * @desc Get data of OutstandingInstitution
+ * @route /hoi/data/outstanding-institution
+ * @method GET
+ * @access Private
+ */
 export const institutionDataHandler = asyncHandler(async (req, res) => {
     const user_institution = (req as AuthRequest).user.institution;
 
@@ -31,10 +33,12 @@ export const institutionDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of research forms to hoi
-//@route GET /hoi/data/research
-//@access private
-
+/**
+ * @desc Get data of Research
+ * @route /hoi/data/research
+ * @method GET
+ * @access Private
+ */
 export const researchDataHandler = asyncHandler(async (req, res) => {
     const user_institution = (req as AuthRequest).user.institution;
 
@@ -53,10 +57,12 @@ export const researchDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of sports forms to hoi
-//@route GET /hoi/data/sports
-//@access private
-
+/**
+ * @desc Get data of Sports
+ * @route /hoi/data/sports
+ * @method GET
+ * @access Private
+ */
 export const sportsDataHandler = asyncHandler(async (req, res) => {
     const user_institution = (req as AuthRequest).user.institution;
 
@@ -75,10 +81,12 @@ export const sportsDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of teaching forms to hoi
-//@route GET /hoi/data/teaching
-//@access private
-
+/**
+ * @desc Get data of Teaching
+ * @route /hoi/data/teaching
+ * @method GET
+ * @access Private
+ */
 export const teachingDataHandler = asyncHandler(async (req, res) => {
     const user_institution = (req as AuthRequest).user.institution;
 
@@ -97,10 +105,12 @@ export const teachingDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of non-teaching forms to hoi
-//@route GET /hoi/data/non-teaching
-//@access private
-
+/**
+ * @desc Data of Non Teaching
+ * @route /hoi/data/non-teaching
+ * @method GET
+ * @access Private
+ */
 export const nonTeachingDataHandler = asyncHandler(async (req, res) => {
     const user_institution = (req as AuthRequest).user.institution;
 
@@ -119,38 +129,18 @@ export const nonTeachingDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of students to HOI
-//@route GET /hoi/data/students
-//@access private
-
+/**
+ * @desc Get data of Students
+ * @route /hoi/data/students
+ * @method GET
+ * @access Private
+ */
 export const studentsDataHandler = asyncHandler(async (req, res) => {
     const user_institution = (req as AuthRequest).user.institution;
 
     const currentYear = new Date().getFullYear();
 
     const data = await Students.findAll({
-        where: sequelize.and(
-            // raw SQL query using and operator
-            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-            { institution_name: user_institution }
-        ),
-    });
-
-    res.status(200).json({
-        data: data,
-    });
-});
-
-//@desc get data of students to HOI
-//@route GET /hoi/data/students
-//@access private
-
-export const houseDataHandler = asyncHandler(async (req, res) => {
-    const user_institution = (req as AuthRequest).user.institution;
-
-    const currentYear = new Date().getFullYear();
-
-    const data = await House.findAll({
         where: sequelize.and(
             // raw SQL query using and operator
             sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year

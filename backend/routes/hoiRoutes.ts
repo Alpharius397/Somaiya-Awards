@@ -7,7 +7,6 @@ import {
     teachingDataHandler,
     nonTeachingDataHandler,
     studentsDataHandler,
-    houseDataHandler,
 } from "../controllers/hoiController";
 
 // all hoi accessible routes;
@@ -35,7 +34,5 @@ router.route("/non-teaching").get(nonTeachingDataHandler);
 //get non-teaching form data
 
 router.route("/students").get(studentsDataHandler);
-
-// router.route("/house").get(houseDataHandler);
 
 export default router;

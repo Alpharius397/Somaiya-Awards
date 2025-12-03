@@ -19,8 +19,6 @@ import { Role } from "../types/role";
 
 /**GET Routes */
 router.route("/outstanding-institution").get(institutionDataHandler);
-// router.route('/research').get(researchDataHandler);
-// router.route('/sports').get(sportsDataHandler);
 router.route("/teaching").get(teachingDataHandler);
 router.route("/non-teaching").get(nonTeachingDataHandler);
 
@@ -29,8 +27,6 @@ router.route("/nominated-staff-names").get(getNominatedStaffNames);
 
 /**PUT Routes */
 
-// router.route('/research').put(researchDataUpdater);
-// router.route('/sports').put(sportsDataUpdater);
 router
     .route("/teaching")
     .put(
@@ -50,7 +46,6 @@ router
 
 /**POST Routes */
 
-// router.route('/research').post(researchRecFileHandler)
 router
     .route("/teaching")
     .post(
@@ -69,5 +64,5 @@ router
         upload09.single("approvalFile"),
         nonTeachingRecFileHandler
     );
-// router.route('/sports').post(sportsRecFileHandler)
+
 export default router;

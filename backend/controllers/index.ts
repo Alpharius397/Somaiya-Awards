@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import z from "zod";
 import { FileRequest } from "../types/request";
 
+
 /** Checks schema against validator and throws an error if invalid schema and also set res to status 400 */
 export function checkObject<T>(
     data: { [key: string]: any },
@@ -32,4 +33,20 @@ export function checkFiles(req: Request, res: Response) {
     }
 
     return files;
+}
+
+export function getParamValue(
+    req: Request,
+    res: Response,
+    key: string,
+    error: string
+) {
+    const value: string | null = req.params[key];
+
+    if (!value) {
+        res.status(400);
+        throw new Error(error);
+    }
+
+    return value;
 }

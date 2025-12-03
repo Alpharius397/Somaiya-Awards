@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { FileRequest } from "../types/request";
 import asyncHandler from "express-async-handler";
-import {
+import type {
     countAll,
     TeachingJuryScore,
     lastDate,
@@ -17,7 +17,6 @@ import {
     CoachType,
     SportsBoyType,
 } from "../types/controllers/admin";
-import { v4 as uuidv4 } from "uuid";
 import {
     User,
     FeedbackOne,
@@ -37,6 +36,7 @@ import {
 import { Op } from "sequelize";
 import {
     applicationHeader,
+    awards,
     Group,
     Groups,
     Institutes,
@@ -69,15 +69,14 @@ function textToScore(text: string) {
             return 0;
     }
 }
-/**
- * DASHBOARD SECTION
- *
- */
-//@desc get counts of all forms
-//@route GET admin/data/count/all
-//@access Private
 
-export const getCounts = asyncHandler(async (req: Request, res: Response) => {
+/**
+ * @desc Get count of all forms
+ * @route /admin/data/count/all
+ * @method GET
+ * @access Private
+ */
+export const getCounts = asyncHandler(async (_req: Request, res: Response) => {
     const conditions = {
         where: sequelize.where(
             sequelize.fn("YEAR", sequelize.col("createdAt")),
@@ -147,6 +146,9 @@ function getLastDate(days: number) {
     return new Date(currentYear, currentMonth, currentDate);
 }
 
+/**
+ * NOTE: raw: false, gives the class back. To access any new aggregation field use the dataValues field
+ * */
 function sequelLastDays(date: Date) {
     return {
         where: sequelize.where(
@@ -166,78 +168,81 @@ function sequelLastDays(date: Date) {
         raw: true,
     };
 }
-//@desc get last 15 days count total datewise
-//@route GET admin/data/count/15
-//@access private
 
 /**
- * NOTE: raw: false, gives the class back. To access any new aggregation field use the dataValues field
- * */
-
-// Ignore warnings. Raw: true -> gives json instead of class
+ * @desc Get form count un last 15 days
+ * @route /admin/data/count/all
+ * @method GET
+ * @access Private
+ */
 export const getDaysCount = asyncHandler(
-    async (req: Request, res: Response) => {
+    // Ignore warnings. Raw: true -> gives json instead of class
+    async (__req: Request, res: Response) => {
         //get institution data
 
         let conditions = sequelLastDays(getLastDate(15));
 
-        //@ts-ignore
-        const institutionData: lastDate[] =
-            await OutstandingInstitution.findAll(conditions);
+        const institutionData = (await OutstandingInstitution.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         //get research data
 
-        //@ts-ignore
-        const researchData: lastDate[] = await Research.findAll(conditions);
+        const researchData = (await Research.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         //get sports data
 
-        //@ts-ignore
-        const sportsData: lastDate[] = await Sports.findAll(conditions);
+        const sportsData = (await Sports.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         //get teaching data
 
-        //@ts-ignore
-        const teachingData: lastDate[] = await Teaching.findAll(conditions);
+        const teachingData = (await Teaching.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         //get Non Teaching Data
 
-        //@ts-ignore
-        const nonTeachingData: lastDate[] =
-            await NonTeaching.findAll(conditions);
+        const nonTeachingData = (await NonTeaching.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         // get feedback One Data
 
-        //@ts-ignore
-        const feedbackOneData: lastDate[] =
-            await FeedbackOne.findAll(conditions);
+        const feedbackOneData = (await FeedbackOne.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         // get feedback two data
 
-        //@ts-ignore
-        const feedbackTwoData: lastDate[] =
-            await FeedbackTwo.findAll(conditions);
+        const feedbackTwoData = (await FeedbackTwo.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         // get feedback three data
 
-        //@ts-ignore
-        const feedbackThreeData: lastDate[] =
-            await FeedbackThree.findAll(conditions);
+        const feedbackThreeData = (await FeedbackThree.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         // get feedback four data
 
-        //@ts-ignore
-        const feedbackFourData: lastDate[] =
-            await FeedbackFour.findAll(conditions);
+        const feedbackFourData = (await FeedbackFour.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         // get students form data
 
-        //@ts-ignore
-        const studentsData: lastDate[] = await Students.findAll(conditions);
+        const studentsData = (await Students.findAll(
+            conditions
+        )) as unknown as lastDate[];
 
         //process th data to extract just dates
 
-        let lists: lastDate[] = [
+        let lists = [
             ...institutionData,
             ...researchData,
             ...sportsData,
@@ -264,9 +269,6 @@ export const getDaysCount = asyncHandler(
     }
 );
 
-//@desc get institution wise all forms count
-//@route GET admin/data/count/institution-wise
-//@access Private
 function sequelInstitute() {
     return {
         where: sequelize.where(
@@ -287,51 +289,57 @@ function sequelInstitute() {
     };
 }
 
+/**
+ * @desc Get institution wise all forms count
+ * @route /admin/data/count/institution-wise
+ * @method GET
+ * @access Private
+ */
 export const getInstitutionWiseCount = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         let conditions = sequelInstitute();
 
-        //@ts-ignore
-        const institutionData: InstituteCount[] =
-            await OutstandingInstitution.findAll(conditions);
+        const institutionData = (await OutstandingInstitution.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get research data
 
-        //@ts-ignore
-        const researchData: InstituteCount[] =
-            await Research.findAll(conditions);
+        const researchData = (await Research.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get sports data
 
-        //@ts-ignore
-        const sportsData: InstituteCount[] = await Sports.findAll(conditions);
+        const sportsData = (await Sports.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get teaching data
 
-        //@ts-ignore
-        const teachingData: InstituteCount[] =
-            await Teaching.findAll(conditions);
+        const teachingData = (await Teaching.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get Non Teaching Data
 
         //@ts-ignore
-        const nonTeachingData: InstituteCount[] =
-            await NonTeaching.findAll(conditions);
+        const nonTeachingData = (await NonTeaching.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         // get feedback One Data
 
-        //@ts-ignore
-        const studentsData: InstituteCount[] =
-            await Students.findAll(conditions);
+        const studentsData = (await Students.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //process th data to extract just dates
 
-        //@ts-expect-error {}
         let countObject: instituteCountType = {};
 
         for (let i of Institutes) {
             countObject[i] = {
-                id: uuidv4(),
                 institution_form: 0,
                 institution_name: i,
                 research_form: 0,
@@ -413,47 +421,49 @@ function groupCountMethod(
     groupCount[groupIndex].formsFilled += count;
 }
 
-// @desc : group Wise Count
-// @ route GET admin/data/count/group
-// @access Private
-
-// TODO: complete the controller
+/**
+ * @desc Get form count group-wise
+ * @route /admin/data/count/group
+ * @method GET
+ * @access Private
+ */
 export const getGroupWiseCount = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         let conditions = sequelInstitute();
 
-        //@ts-ignore
-        const institutionData: InstituteCount[] =
-            await OutstandingInstitution.findAll(conditions);
+        const institutionData = (await OutstandingInstitution.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get research data
 
-        //@ts-ignore
-        const researchData: InstituteCount[] =
-            await Research.findAll(conditions);
+        const researchData = (await Research.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get sports data
 
-        //@ts-ignore
-        const sportsData: InstituteCount[] = await Sports.findAll(conditions);
+        const sportsData = (await Sports.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get teaching data
 
-        //@ts-ignore
-        const teachingData: InstituteCount[] =
-            await Teaching.findAll(conditions);
+        const teachingData = (await Teaching.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         //get Non Teaching Data
 
-        //@ts-ignore
-        const nonTeachingData: InstituteCount[] =
-            await NonTeaching.findAll(conditions);
+        const nonTeachingData = (await NonTeaching.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         // get feedback One Data
 
-        //@ts-ignore
-        const studentsData: InstituteCount[] =
-            await Students.findAll(conditions);
+        const studentsData = (await Students.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
         // get feedback One Data
 
@@ -552,12 +562,14 @@ export const getGroupWiseCount = asyncHandler(
  * RESPONSES SECTION
  */
 
-//@desc get records of institution form of current Year
-//@route admin/data/forms/outstanding-institution
-//@access Private
-
+/**
+ * @desc Get records of institution form of current year
+ * @route /admin/data/forms/outstanding-institution
+ * @method GET
+ * @access Private
+ */
 export const getInstitutionData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await OutstandingInstitution.findAll({
@@ -575,12 +587,14 @@ export const getInstitutionData = asyncHandler(
     }
 );
 
-//@desc get records of ieac approved research form of current Year
-//@route admin/data/forms/research
-//@access Private
-
+/**
+ * @desc Get records of IEAC aprroved research form of current year
+ * @route /admin/data/forms/research
+ * @method GET
+ * @access Private
+ */
 export const getResearchData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Research.findAll({
@@ -601,12 +615,14 @@ export const getResearchData = asyncHandler(
     }
 );
 
-//@desc get records of sports admin approved Sports Girl form of current Year
-//@route admin/data/forms/sports-girl
-//@access Private
-
+/**
+ * @desc Get records of sports admin aprroved Sports Girl form of current year
+ * @route /admin/data/forms/sports-girl
+ * @method GET
+ * @access
+ */
 export const getSportsGirlData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const rawData = await Sports.findAll({
@@ -654,12 +670,14 @@ export const getSportsGirlData = asyncHandler(
     }
 );
 
-//@desc get records of sports admin approved Sports Boy form of current Year
-//@route admin/data/forms/sports-boy
-//@access Private
-
+/**
+ * @desc Get records of sports admin approved Sports Boy form of current year
+ * @route /admin/data/forms/sports-boy
+ * @method GET
+ * @access Private
+ */
 export const getSportsBoyData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const rawData = await Sports.findAll({
@@ -704,12 +722,14 @@ export const getSportsBoyData = asyncHandler(
     }
 );
 
-//@desc get records of sports admin approved Sports Coach form of current Year
-//@route admin/data/forms/sports-coach
-//@access Private
-
+/**
+ * @desc Get records of sports admin approved Sports Coach form of current year
+ * @route /admin/data/forms/sports-coach
+ * @method GET
+ * @access Private
+ */
 export const getSportsCoachData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const rawData = await Sports.findAll({
@@ -786,12 +806,14 @@ export const getSportsCoachData = asyncHandler(
     }
 );
 
-//@desc get records of students admin approved form of current Year
-//@route admin/data/forms/students
-//@access Private
-
+/**
+ * @desc get records of students admin approved form of current year
+ * @route /admin/data/forms/students
+ * @method GET
+ * @access Private
+ */
 export const getStudentsData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Students.findAll({
@@ -812,12 +834,14 @@ export const getStudentsData = asyncHandler(
     }
 );
 
-//@desc get records ieac approved teaching form of current Year
-//@route admin/data/forms/teaching
-//@access Private
-
+/**
+ * @desc Get records of IEAC approved Teaching form of current year
+ * @route /admin/data/forms/teaching
+ * @method GET
+ * @access Private
+ */
 export const getTeachingData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Teaching.findAll({
@@ -838,12 +862,14 @@ export const getTeachingData = asyncHandler(
     }
 );
 
-//@desc get records of ieac approved non teaching form of current Year
-//@route admin/data/forms/non-teaching
-//@access Private
-
+/**
+ * @desc Get records of IEAC approved NonTeaching form of current year
+ * @route /admin/data/non-teaching
+ * @method GET
+ * @access Private
+ */
 export const getNonTeachingData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await NonTeaching.findAll({
@@ -864,12 +890,14 @@ export const getNonTeachingData = asyncHandler(
     }
 );
 
-//@desc get records of feedback-01 form of current Year
-//@route admin/data/forms/feedback-01
-//@access Private
-
+/**
+ * @desc Get records of feedback-01 form of current uear
+ * @route /admin/data/forms/feedback-01
+ * @method GET
+ * @access Private
+ */
 export const getFeedback01Data = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackOne.findAll({
@@ -885,12 +913,14 @@ export const getFeedback01Data = asyncHandler(
     }
 );
 
-//@desc get records feedback-02 form of current Year
-//@route admin/data/forms/feedback-02
-//@access Private
-
+/**
+ * @desc Get records of feedback-02 form of current uear
+ * @route /admin/data/forms/feedback-02
+ * @method GET
+ * @access Private
+ */
 export const getFeedback02Data = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackTwo.findAll({
@@ -906,12 +936,14 @@ export const getFeedback02Data = asyncHandler(
     }
 );
 
-//@desc get records of feedback-03 form of current Year
-//@route admin/data/forms/feedback-03
-//@access Private
-
+/**
+ * @desc Get records of feedback-03 form of current uear
+ * @route /admin/data/forms/feedback-03
+ * @method GET
+ * @access Private
+ */
 export const getFeedback03Data = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackThree.findAll({
@@ -927,12 +959,14 @@ export const getFeedback03Data = asyncHandler(
     }
 );
 
-//@desc get records of feedback04 of current Year
-//@route admin/data/forms/feedback-04
-//@access Private
-
+/**
+ * @desc Get records of feedback-04 form of current uear
+ * @route /admin/data/forms/feedback-04
+ * @method GET
+ * @access Private
+ */
 export const getFeedback04Data = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackFour.findAll({
@@ -952,9 +986,13 @@ export const getFeedback04Data = asyncHandler(
  * Score Card Data API methods
  */
 
-//@desc get necessary Data for Teaching Scorecard
-//@route GET admin/data/teaching/scorecard/:id
-//@acess Private
+
+/**
+ * @desc Get data for Teaching Scorecard
+ * @route /admin/data/teaching/scorecard/
+ * @method GET
+ * @access Private
+ */
 export const getTeachingScoreCardData = asyncHandler(
     async (req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
@@ -962,7 +1000,7 @@ export const getTeachingScoreCardData = asyncHandler(
         const peersValidFeedbacks = [];
 
         let hoiScore = 0;
-        // const applicationID = req.headers.applicationid;
+
         const applicationID = req.headers[applicationHeader];
 
         const applicationData = await Teaching.findOne({
@@ -1133,6 +1171,12 @@ export const getTeachingScoreCardData = asyncHandler(
 //@route GET admin/data/teaching/scorecard/:id
 //@access Private
 
+/**
+ * @desc Get scorecard data for Non Teaching
+ * @route /admin/data/non-teaching/scorecard/:id
+ * @method GET
+ * @access Private
+ */
 export const getNonTeachingScoreCardData = asyncHandler(
     async (req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
@@ -1308,6 +1352,12 @@ export const getNonTeachingScoreCardData = asyncHandler(
     }
 );
 
+/**
+ * @desc Get data for scorecard of Inspiring Coach
+ * @route /admin/data/sports-coach/scorecard/
+ * @method GET
+ * @access Private
+ */
 export const getInspiringCoachScorecard = asyncHandler(async (req, res) => {
     const currentYear = new Date().getFullYear();
 
@@ -1409,22 +1459,34 @@ export const getInspiringCoachScorecard = asyncHandler(async (req, res) => {
 //@route POST admin/data/announce-results
 //@access Private
 
+/**
+ * @desc Get results file
+ * @route /admin/data/announce-results
+ * @method POST
+ * @access Private
+ */
 export const resultsDataHandler = asyncHandler(
     async (req: Request, res: Response) => {
-        await Results.create({
-            result: (req as FileRequest).file.path,
-        });
-
+        try {
+            await Results.create({
+                result: (req as FileRequest).file.path,
+            });
+        } catch (err) {
+            res.status(500);
+            throw err;
+        }
         res.status(200).json({});
     }
 );
 
-//@desc POST results file
-//@route POST admin/data/announce-results
-//@access Private
-
+/**
+ * @desc Get results file
+ * @route /admin/data/results
+ * @method GET
+ * @access Public
+ */
 export const getResultsData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const result = await Results.findAll({
@@ -1444,8 +1506,14 @@ export const getResultsData = asyncHandler(
 //@route GET admin/data/users
 //@access Private
 
+/**
+ * @desc Get all users
+ * @route /admin/data/users
+ * @method GET
+ * @access Private
+ */
 export const getUsersData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         const result = await User.findAll({
             attributes: {
                 exclude: ["password"], // why was this not excluded??
@@ -1458,9 +1526,12 @@ export const getUsersData = asyncHandler(
     }
 );
 
-//@desc GET Form Preview Data
-//@route GET admin/data/preview/formType
-//@access Private
+/**
+ * @desc Get form preview data
+ * @route /admin/data/:formtype/preview/:id
+ * @method GET
+ * @access Private
+ */
 export const getFormPreviewData = asyncHandler(
     async (req: Request, res: Response) => {
         const formType = req.params.formtype;
@@ -1589,11 +1660,14 @@ export const getFormPreviewData = asyncHandler(
     }
 );
 
-//@desc GET jury summary data
-//@route GET admin/data/jury-summary/teaching
-//@access Private
+/**
+ * @desc Get Jury summary data for teaching
+ * @route /admin/data/jury-summary/teaching
+ * @method GET
+ * @access Private
+ */
 export const getTeachingJurySummaryData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         let promisingApprovedData = [];
         let excellenceApprovedData = [];
         let promisingNotApprovedData = [];
@@ -1754,24 +1828,25 @@ export const getTeachingJurySummaryData = asyncHandler(
             faculty.totalScore =
                 faculty.applicationScore + faculty.feedbackScore;
 
-            if (
-                entry.awards_category ===
-                "Excellence in Teaching (more than 3 years of service)"
-            ) {
-                if (entry.ieacApproved) {
-                    excellenceApprovedData.push(faculty);
-                } else {
-                    excellenceNotApprovedData.push(faculty);
-                }
-            } else if (
-                entry.awards_category ===
-                "Promising Teacher of the year (2 to 3 years of service)"
-            ) {
-                if (entry.ieacApproved) {
-                    promisingApprovedData.push(faculty);
-                } else {
-                    promisingNotApprovedData.push(faculty);
-                }
+            const teaching_awards_category =
+                entry.awards_category as (typeof awards)[number];
+
+            switch (teaching_awards_category) {
+                case "Excellence in Teaching (more than 3 years of service)":
+                    if (entry.ieacApproved) {
+                        excellenceApprovedData.push(faculty);
+                    } else {
+                        excellenceNotApprovedData.push(faculty);
+                    }
+                    break;
+                case "Promising Teacher of the year (2 to 3 years of service)":
+                    if (entry.ieacApproved) {
+                        promisingApprovedData.push(faculty);
+                    } else {
+                        promisingNotApprovedData.push(faculty);
+                    }
+
+                    break;
             }
         }
 
@@ -1784,11 +1859,14 @@ export const getTeachingJurySummaryData = asyncHandler(
     }
 );
 
-//@desc GET jury summary data
-//@route GET admin/data/jury-summary/non-teaching
-//@access Private
+/**
+ * @desc Get Jury summary data for teaching
+ * @route /admin/data/jury-summary/non-teaching
+ * @method GET
+ * @access Private
+ */
 export const getNonTeachingJurySummaryData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
         // data
 
         const data = {
@@ -2069,9 +2147,12 @@ export const getNonTeachingJurySummaryData = asyncHandler(
     }
 );
 
-//@desc Delete user
-//@route Delete admin/data/delete-user
-//@access Private
+/**
+ * @desc Delete a user
+ * @route /admin/data/delete-user
+ * @method DELETE
+ * @access Private
+ */
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
     const { userId } = req.body;
 

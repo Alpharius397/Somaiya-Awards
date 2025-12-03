@@ -1,10 +1,19 @@
-import { StatusCode } from "../constants";
 import { Request, Response, NextFunction } from "express";
+
+enum StatusCode {
+    BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    FORBIDDEN = 403,
+    NOT_FOUND = 404,
+    METHOD_NOT_ALLOWED = 405,
+}
+
+type ErrorJsonType = { title: string; message: string; stack?: string }
 
 function getErrorJson(
     err: Error,
     statusCode: StatusCode
-): { title: string; message: string; stack?: string } {
+): ErrorJsonType {
     const debug = !(process.env.PROD === "1");
 
     const getTitle = (statusCode: StatusCode) => {
@@ -29,18 +38,16 @@ function getErrorJson(
         }
     };
 
+    const errorJson: ErrorJsonType ={
+            title: getTitle(statusCode),
+            message: err.message,
+    };
+    
     if (debug) {
-        return {
-            title: getTitle(statusCode),
-            message: err.message,
-            stack: err.stack,
-        };
-    } else {
-        return {
-            title: getTitle(statusCode),
-            message: err.message,
-        };
+        errorJson.stack = err.stack;
     }
+
+    return errorJson
 }
 export default function errorHandler(
     err: Error,
@@ -59,6 +66,8 @@ export default function errorHandler(
     } catch (e) {}
 
     err.message = json;
+
+    res
 
     res.status(statusCode).json(getErrorJson(err, statusCode));
     return;

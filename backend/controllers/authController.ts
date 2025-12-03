@@ -22,9 +22,12 @@ import {
 } from "../middleware/cookie";
 import { removeCsrfCookie, setCsrfCookie } from "../middleware/csrfMiddleware";
 
-//@desc handle login
-//@route POST /auth/login
-//@access public
+/**
+ * @desc Handle Login
+ * @route /auth/login
+ * @method POST
+ * @access Public
+ */
 export const userLogin = asyncHandler(async (req, res) => {
     const { user_email, user_password } = checkObject<UserLoginType>(
         req.body,
@@ -66,16 +69,14 @@ export const userLogin = asyncHandler(async (req, res) => {
     }
 });
 
-//@desc handle cookie refresh
-//@route POST /auth/refresh
-//@access public
+/**
+ * @desc Handle JWT refresh
+ * @route /auth/refresh
+ * @method POST
+ * @access Private
+ */
 export const userRefresh = asyncHandler(async (req, res) => {
     const refreshToken = req.cookies[RefreshCookie];
-    /**
-     * WARN: (Don't Follow that):
-     *
-     * if something breaks remove this if statement due to token or userID while TESTING
-     * */
 
     // Refresh absent
     if (!refreshToken) {
@@ -91,8 +92,6 @@ export const userRefresh = asyncHandler(async (req, res) => {
         });
         return;
     }
-
-    /**till here */
 
     let refresh = getJwtToken(refreshToken);
 
@@ -121,10 +120,12 @@ export const userRefresh = asyncHandler(async (req, res) => {
     res.status(200).json({});
 });
 
-//@desc handle user creation from admin side
-//@route POST /auth/register
-//@access private
-
+/**
+ * @desc Handle user creation
+ * @route /auth/register
+ * @method POST
+ * @access Private
+ */
 export const registerUser = asyncHandler(async (req, res) => {
     const { user_email_id, user_password, user_role, user_institution } =
         checkObject<RegisterType>(req.body, Register, res);
@@ -155,10 +156,12 @@ export const registerUser = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle password change request
-//@route POST /auth/forgot-password
-//@access public
-
+/**
+ * @desc Handle Password Change
+ * @route /auth/forgot-password
+ * @method POST
+ * @access Public
+ */
 export const passwordReset = asyncHandler(async (req, res) => {
     const quick = z.object({ user_email: email });
     type Quick = z.infer<typeof quick>;
@@ -243,10 +246,12 @@ export const passwordReset = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc verify user to change password
-//@route GET /auth/:id/:token
-//@access private
-
+/**
+ * @desc Verify Token for password change
+ * @route /auth/:id/:token
+ * @method GET
+ * @access Public
+ */
 export const verifyForPasswordReset = asyncHandler(async (req, res) => {
     const { id, token } = req.params;
 
@@ -279,10 +284,12 @@ export const verifyForPasswordReset = asyncHandler(async (req, res) => {
     }
 });
 
-//@desc  change password
-//@route POST /auth/:id/:token
-//@access private
-
+/**
+ * @desc Change Password
+ * @route /auth/:id/:token
+ * @method POST
+ * @access Public
+ */
 export const changePassword = asyncHandler(async (req, res) => {
     const { id, token } = req.params;
 
@@ -343,6 +350,12 @@ export const changePassword = asyncHandler(async (req, res) => {
     });
 });
 
+/**
+ * @desc Bulk Creation of User
+ * @route /auth/bulk-create
+ * @method POST
+ * @access Private
+ */
 export const bulkCreateOrUpdateUsers = asyncHandler(async (req, res) => {
     const quick = z.object({ formData: z.array(Register) });
 
@@ -390,10 +403,13 @@ export const bulkCreateOrUpdateUsers = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle logout
-//@route POST /auth/logout
-//@access public
-export const userLogout = asyncHandler(async (req, res) => {
+/**
+ * @desc Handle Logout
+ * @route /auth/logout
+ * @method POST
+ * @access Public
+ */
+export const userLogout = asyncHandler(async (_req, res) => {
     removeRefreshCookie(res);
     removeAccessCookie(res);
     removeCsrfCookie(res);

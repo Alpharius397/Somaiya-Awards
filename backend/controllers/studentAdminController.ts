@@ -2,11 +2,13 @@ import asyncHandler from "express-async-handler";
 import sequelize, { Op } from "sequelize";
 import { Students } from "../models";
 
-//@desc get somaiya star girl form data of current Year
-//@route GET students-admin/data/somaiya-star-girl
-//@access PRIVATE
-
-export const somaiyaStarGirlDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get Somaiya Star Girl
+ * @route /students-admin/data/somaiya-star-girl
+ * @method GET
+ * @access Private
+ */
+export const somaiyaStarGirlDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await Students.findAll({
@@ -27,10 +29,13 @@ export const somaiyaStarGirlDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get somaiya star boy form data of current Year
-//@route GET students-admin/data/somaiya-star-boy
-//@access PRIVATE
-export const somaiyaStarBoyDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get Somaiya Star Boy
+ * @route /students-admin/data/somaiya-star-boy
+ * @method GET
+ * @access Private
+ */
+export const somaiyaStarBoyDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await Students.findAll({
@@ -51,34 +56,42 @@ export const somaiyaStarBoyDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get somaiya star innovator form data of current Year
-//@route GET students-admin/data/somaiya-star-innovator
-//@access PRIVATE
-export const somaiyaStarInnovatorDataHandler = asyncHandler(async (req, res) => {
-    const currentYear = new Date().getFullYear();
+/**
+ * @desc Get Somaiya Star Innovator
+ * @route /students-admin/data/somaiya-star-innovator
+ * @method GET
+ * @access Private
+ */
+export const somaiyaStarInnovatorDataHandler = asyncHandler(
+    async (_req, res) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Students.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { nomination_category: "Somaiya Star Innovator" },
-            ],
-        },
-    });
+        const data = await Students.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { nomination_category: "Somaiya Star Innovator" },
+                ],
+            },
+        });
 
-    res.status(200).json({
-        message: "Request Successful",
-        data: data,
-    });
-});
+        res.status(200).json({
+            message: "Request Successful",
+            data: data,
+        });
+    }
+);
 
-//@desc get somaiya star citizen form data of current Year
-//@route GET students-admin/data/somaiya-star-citizen
-//@access PRIVATE
-export const somaiyaStarCitizenDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get Somaiya Star Citizen
+ * @route /students-admin/data/somaiya-star-citizen
+ * @method GET
+ * @access Private
+ */
+export const somaiyaStarCitizenDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await Students.findAll({
@@ -99,10 +112,13 @@ export const somaiyaStarCitizenDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get somaiya Green star form data of current Year
-//@route GET students-admin/data/somaiya-green-star
-//@access PRIVATE
-export const somaiyaGreenStarDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get Somaiya Green Star
+ * @route /students-admin/data/somaiya-green-star
+ * @method GET
+ * @access Private
+ */
+export const somaiyaGreenStarDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await Students.findAll({
@@ -122,10 +138,6 @@ export const somaiyaGreenStarDataHandler = asyncHandler(async (req, res) => {
         data: data,
     });
 });
-
-//@desc get somaiya Green star form data of current Year
-//@route PUT students-admin/data/update
-//@access PRIVATE
 
 export const studentsDataUpdater = asyncHandler(async (req, res) => {
     const { applicationID } = req.body;

@@ -5,11 +5,13 @@ import { OutstandingInstitution, Teaching } from "../models";
 import { Op } from "sequelize";
 import { instituteHeader } from "../constants";
 
-//@desc get data of institution forms to ieac
-//@route GET /ieac/data/outstanding-institution
-//@access private
-
-export const institutionDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get data of OutstandingInstitution
+ * @route /ieac/data/outstanding-institution
+ * @method GET
+ * @access Private
+ */
+export const institutionDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await OutstandingInstitution.findAll({
@@ -24,56 +26,13 @@ export const institutionDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of research forms to ieac
-//@route GET /ieac/data/research
-//@access private
 /**
- * @deprecated : Permanently moved to research Admin
+ * @desc Get data of Teaching
+ * @route /ieac/data/teaching
+ * @method GET
+ * @access Private
  */
-// export const researchDataHandler = asyncHandler(async (req, res) => {
-//     const user_institution = (req as AuthRequest).user.institution;
-//
-//     const currentYear = new Date().getFullYear();
-//
-//     const data = await Research.findAll({
-//         where: sequelize.and(
-//             // raw SQL query using and operator
-//             sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-//             { institution: user_institution }
-//         ),
-//     });
-//
-//     res.status(200).json({
-//         data: data,
-//     });
-// });
-
-//@desc get data of sports forms to ieac
-//@route GET /ieac/data/sports
-//@access private
-/**@deprecated : Shifted Permanently to Sports Admin */
-const sportsDataHandler = asyncHandler(async (req, res) => {});
-//     const user_institution = (req as AuthRequest).user.institution;
-//
-//     const currentYear = new Date().getFullYear();
-//
-//     const data = await Sports.findAll({
-//         where: sequelize.and(
-//             // raw SQL query using and operator
-//             sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-//             { institute_name: user_institution }
-//         ),
-//     });
-//
-//     res.status(200).json({
-//         data: data,
-//     });
-// });
-
-//@desc get data of teaching forms to ieac
-//@route GET /ieac/data/teaching
-//@access private
-export const teachingDataHandler = asyncHandler(async (req, res) => {
+export const teachingDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await Teaching.findAll({
@@ -88,10 +47,13 @@ export const teachingDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of non-teaching forms to ieac
-//@route GET /ieac/data/non-teaching
-//@access private
-export const nonTeachingDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get data of Non Teaching
+ * @route /ieac/data/non-teaching
+ * @method GET
+ * @access Private
+ */
+export const nonTeachingDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await NonTeaching.findAll({
@@ -106,67 +68,12 @@ export const nonTeachingDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc update institution form
-//@route PUT /ieac/data/outstanding-institution
-//@access private
-/**@deprecated : no longer required (Then remove it) */
-// const institutionDataUpdater = asyncHandler(async (req, res) => {
-//     res.status(200).json({
-//         message: "API works",
-//     });
-// });
-
-// @desc update research form
-// @route PUT /ieac/data/research
-// @access private
 /**
- * @deprecated permanently moved to research Admin
+ * @desc Update IEAC score for Teaching
+ * @route /ieac/data/teaching
+ * @method PUT
+ * @access Private
  */
-// export const researchDataUpdater = asyncHandler(async (req, res) => {
-//     const { applicationID } = req.body;
-
-//     const applicationForm = await Research.findOne({
-//         where: { id: applicationID },
-//     });
-
-//     if (!applicationForm) {
-//         res.status(404);
-//         throw new Error("Application not found");
-//     }
-
-//
-//     await applicationForm.update({ ieacApproved: true });
-
-//     res.status(200).json({
-//         message: "Update Successful",
-//     });
-// });
-
-//@desc update sports
-//@route PUT /ieac/data/sports
-//@access private
-/**@deprecated : No need For IAEC Approval */
-export const sportsDataUpdater = asyncHandler(async (req, res) => {});
-//     const { applicationID } = req.body;
-//
-//     const applicationForm = await Sports.findOne({
-//         where: { id: applicationID },
-//     });
-//     if (!applicationForm) {
-//         res.status(404);
-//         throw new Error("Application not found");
-//     }
-//
-//     await applicationForm.update({ ieacApproved: true });
-//
-//     res.status(200).json({
-//         message: "Update Successful",
-//     });
-// });
-
-//@desc update teaching forms
-//@route PUT /ieac/data/teaching
-//@access private
 // TODO: add zod for this
 export const teachingDataUpdater = asyncHandler(async (req, res) => {
     const { scoreA, scoreB, scoreC, recommended, applicationID } = req.body;
@@ -190,11 +97,12 @@ export const teachingDataUpdater = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc update non-teaching forms
-//@route PUT /ieac/data/non-teaching
-//@access private
-
-export const nonTeachingDataUpdater = asyncHandler(async (req, res) => {
+/**
+ * @desc Update IEAC score for Teaching
+ * @route /ieac/data/teaching
+ * @method PUT
+ * @access Private
+ */ export const nonTeachingDataUpdater = asyncHandler(async (req, res) => {
     const { scoreA, scoreB, recommended, applicationID } = req.body;
 
     const applicationForm = await NonTeaching.findOne({
@@ -217,69 +125,11 @@ export const nonTeachingDataUpdater = asyncHandler(async (req, res) => {
 });
 
 /**
- * File handlers
+ * @desc Handle IEAC approved file for Teaching
+ * @route /ieac/data/teaching
+ * @method POST
+ * @access Private
  */
-/**@deprecated : No longer required */
-// const researchRecFileHandler = asyncHandler(async (req, res) => {
-//     const ieacApprovedFile = (req as FileRequest).file.path;
-//
-//     const currentYear = new Date().getFullYear();
-//     await Research.update(
-//         {
-//             ieacApprovedFile: ieacApprovedFile,
-//         },
-//         {
-//             where: {
-//                 createdAt: {
-//                     [Op.and]: [
-//                         sequelize.where(
-//                             sequelize.fn("YEAR", sequelize.col("createdAt")),
-//                             currentYear
-//                         ),
-//                     ],
-//                 },
-//                 institution: (req as AuthRequest).user.institution,
-//             },
-//         }
-//     );
-//
-//     res.status(200).json({
-//         file: ieacApprovedFile,
-//         message: "File uploaded sucessfully! ",
-//     });
-// });
-
-/**@deprecated : No Need for IAEC to approve */
-const sportsRecFileHandler = asyncHandler(async (req, res) => {});
-//
-//     const ieacApprovedFile = (req as FileRequest).file.path;
-//
-//     const currentYear = new Date().getFullYear();
-//     await Sports.update(
-//         {
-//             ieacApprovedFile: ieacApprovedFile,
-//         },
-//         {
-//             where: {
-//                 createdAt: {
-//                     [Op.and]: [
-//                         sequelize.where(
-//                             sequelize.fn("YEAR", sequelize.col("createdAt")),
-//                             currentYear
-//                         ),
-//                     ],
-//                 },
-//                 institute_name: (req as AuthRequest).user.institution,
-//             },
-//         }
-//     );
-//
-//     res.status(200).json({
-//         file: ieacApprovedFile,
-//         message: "File uploaded sucessfully! ",
-//     });
-// });
-
 export const teachingRecFileHandler = asyncHandler(async (req, res) => {
     const ieacApprovedFile = (req as FileRequest).file.path;
 
@@ -306,6 +156,12 @@ export const teachingRecFileHandler = asyncHandler(async (req, res) => {
     });
 });
 
+/**
+ * @desc Handle IEAC approved file for Non Teaching
+ * @route /ieac/data/teaching
+ * @method POST
+ * @access Private
+ */
 export const nonTeachingRecFileHandler = asyncHandler(async (req, res) => {
     const ieacApprovedFile = (req as FileRequest).file.path;
 
@@ -332,12 +188,14 @@ export const nonTeachingRecFileHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get nominated faculty names for particular college
-//@route GET sports-admin/data/nominated-coach-names
-//@access PRIVATE
-
+/**
+ * @desc Get nominated Teachings data
+ * @route /ieac/data/nominated-faculty-names
+ * @method GET
+ * @access Public
+ */
 export const getNominatedTeacherNames = asyncHandler(async (req, res) => {
-    let names = [];
+    const names = [];
 
     const institute_name = req.headers[instituteHeader];
 
@@ -359,14 +217,15 @@ export const getNominatedTeacherNames = asyncHandler(async (req, res) => {
         [Op.or]: [{ institution_name: institute_name }],
     };
 
-    const laxmiRegex = /Somaiya Vidyamandir,\s+Laxmiwadi/.test(institute_name);
-
-    if (laxmiRegex) {
-        conditions[Op.or] = [
-            { institution_name: "Somaiya Vidyamandir,  Laxmiwadi" },
-            { institution_name: "Somaiya Vidyamandir, Laxmiwadi" },
-        ];
-    }
+    //TODO: Get rid of this
+    // const laxmiRegex = /Somaiya Vidyamandir,\s+Laxmiwadi/.test(institute_name);
+    //
+    // if (laxmiRegex) {
+    //     conditions[Op.or] = [
+    //         { institution_name: "Somaiya Vidyamandir,  Laxmiwadi" },
+    //         { institution_name: "Somaiya Vidyamandir, Laxmiwadi" },
+    //     ];
+    // }
 
     const result = await Teaching.findAll({
         where: {
@@ -388,12 +247,14 @@ export const getNominatedTeacherNames = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get nominated faculty names for particular college
-//@route GET sports-admin/data/nominated-coach-names
-//@access PRIVATE
-
+/**
+ * @desc Get nominated NonTeaching data
+ * @route /ieac/data/nominated-staff-names
+ * @method GET
+ * @access Public
+ */
 export const getNominatedStaffNames = asyncHandler(async (req, res) => {
-    let names = [];
+    const names = [];
     const institute_name = req.headers[instituteHeader];
 
     if (!institute_name) {
@@ -414,14 +275,15 @@ export const getNominatedStaffNames = asyncHandler(async (req, res) => {
         [Op.or]: [{ institution_name: institute_name }],
     };
 
-    const laxmiRegex = /Somaiya Vidyamandir,\s+Laxmiwadi/.test(institute_name);
-
-    if (laxmiRegex) {
-        conditions[Op.or] = [
-            { institution_name: "Somaiya Vidyamandir,  Laxmiwadi" },
-            { institution_name: "Somaiya Vidyamandir, Laxmiwadi" },
-        ];
-    }
+    //TODO: Get rid of this
+    // const laxmiRegex = /Somaiya Vidyamandir,\s+Laxmiwadi/.test(institute_name);
+    //
+    // if (laxmiRegex) {
+    //     conditions[Op.or] = [
+    //         { institution_name: "Somaiya Vidyamandir,  Laxmiwadi" },
+    //         { institution_name: "Somaiya Vidyamandir, Laxmiwadi" },
+    //     ];
+    // }
 
     const result = await NonTeaching.findAll({
         where: {

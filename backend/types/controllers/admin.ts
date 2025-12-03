@@ -46,16 +46,15 @@ export const instituteCount = z.record(
     })
 );
 
-export type instituteCountType = {
-    id: string;
-    institution_name: string;
-    institution_form: number;
-    research_form: number;
-    sports_form: number;
-    teaching_form: number;
-    non_teaching_form: number;
-    students_form: number;
-};
+export interface instituteCountType {
+    institution_name?: string;
+    institution_form?: number;
+    research_form?: number;
+    sports_form?: number;
+    teaching_form?: number;
+    non_teaching_form?: number;
+    students_form?: number;
+}
 
 export const instituteCountArray = z.object({
     data: z.array(

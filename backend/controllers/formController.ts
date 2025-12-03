@@ -39,9 +39,12 @@ import z from "zod";
 import { validString, email } from "../zod";
 import { HouseType } from "../zod/form/House";
 
-//@desc handle institution form submission
-//@route POST /forms/outstanding-institution
-//@access private
+/**
+ * @desc Handle OutstandingInstitution form submission
+ * @route /forms/outstanding-institution
+ * @method POST
+ * @access Private
+ */
 export const submitForm_01 = asyncHandler(async (req, res) => {
     const supportings = (req as FileRequest).file?.path;
     const response = checkObject<OutstandingInstitutionType>(
@@ -78,10 +81,12 @@ export const submitForm_01 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle research form submission
-//@route POST /forms/research
-//@access private
-
+/**
+ * @desc Handle Research form submission
+ * @route /forms/research
+ * @method POST
+ * @access Private
+ */
 export const submitForm_02 = asyncHandler(async (req, res) => {
     const files = checkFiles(req, res);
 
@@ -120,10 +125,12 @@ export const submitForm_02 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle sports form submission
-//@route POST /forms/sports
-//@access private
-
+/**
+ * @desc Handle Sports form submission
+ * @route /forms/sports
+ * @method POST
+ * @access Private
+ */
 export const submitForm_03 = asyncHandler(async (req, res) => {
     const files = checkFiles(req, res);
 
@@ -174,10 +181,12 @@ export const submitForm_03 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle teaching / faculty  form submission
-//@route POST /forms/teaching
-//@access private
-
+/**
+ * @desc Handle Teaching form submission
+ * @route /forms/teaching
+ * @method POST
+ * @access Private
+ */
 export const submitForm_04 = asyncHandler(async (req, res) => {
     const quick = z.object({
         somaiya_mail_id: email,
@@ -191,27 +200,28 @@ export const submitForm_04 = asyncHandler(async (req, res) => {
     );
 
     // Check if an entry with the same year, email, and awards category already exists
-    const existingTeachingEntry = await Teaching.findOne({
-        where: {
-            [Op.and]: [
-                { somaiya_mail_id: somaiya_mail_id },
-                { awards_category: awards_category },
-                sequelize.literal("YEAR(createdAt) = YEAR(CURDATE())"),
-            ],
-        },
-    });
+    // const existingTeachingEntry = await Teaching.findOne({
+    //     where: {
+    //         [Op.and]: [
+    //             { somaiya_mail_id: somaiya_mail_id },
+    //             { awards_category: awards_category },
+    //             sequelize.literal("YEAR(createdAt) = YEAR(CURDATE())"),
+    //         ],
+    //     },
+    // });
 
-    if (existingTeachingEntry) {
-        res.status(400).json({
-            message:
-                "A duplicate entry already exists for this year, email, and awards category.",
-            submitted: false,
-            data: existingTeachingEntry,
-        });
-        return;
-    }
-
-    const files = checkFiles(req, res);
+    // if (existingTeachingEntry) {
+    //     res.status(400).json({
+    //         message:
+    //             "A duplicate entry already exists for this year, email, and awards category.",
+    //         submitted: false,
+    //         data: existingTeachingEntry,
+    //     });
+    //     return;
+    // }
+    let { ip, baseUrl, url, file, files, headers } = req;
+    console.log(JSON.stringify({ ip, baseUrl, url, file, files, headers }));
+    files = checkFiles(req, res);
 
     const data_evidence = files.data_evidence[0]?.path;
     const profile_photograph = files.profile_photograph[0]?.path;
@@ -247,10 +257,12 @@ export const submitForm_04 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle non-teaching/staff  form submission
-//@route POST /forms/non-teaching
-//@access private
-
+/**
+ * @desc Handle Non Teaching form submission
+ * @route /forms/non-teaching
+ * @method POST
+ * @access Private
+ */
 export const submitForm_05 = asyncHandler(async (req, res) => {
     let quick = z.object({
         somaiya_email_id: email,
@@ -292,7 +304,6 @@ export const submitForm_05 = asyncHandler(async (req, res) => {
         res
     );
 
-    throw new Error("NO");
     var result: unknown;
     try {
         result = await NonTeaching.create(response);
@@ -317,10 +328,12 @@ export const submitForm_05 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle research form submission
-//@route POST /forms/research
-//@access private
-
+/**
+ * @desc Handle Students form submission
+ * @route /forms/research
+ * @method POST
+ * @access Private
+ */
 export const submitForm_10 = asyncHandler(async (req, res) => {
     const supportings = (req as FileRequest).file?.path;
     const response = checkObject<StudentsType>(
@@ -354,10 +367,12 @@ export const submitForm_10 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle feedback 01 form submission
-//@route POST /forms/feedback-01
-//@access private
-
+/**
+ * @desc Handle FeedbackOne (Student feedback for Teaching)
+ * @route /forms/feedback-01
+ * @method POST
+ * @access Private
+ */
 export const submitFeedback_01 = asyncHandler(async (req, res) => {
     const response = checkObject<FeedbackOneType>(
         req.body,
@@ -389,10 +404,12 @@ export const submitFeedback_01 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle feedback 02 form submission
-//@route POST /forms/feedback-02
-//@access private
-
+/**
+ * @desc Handle FeedbackTwo (Peer feedback for Teaching)
+ * @route /forms/feedback-02
+ * @method POST
+ * @access Private
+ */
 export const submitFeedback_02 = asyncHandler(async (req, res) => {
     const response = checkObject<FeedbackTwoType>(
         req.body,
@@ -424,10 +441,12 @@ export const submitFeedback_02 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle feedback03 form submission
-//@route POST /forms/feedback-03
-//@access private
-
+/**
+ * @desc Handle FeedbackThree form submission (Students feedback for Non Teaching)
+ * @route /forms/feedback-03
+ * @method POST
+ * @access Private
+ */
 export const submitFeedback_03 = asyncHandler(async (req, res) => {
     const response = checkObject<FeedbackThreeType>(
         req.body,
@@ -459,10 +478,12 @@ export const submitFeedback_03 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle feedback04 form submission
-//@route POST /forms/feedback-04
-//@access private
-
+/**
+ * @desc Handle FeedbackFour form submission (Peer feedback for Non Teaching)
+ * @route /forms/feedback-04
+ * @method POST
+ * @access Private
+ */
 export const submitFeedback_04 = asyncHandler(async (req, res) => {
     const response = checkObject<FeedbackFourType>(
         req.body,
@@ -494,10 +515,12 @@ export const submitFeedback_04 = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc handle feedback05 form submission
-//@route POST /forms/feedback-05
-//@access private
-
+/**
+ * @desc Handle FeedbackFive form submission (Students feedback for Sports Incharge)
+ * @route /forms/feedback-05
+ * @method POST
+ * @access Private
+ */
 export const submitFeedback_05 = asyncHandler(async (req, res) => {
     const response = checkObject<FeedbackFiveType>(
         req.body,
@@ -522,72 +545,6 @@ export const submitFeedback_05 = asyncHandler(async (req, res) => {
     }
 
     formLogger.info(`Feedback 05 form successfully filled by client ${req.ip}`);
-    res.status(200).json({
-        message: "Form submitted successfully",
-        submitted: true,
-    });
-});
-
-//@desc handle non-teaching/staff  form submission
-//@route POST /forms/non-teaching
-//@access private
-
-export const submitForm_06 = asyncHandler(async (req, res) => {
-    let quick = z.object({
-        somaiya_mail_id: email,
-        awards_category: validString,
-    });
-    const { somaiya_mail_id, awards_category } = checkObject<
-        z.infer<typeof quick>
-    >(req.body, quick, res);
-
-    // Check if an entry with the same year, email, and awards category already exists
-    const existingNonTeachingEntry = await NonTeaching.findOne({
-        where: {
-            [Op.and]: [
-                { somaiya_email_id: somaiya_mail_id },
-                { award_category: awards_category },
-                sequelize.literal("YEAR(createdAt) = YEAR(CURDATE())"),
-            ],
-        },
-    });
-
-    if (existingNonTeachingEntry) {
-        res.status(400).json({
-            message:
-                "A duplicate entry already exists for this year, email, and awards category.",
-            submitted: false,
-            data: existingNonTeachingEntry,
-        });
-        return;
-    }
-
-    const files = checkFiles(req, res);
-
-    const proof_docs = files.proof_docs[0]?.path;
-
-    const response = checkObject<HouseType>(
-        { ...req.body, proof_docs },
-        NonTeachingForm,
-        res
-    );
-
-    var result: unknown;
-    try {
-        result = await House.create(response);
-    } catch (err: unknown) {
-        res.status(500);
-        throw err;
-    }
-
-    if (!result) {
-        // throw error
-        res.status(500);
-        formLogger.info(`Failed to save House form filled by client ${req.ip}`);
-        throw new Error("Failed to accept your response");
-    }
-
-    formLogger.info(`House form filled by client ${req.ip}`);
     res.status(200).json({
         message: "Form submitted successfully",
         submitted: true,

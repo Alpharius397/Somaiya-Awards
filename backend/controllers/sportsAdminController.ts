@@ -13,7 +13,13 @@ import {
 //@route GET sports-admin/data/sports-star-girl
 //@access PRIVATE
 
-export const sportsStarGirlDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get data of sportsStarGirl
+ * @route sports-admin/data/sports-star-girl
+ * @method GET
+ * @access Private
+ */
+export const sportsStarGirlDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const rawData = await Sports.findAll({
@@ -54,11 +60,13 @@ export const sportsStarGirlDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get sports star Boy form data of current Year
-//@route GET sports-admin/data/sports-star-boy
-//@access PRIVATE
-
-export const sportsStarBoyDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get data of sportsStarBoy
+ * @route /sports-admin/data/sports-star-boy
+ * @method GET
+ * @access Private
+ */
+export const sportsStarBoyDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const rawData = await Sports.findAll({
@@ -100,11 +108,14 @@ export const sportsStarBoyDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get inspiring coach/ Teacher sports form data of current Year
-//@route GET sports-admin/data/inspiring-coach
-//@access PRIVATE
 // TODO: Do something about this
-export const inspiringCoachDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get data on inspiringCoach
+ * @route /sports-admin/data/sports-star-boy
+ * @method GET
+ * @access Private
+ */
+export const inspiringCoachDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const rawData = await Sports.findAll({
@@ -253,12 +264,19 @@ export const inspiringCoachDataHandler = asyncHandler(async (req, res) => {
 //@desc update recommendation of sports form nominees
 //@route PUT sports-admin/data/update
 //@access PRIVATE
+/**
+ * @desc Update recommendation of Sports
+ * @route /sports-admin/data/up
+ * @method PUT
+ * @access Private
+ */
 export const sportsDataUpdater = asyncHandler(async (req, res) => {
     const { type, applicationID } = req.body;
 
     const applicationForm = await Sports.findOne({
         where: { id: applicationID },
     });
+
     if (!applicationForm) {
         res.status(404);
         throw new Error("Application not found");
@@ -287,8 +305,14 @@ export const sportsDataUpdater = asyncHandler(async (req, res) => {
 //@route GET sports-admin/data/nominated-coach-names
 //@access PRIVATE
 
+/**
+ * @desc Get nominated coach name
+ * @route /sports-admin/data/nominated-coach-names
+ * @method GET
+ * @access Private
+ */
 export const getNominatedNames = asyncHandler(async (req, res) => {
-    let names = [];
+    const names = [];
 
     const institute_name = req.headers[instituteHeader];
 
@@ -309,15 +333,15 @@ export const getNominatedNames = asyncHandler(async (req, res) => {
     const conditions = {
         [Op.or]: [{ institution_name: institute_name }],
     };
-
-    const laxmiRegex = /Somaiya Vidyamandir,\s+Laxmiwadi/.test(institute_name);
-
-    if (laxmiRegex) {
-        conditions[Op.or] = [
-            { institution_name: "Somaiya Vidyamandir,  Laxmiwadi" },
-            { institution_name: "Somaiya Vidyamandir, Laxmiwadi" },
-        ];
-    }
+    // TODO: Remove it
+    // const laxmiRegex = /Somaiya Vidyamandir,\s+Laxmiwadi/.test(institute_name);
+    //
+    // if (laxmiRegex) {
+    //     conditions[Op.or] = [
+    //         { institution_name: "Somaiya Vidyamandir,  Laxmiwadi" },
+    //         { institution_name: "Somaiya Vidyamandir, Laxmiwadi" },
+    //     ];
+    // }
 
     const result = await Sports.findAll({
         where: {
@@ -337,7 +361,13 @@ export const getNominatedNames = asyncHandler(async (req, res) => {
     });
 });
 
-export const getSportsCoachExcelData = asyncHandler(async (req, res) => {
+/**
+ * @desc Get Coach data for excel
+ * @route /sports-admin/sports-excel/inspiring-coach
+ * @method GET
+ * @access Private
+ */
+export const getSportsCoachExcelData = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
     const data: SportsExcelType<CoachData> = {
         OK: [],
@@ -414,7 +444,13 @@ export const getSportsCoachExcelData = asyncHandler(async (req, res) => {
     res.status(200).json(data);
 });
 
-export const getSportsGirlExcelData = asyncHandler(async (req, res) => {
+/**
+ * @desc Get Sports Star Girl data for excel
+ * @route /sports-admin/sports-excel/sports-star-girl
+ * @method GET
+ * @access Private
+ */
+export const getSportsGirlExcelData = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
     const data: SportsExcelType<GirlData> = {
         OK: [],
@@ -459,7 +495,13 @@ export const getSportsGirlExcelData = asyncHandler(async (req, res) => {
     res.status(200).json(data);
 });
 
-export const getSportsBoyExcelData = asyncHandler(async (req, res) => {
+/**
+ * @desc Get Sports Star Boy data for excel
+ * @route /sports-admin/sports-excel/sports-star-boy
+ * @method GET
+ * @access Private
+ */
+export const getSportsBoyExcelData = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
     const data: SportsExcelType<BoyData> = {
         OK: [],

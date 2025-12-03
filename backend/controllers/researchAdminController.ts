@@ -2,11 +2,13 @@ import asyncHandler from "express-async-handler";
 import sequelize from "sequelize";
 import { Research } from "../models";
 
-//@desc get data of research forms to Research Admin
-//@route GET /research-admin/data/research
-//@access private
-
-export const researchDataHandler = asyncHandler(async (req, res) => {
+/**
+ * @desc Get data of Research
+ * @route /research-admin/data/research
+ * @method GET
+ * @access Private
+ */
+export const researchDataHandler = asyncHandler(async (_req, res) => {
     const currentYear = new Date().getFullYear();
 
     const data = await Research.findAll({
@@ -21,9 +23,12 @@ export const researchDataHandler = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc get data of research forms to Research Admin
-//@route PUT /research-admin/data/update
-//@access private
+/**
+ * @desc Get data of Research
+ * @route /research-admin/data/update
+ * @method PUT
+ * @access Private
+ */
 export const researchDataUpdater = asyncHandler(async (req, res) => {
     const { applicationID } = req.body;
 
