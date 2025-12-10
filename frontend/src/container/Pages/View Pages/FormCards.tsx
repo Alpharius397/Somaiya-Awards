@@ -3,8 +3,9 @@ import FormCard from "@/components/utils/FormCard";
 import HandleLogout from "@/container/Pages/Logout";
 import React from "react";
 
-export default function FormCards() {
+function FormCards() {
     const logout = HandleLogout();
+
     return (
         <div className="p-5 w-full h-screen ">
             {/* Headers  */}
@@ -100,3 +101,5 @@ export default function FormCards() {
         </div>
     );
 }
+
+export default React.memo(FormCards);

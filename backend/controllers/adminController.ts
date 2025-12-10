@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { FileRequest } from "../types/request";
 import asyncHandler from "express-async-handler";
 import type {
@@ -76,59 +76,63 @@ function textToScore(text: string) {
  * @method GET
  * @access Private
  */
-export const getCounts = asyncHandler(async (_req: Request, res: Response) => {
-    const conditions = {
-        where: sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("createdAt")),
-            new Date().getFullYear()
-        ),
-    };
+export const getCounts = asyncHandler(
+    async (_req: Request, res: Response, next: NextFunction) => {
+        const conditions = {
+            where: sequelize.where(
+                sequelize.fn("YEAR", sequelize.col("createdAt")),
+                new Date().getFullYear()
+            ),
+        };
 
-    let countData: countAll = {
-        /** WARN: Explicitly Fail if something errors out */
+        let countData: countAll = {
+            /** WARN: Explicitly Fail if something errors out */
 
-        // institution Count
-        institutionFormCount: await OutstandingInstitution.count(conditions),
+            // institution Count
+            institutionFormCount:
+                await OutstandingInstitution.count(conditions),
 
-        // research Count
+            // research Count
 
-        researchFormCount: await Research.count(conditions),
+            researchFormCount: await Research.count(conditions),
 
-        // sports Count
+            // sports Count
 
-        sportsFormCount: await Sports.count(conditions),
+            sportsFormCount: await Sports.count(conditions),
 
-        // teaching Count
+            // teaching Count
 
-        teachingFormCount: await Teaching.count(conditions),
+            teachingFormCount: await Teaching.count(conditions),
 
-        // non teaching Count
+            // non teaching Count
 
-        nonTeachingFormCount: await NonTeaching.count(conditions),
+            nonTeachingFormCount: await NonTeaching.count(conditions),
 
-        // feedback1 count
+            // feedback1 count
 
-        feedbackOneFormCount: await FeedbackOne.count(conditions),
+            feedbackOneFormCount: await FeedbackOne.count(conditions),
 
-        // feedback2 count
+            // feedback2 count
 
-        feedbackTwoFormCount: await FeedbackTwo.count(conditions),
+            feedbackTwoFormCount: await FeedbackTwo.count(conditions),
 
-        // feedback3 count
+            // feedback3 count
 
-        feedbackThreeFormCount: await FeedbackThree.count(conditions),
+            feedbackThreeFormCount: await FeedbackThree.count(conditions),
 
-        // feedback4 count
+            // feedback4 count
 
-        feedbackFourFormCount: await FeedbackFour.count(conditions),
+            feedbackFourFormCount: await FeedbackFour.count(conditions),
 
-        // students form count
+            // students form count
 
-        studentsFormCount: await Students.count(conditions),
-    };
+            studentsFormCount: await Students.count(conditions),
+        };
 
-    res.status(200).json({ data: countData });
-});
+        res.status(200).json({ data: countData });
+        next();
+    }
+);
 
 /**
  * Returns the date, `days` days ago.
@@ -177,7 +181,7 @@ function sequelLastDays(date: Date) {
  */
 export const getDaysCount = asyncHandler(
     // Ignore warnings. Raw: true -> gives json instead of class
-    async (__req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         //get institution data
 
         let conditions = sequelLastDays(getLastDate(15));
@@ -266,6 +270,7 @@ export const getDaysCount = asyncHandler(
         }
 
         res.status(200).json({ data: data });
+        next();
     }
 );
 
@@ -296,7 +301,7 @@ function sequelInstitute() {
  * @access Private
  */
 export const getInstitutionWiseCount = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         let conditions = sequelInstitute();
 
         const institutionData = (await OutstandingInstitution.findAll(
@@ -407,6 +412,7 @@ export const getInstitutionWiseCount = asyncHandler(
         });
 
         res.status(200).json(array);
+        next();
     }
 );
 
@@ -428,7 +434,7 @@ function groupCountMethod(
  * @access Private
  */
 export const getGroupWiseCount = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         let conditions = sequelInstitute();
 
         const institutionData = (await OutstandingInstitution.findAll(
@@ -555,6 +561,7 @@ export const getGroupWiseCount = asyncHandler(
         }
 
         res.status(200).json(groupCount);
+        next();
     }
 );
 
@@ -569,7 +576,7 @@ export const getGroupWiseCount = asyncHandler(
  * @access Private
  */
 export const getInstitutionData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await OutstandingInstitution.findAll({
@@ -584,6 +591,7 @@ export const getInstitutionData = asyncHandler(
         };
 
         res.status(200).json(instituteData);
+        next();
     }
 );
 
@@ -594,7 +602,7 @@ export const getInstitutionData = asyncHandler(
  * @access Private
  */
 export const getResearchData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Research.findAll({
@@ -612,6 +620,7 @@ export const getResearchData = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
@@ -622,7 +631,7 @@ export const getResearchData = asyncHandler(
  * @access
  */
 export const getSportsGirlData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const rawData = await Sports.findAll({
@@ -667,6 +676,7 @@ export const getSportsGirlData = asyncHandler(
         }
 
         res.status(200).json(data);
+        next();
     }
 );
 
@@ -677,7 +687,7 @@ export const getSportsGirlData = asyncHandler(
  * @access Private
  */
 export const getSportsBoyData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const rawData = await Sports.findAll({
@@ -719,6 +729,7 @@ export const getSportsBoyData = asyncHandler(
         }
 
         res.status(200).json(data);
+        next();
     }
 );
 
@@ -729,7 +740,7 @@ export const getSportsBoyData = asyncHandler(
  * @access Private
  */
 export const getSportsCoachData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const rawData = await Sports.findAll({
@@ -803,6 +814,7 @@ export const getSportsCoachData = asyncHandler(
         }
 
         res.status(200).json(data);
+        next();
     }
 );
 
@@ -813,7 +825,7 @@ export const getSportsCoachData = asyncHandler(
  * @access Private
  */
 export const getStudentsData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Students.findAll({
@@ -823,7 +835,6 @@ export const getStudentsData = asyncHandler(
                         sequelize.fn("YEAR", sequelize.col("createdAt")),
                         currentYear
                     ),
-                    { approved: true },
                 ],
             },
         });
@@ -831,6 +842,7 @@ export const getStudentsData = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
@@ -841,7 +853,7 @@ export const getStudentsData = asyncHandler(
  * @access Private
  */
 export const getTeachingData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Teaching.findAll({
@@ -859,6 +871,7 @@ export const getTeachingData = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
@@ -869,7 +882,7 @@ export const getTeachingData = asyncHandler(
  * @access Private
  */
 export const getNonTeachingData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await NonTeaching.findAll({
@@ -887,6 +900,7 @@ export const getNonTeachingData = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
@@ -897,7 +911,7 @@ export const getNonTeachingData = asyncHandler(
  * @access Private
  */
 export const getFeedback01Data = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackOne.findAll({
@@ -910,6 +924,7 @@ export const getFeedback01Data = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
@@ -920,7 +935,7 @@ export const getFeedback01Data = asyncHandler(
  * @access Private
  */
 export const getFeedback02Data = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackTwo.findAll({
@@ -933,6 +948,7 @@ export const getFeedback02Data = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
@@ -943,7 +959,7 @@ export const getFeedback02Data = asyncHandler(
  * @access Private
  */
 export const getFeedback03Data = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackThree.findAll({
@@ -956,6 +972,7 @@ export const getFeedback03Data = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
@@ -966,7 +983,7 @@ export const getFeedback03Data = asyncHandler(
  * @access Private
  */
 export const getFeedback04Data = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await FeedbackFour.findAll({
@@ -979,13 +996,13 @@ export const getFeedback04Data = asyncHandler(
         res.status(200).json({
             data: data,
         });
+        next();
     }
 );
 
 /**
  * Score Card Data API methods
  */
-
 
 /**
  * @desc Get data for Teaching Scorecard
@@ -994,7 +1011,7 @@ export const getFeedback04Data = asyncHandler(
  * @access Private
  */
 export const getTeachingScoreCardData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
         const studentsValidFeedbacks = [];
         const peersValidFeedbacks = [];
@@ -1164,6 +1181,7 @@ export const getTeachingScoreCardData = asyncHandler(
             student_avg: studentsFeedbackAverageScore,
             peers_avg: peersFeedbackAverageScore,
         });
+        next();
     }
 );
 
@@ -1178,7 +1196,7 @@ export const getTeachingScoreCardData = asyncHandler(
  * @access Private
  */
 export const getNonTeachingScoreCardData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const studentValidFeedbacks = [];
@@ -1349,6 +1367,7 @@ export const getNonTeachingScoreCardData = asyncHandler(
             student_avg: student_avg,
             peers_avg: peers_avg,
         });
+        next();
     }
 );
 
@@ -1358,102 +1377,105 @@ export const getNonTeachingScoreCardData = asyncHandler(
  * @method GET
  * @access Private
  */
-export const getInspiringCoachScorecard = asyncHandler(async (req, res) => {
-    const currentYear = new Date().getFullYear();
+export const getInspiringCoachScorecard = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const currentYear = new Date().getFullYear();
 
-    const applicationID = req.headers[applicationHeader];
+        const applicationID = req.headers[applicationHeader];
 
-    const response = await Sports.findOne({
-        where: { id: applicationID },
-    });
+        const response = await Sports.findOne({
+            where: { id: applicationID },
+        });
 
-    if (!response) {
-        res.status(404).json({ error: "Application Not Found" });
-        return;
-    }
+        if (!response) {
+            res.status(404).json({ error: "Application Not Found" });
+            return;
+        }
 
-    const theCoach = response.nominee_inspiring_coach;
+        const theCoach = response.nominee_inspiring_coach;
 
-    const feedbacks = await FeedbackFive.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-
-                sequelize.where(
-                    sequelize.fn(
-                        "TRIM",
-                        sequelize.fn("LOWER", sequelize.col("nominee_name"))
+        const feedbacks = await FeedbackFive.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
                     ),
-                    theCoach
-                ),
-            ],
-        },
-    });
 
-    let feedbackScore = 0;
+                    sequelize.where(
+                        sequelize.fn(
+                            "TRIM",
+                            sequelize.fn("LOWER", sequelize.col("nominee_name"))
+                        ),
+                        theCoach
+                    ),
+                ],
+            },
+        });
 
-    for (const answers of feedbacks) {
-        feedbackScore =
-            feedbackScore +
-            (answers.q_01 +
-                answers.q_02 +
-                answers.q_03 +
-                answers.q_04 +
-                answers.q_05 +
-                answers.q_06 +
-                answers.q_07 +
-                answers.q_08 +
-                answers.q_09 +
-                answers.q_10 +
-                answers.q_11 +
-                answers.q_12 +
-                answers.q_13 +
-                answers.q_14 +
-                answers.q_15 +
-                answers.q_16 +
-                answers.q_17 +
-                answers.q_18 +
-                answers.q_19 +
-                answers.q_20);
+        let feedbackScore = 0;
+
+        for (const answers of feedbacks) {
+            feedbackScore =
+                feedbackScore +
+                (answers.q_01 +
+                    answers.q_02 +
+                    answers.q_03 +
+                    answers.q_04 +
+                    answers.q_05 +
+                    answers.q_06 +
+                    answers.q_07 +
+                    answers.q_08 +
+                    answers.q_09 +
+                    answers.q_10 +
+                    answers.q_11 +
+                    answers.q_12 +
+                    answers.q_13 +
+                    answers.q_14 +
+                    answers.q_15 +
+                    answers.q_16 +
+                    answers.q_17 +
+                    answers.q_18 +
+                    answers.q_19 +
+                    answers.q_20);
+        }
+
+        feedbackScore = feedbackScore / feedbacks.length;
+
+        const admin_score =
+            response.q_01 +
+            response.q_02 +
+            response.q_03 +
+            response.q_04 +
+            response.q_05 +
+            response.q_06 +
+            response.q_07 +
+            response.q_08 +
+            response.q_09 +
+            response.q_10 +
+            response.q_11 +
+            response.q_12 +
+            response.q_13 +
+            response.q_14 +
+            response.q_15 +
+            response.q_16 +
+            response.q_17 +
+            response.q_18 +
+            response.q_19 +
+            response.q_20;
+
+        const final_score = 0.4 * admin_score + 0.6 * feedbackScore;
+
+        res.status(200).json({
+            name: response.nominee_inspiring_coach,
+            institute: response.institution_name,
+            admin_score,
+            feed_score: feedbackScore,
+            final_score,
+        });
+        next();
     }
-
-    feedbackScore = feedbackScore / feedbacks.length;
-
-    const admin_score =
-        response.q_01 +
-        response.q_02 +
-        response.q_03 +
-        response.q_04 +
-        response.q_05 +
-        response.q_06 +
-        response.q_07 +
-        response.q_08 +
-        response.q_09 +
-        response.q_10 +
-        response.q_11 +
-        response.q_12 +
-        response.q_13 +
-        response.q_14 +
-        response.q_15 +
-        response.q_16 +
-        response.q_17 +
-        response.q_18 +
-        response.q_19 +
-        response.q_20;
-
-    const final_score = 0.4 * admin_score + 0.6 * feedbackScore;
-
-    res.status(200).json({
-        name: response.nominee_inspiring_coach,
-        institute: response.institution_name,
-        admin_score,
-        feed_score: feedbackScore,
-        final_score,
-    });
-});
+);
 
 //@desc POST results file
 //@route POST admin/data/announce-results
@@ -1466,7 +1488,7 @@ export const getInspiringCoachScorecard = asyncHandler(async (req, res) => {
  * @access Private
  */
 export const resultsDataHandler = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         try {
             await Results.create({
                 result: (req as FileRequest).file.path,
@@ -1476,6 +1498,7 @@ export const resultsDataHandler = asyncHandler(
             throw err;
         }
         res.status(200).json({});
+        next();
     }
 );
 
@@ -1486,7 +1509,7 @@ export const resultsDataHandler = asyncHandler(
  * @access Public
  */
 export const getResultsData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const result = await Results.findAll({
@@ -1499,6 +1522,7 @@ export const getResultsData = asyncHandler(
         res.status(200).json({
             data: result,
         });
+        next();
     }
 );
 
@@ -1513,7 +1537,7 @@ export const getResultsData = asyncHandler(
  * @access Private
  */
 export const getUsersData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const result = await User.findAll({
             attributes: {
                 exclude: ["password"], // why was this not excluded??
@@ -1523,6 +1547,7 @@ export const getUsersData = asyncHandler(
         res.status(200).json({
             data: result,
         });
+        next();
     }
 );
 
@@ -1533,7 +1558,7 @@ export const getUsersData = asyncHandler(
  * @access Private
  */
 export const getFormPreviewData = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         const formType = req.params.formtype;
         const applicationID = req.headers[applicationHeader];
 
@@ -1657,6 +1682,7 @@ export const getFormPreviewData = asyncHandler(
         res.status(200).json({
             data: application,
         });
+        next();
     }
 );
 
@@ -1667,7 +1693,7 @@ export const getFormPreviewData = asyncHandler(
  * @access Private
  */
 export const getTeachingJurySummaryData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         let promisingApprovedData = [];
         let excellenceApprovedData = [];
         let promisingNotApprovedData = [];
@@ -1856,6 +1882,7 @@ export const getTeachingJurySummaryData = asyncHandler(
             promising_notApproved: promisingNotApprovedData,
             excellence_notApproved: excellenceNotApprovedData,
         });
+        next();
     }
 );
 
@@ -1866,7 +1893,7 @@ export const getTeachingJurySummaryData = asyncHandler(
  * @access Private
  */
 export const getNonTeachingJurySummaryData = asyncHandler(
-    async (_req: Request, res: Response) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         // data
 
         const data = {
@@ -2144,6 +2171,7 @@ export const getNonTeachingJurySummaryData = asyncHandler(
         }
 
         res.status(200).json(data);
+        next();
     }
 );
 
@@ -2153,17 +2181,22 @@ export const getNonTeachingJurySummaryData = asyncHandler(
  * @method DELETE
  * @access Private
  */
-export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
-    const { userId } = req.body;
+export const deleteUser = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const { userId } = req.body;
 
-    if (!userId) {
-        res.status(400).json({ error: "Missing userId in the request body" });
-        return;
+        if (!userId) {
+            res.status(400).json({
+                error: "Missing userId in the request body",
+            });
+            return;
+        }
+
+        await User.destroy({
+            where: { id: userId },
+        });
+
+        res.status(200).json({});
+        next();
     }
-
-    await User.destroy({
-        where: { id: userId },
-    });
-
-    res.status(200).json({});
-});
+);

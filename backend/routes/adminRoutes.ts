@@ -33,6 +33,7 @@ import userAuthenticator from "../middleware/userAuthenticator";
 import { Role } from "../types/role";
 import roleMiddle from "../middleware/role";
 import csrfMiddleware from "../middleware/csrfMiddleware";
+import { AuthLoggerMiddleware } from "../middleware/logger";
 
 /** GET ROUTES */
 
@@ -159,4 +160,6 @@ router
         deleteUser
     );
 
+router.use(AuthLoggerMiddleware);
+    
 export default router;

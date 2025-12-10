@@ -257,57 +257,54 @@ export default function Responses() {
     };
 
     return (
-        <div className="">
-            <div className="h-screen flex flex-row">
-                <SideBar />
+        <div className="flex flex-row">
+            <SideBar />
 
-                <motion.div
-                    initial={{ x: "100%" }}
-                    animate={{ x: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex flex-col w-full p-5">
-                        <h2 className="text-xl font-Poppins font-semibold">
-                            {title}
-                        </h2>
-                        {location.pathname.split("/responses/")[1] ===
-                            "teaching" ||
-                        location.pathname.split("/responses/")[1] ===
-                            "non-teaching" ? (
-                            <div className="">
-                                <button
-                                    onClick={handleJuryReporyDownload}
-                                    className="px-3 py-2 bg-red-800 text-white font-Poppins my-5 rounded-full"
-                                >
-                                    Jury Summary
-                                </button>
-                            </div>
-                        ) : null}
-                        <div className="my-5 overflow-y-scroll">
-                            <DataGrid
-                                rows={rows}
-                                columns={columns}
-                                density="comfortable"
-                                slots={{
-                                    toolbar: GridToolbar,
-                                }}
-                                slotProps={{
-                                    toolbar: {
-                                        showQuickFilter: true,
-                                        quickFilterProps: {
-                                            debounceMs: 500,
-                                        },
-                                    },
-                                }}
-                                sx={{
-                                    boxShadow: 2,
-                                    padding: 2,
-                                }}
-                            />
+            <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="flex flex-col w-full p-5 h-screen">
+                    <h2 className="text-xl font-Poppins font-semibold">
+                        {title}
+                    </h2>
+                    {location.pathname.split("/responses/")[1] === "teaching" ||
+                    location.pathname.split("/responses/")[1] ===
+                        "non-teaching" ? (
+                        <div className="">
+                            <button
+                                onClick={handleJuryReporyDownload}
+                                className="px-3 py-2 bg-red-800 text-white font-Poppins my-5 rounded-full"
+                            >
+                                Jury Summary
+                            </button>
                         </div>
+                    ) : null}
+                    <div className="my-5 overflow-y-scroll">
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            density="comfortable"
+                            slots={{
+                                toolbar: GridToolbar,
+                            }}
+                            slotProps={{
+                                toolbar: {
+                                    showQuickFilter: true,
+                                    quickFilterProps: {
+                                        debounceMs: 500,
+                                    },
+                                },
+                            }}
+                            sx={{
+                                boxShadow: 2,
+                                padding: 2,
+                            }}
+                        />
                     </div>
-                </motion.div>
-            </div>
+                </div>
+            </motion.div>
         </div>
     );
 }

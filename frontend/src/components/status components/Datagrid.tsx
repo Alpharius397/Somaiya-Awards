@@ -32,23 +32,24 @@ function Datagrid(props: { rows: { [key: string]: [] }[] }) {
   ];
 
   return (
-    <div className="w-[97%] p-2 flex justify-center items-center">
-      {!(rows && rows.length > 0) ? (
-        <EmptyData />
-      ) : (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          slots={{ toolbar: GridToolbar }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-              quickFilterProps: { debounceMs: 500 },
-            },
-          }}
-        />
-      )}
-    </div>
+      <div className="w-[97%] p-2 flex justify-center items-center">
+          {!(rows && rows.length > 0) ? (
+              <EmptyData />
+          ) : (
+              <DataGrid
+                  getRowId={(row) => row.institution_name}
+                  rows={rows}
+                  columns={columns}
+                  slots={{ toolbar: GridToolbar }}
+                  slotProps={{
+                      toolbar: {
+                          showQuickFilter: true,
+                          quickFilterProps: { debounceMs: 500 },
+                      },
+                  }}
+              />
+          )}
+      </div>
   );
 }
 

@@ -23,6 +23,7 @@ import {
 } from "../middleware/fileUpload";
 import roleMiddle from "../middleware/role";
 import { Role } from "../types/role";
+import { ApplicationLoggerMiddleware } from "../middleware/logger";
 
 /**
  * Support note:
@@ -131,5 +132,7 @@ router.route("/feedback-04").post(roleMiddle([Role.Peer]), submitFeedback_04);
 router
     .route("/feedback-05")
     .post(roleMiddle([Role.Student]), submitFeedback_05);
+
+router.use(ApplicationLoggerMiddleware);
 
 export default router;

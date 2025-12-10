@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import { NextFunction, Request, Response } from "express";
 import sequelize, { Op } from "sequelize";
 import { Students } from "../models";
 
@@ -8,26 +9,29 @@ import { Students } from "../models";
  * @method GET
  * @access Private
  */
-export const somaiyaStarGirlDataHandler = asyncHandler(async (_req, res) => {
-    const currentYear = new Date().getFullYear();
+export const somaiyaStarGirlDataHandler = asyncHandler(
+    async (_req: Request, res: Response, next: NextFunction) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Students.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { nomination_category: "Somaiya Star -Girl" },
-            ],
-        },
-    });
+        const data = await Students.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { nomination_category: "Somaiya Star -Girl" },
+                ],
+            },
+        });
 
-    res.status(200).json({
-        message: "Request Successful",
-        data: data,
-    });
-});
+        res.status(200).json({
+            message: "Request Successful",
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get Somaiya Star Boy
@@ -35,26 +39,29 @@ export const somaiyaStarGirlDataHandler = asyncHandler(async (_req, res) => {
  * @method GET
  * @access Private
  */
-export const somaiyaStarBoyDataHandler = asyncHandler(async (_req, res) => {
-    const currentYear = new Date().getFullYear();
+export const somaiyaStarBoyDataHandler = asyncHandler(
+    async (_req: Request, res: Response, next: NextFunction) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Students.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { nomination_category: "Somaiya Star -Boy" },
-            ],
-        },
-    });
+        const data = await Students.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { nomination_category: "Somaiya Star -Boy" },
+                ],
+            },
+        });
 
-    res.status(200).json({
-        message: "Request Successful",
-        data: data,
-    });
-});
+        res.status(200).json({
+            message: "Request Successful",
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get Somaiya Star Innovator
@@ -63,7 +70,7 @@ export const somaiyaStarBoyDataHandler = asyncHandler(async (_req, res) => {
  * @access Private
  */
 export const somaiyaStarInnovatorDataHandler = asyncHandler(
-    async (_req, res) => {
+    async (_req: Request, res: Response, next: NextFunction) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Students.findAll({
@@ -82,6 +89,7 @@ export const somaiyaStarInnovatorDataHandler = asyncHandler(
             message: "Request Successful",
             data: data,
         });
+        next();
     }
 );
 
@@ -91,26 +99,29 @@ export const somaiyaStarInnovatorDataHandler = asyncHandler(
  * @method GET
  * @access Private
  */
-export const somaiyaStarCitizenDataHandler = asyncHandler(async (_req, res) => {
-    const currentYear = new Date().getFullYear();
+export const somaiyaStarCitizenDataHandler = asyncHandler(
+    async (_req: Request, res: Response, next: NextFunction) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Students.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { nomination_category: "Somaiya Star Citizen" },
-            ],
-        },
-    });
+        const data = await Students.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { nomination_category: "Somaiya Star Citizen" },
+                ],
+            },
+        });
 
-    res.status(200).json({
-        message: "Request Successful",
-        data: data,
-    });
-});
+        res.status(200).json({
+            message: "Request Successful",
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get Somaiya Green Star
@@ -118,41 +129,47 @@ export const somaiyaStarCitizenDataHandler = asyncHandler(async (_req, res) => {
  * @method GET
  * @access Private
  */
-export const somaiyaGreenStarDataHandler = asyncHandler(async (_req, res) => {
-    const currentYear = new Date().getFullYear();
+export const somaiyaGreenStarDataHandler = asyncHandler(
+    async (_req: Request, res: Response, next: NextFunction) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Students.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { nomination_category: "Somaiya Green Star/ Green Force" },
-            ],
-        },
-    });
+        const data = await Students.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { nomination_category: "Somaiya Green Star/ Green Force" },
+                ],
+            },
+        });
 
-    res.status(200).json({
-        message: "Request Successful",
-        data: data,
-    });
-});
-
-export const studentsDataUpdater = asyncHandler(async (req, res) => {
-    const { applicationID } = req.body;
-
-    const applicationForm = await Students.findOne({
-        where: { id: applicationID },
-    });
-    if (!applicationForm) {
-        res.status(404);
-        throw new Error("Application not found");
+        res.status(200).json({
+            message: "Request Successful",
+            data: data,
+        });
+        next();
     }
+);
 
-    await applicationForm.update({ approved: true });
+export const studentsDataUpdater = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const { applicationID } = req.body;
 
-    res.status(200).json({
-        message: "Update Successful",
-    });
-});
+        const applicationForm = await Students.findOne({
+            where: { id: applicationID },
+        });
+        if (!applicationForm) {
+            res.status(404);
+            throw new Error("Application not found");
+        }
+
+        await applicationForm.update({ approved: true });
+
+        res.status(200).json({
+            message: "Update Successful",
+        });
+        next();
+    }
+);

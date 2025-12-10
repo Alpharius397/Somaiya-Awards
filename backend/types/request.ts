@@ -8,3 +8,7 @@ export interface AuthRequest extends Request {
 export interface FileRequest extends AuthRequest {
     file: Express.Multer.File;
 }
+
+export interface FilesRequest extends AuthRequest {
+    files: { [key: string]: Express.Multer.File[] };
+}

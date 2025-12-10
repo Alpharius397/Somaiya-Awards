@@ -4,6 +4,7 @@ import { User } from "../models";
 import { AccessCookie } from "../constants";
 import { AuthRequest } from "../types/request";
 import { getJwtToken } from "./jwt";
+import RequestFormatter from "../utils/requestFormatter";
 
 /**
  * Auth Workflow:
@@ -47,7 +48,7 @@ const userAuthenticator = asyncHandler(async (req, res, next) => {
     let access = getJwtToken(accessToken);
 
     if (access === null) {
-        res.status(418).json({
+        res.status(401).json({
             message: "Token Expired",
         });
         return;
@@ -61,6 +62,7 @@ const userAuthenticator = asyncHandler(async (req, res, next) => {
         res.status(401).json({
             message: "User ID not found",
         });
+
         return;
     }
 

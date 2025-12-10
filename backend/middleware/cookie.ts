@@ -74,7 +74,11 @@ export function setCookie(
     cookieValue: string,
     option: setCookieType
 ) {
-    res.cookie(cookieName, cookieValue, setCookieOption(option));
+    res.cookie(
+        encodeURIComponent(cookieName),
+        encodeURIComponent(cookieValue),
+        setCookieOption(option)
+    );
 }
 
 export function setAccessCookie(res: Response, cookie: string) {

@@ -1,11 +1,12 @@
 import Axios, { URL } from "@/axios";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function Logout() {
     const navigate = useNavigate();
 
-    return () => {
+    return useCallback(() => {
         Axios.post(URL.AUTH.LOGOUT);
 
         Swal.fire({
@@ -15,5 +16,5 @@ export default function Logout() {
         });
         // navigate to login page
         navigate("/auth/login");
-    };
+    }, [navigate]);
 }

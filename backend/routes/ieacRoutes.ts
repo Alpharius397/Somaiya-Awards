@@ -16,6 +16,7 @@ import userAuthenticator from "../middleware/userAuthenticator";
 import csrfMiddleware from "../middleware/csrfMiddleware";
 import roleMiddle from "../middleware/role";
 import { Role } from "../types/role";
+import { ApplicationLoggerMiddleware } from "../middleware/logger";
 
 /**GET Routes */
 router.route("/outstanding-institution").get(institutionDataHandler);
@@ -64,5 +65,8 @@ router
         upload09.single("approvalFile"),
         nonTeachingRecFileHandler
     );
+
+router.use(ApplicationLoggerMiddleware);
+
 
 export default router;

@@ -9,6 +9,7 @@ import {
     userLogout,
 } from "../controllers/authController";
 import csrfMiddleware from "../middleware/csrfMiddleware";
+import { AuthLoggerMiddleware } from "../middleware/logger";
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.route("/forgot-password").post(passwordReset);
 router.route("/:id/:token").post(changePassword);
 router.route("/register").post(registerUser);
 router.route("/bulk-create").post(csrfMiddleware, bulkCreateOrUpdateUsers);
+router.use(AuthLoggerMiddleware);
 
 /**
  * Exports

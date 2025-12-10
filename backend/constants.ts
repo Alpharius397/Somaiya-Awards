@@ -1,3 +1,5 @@
+export const DIR_NAME = __dirname;
+
 export const AccessCookie = "x-access";
 
 export const RefreshCookie = "x-refresh";

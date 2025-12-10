@@ -19,11 +19,18 @@ import cookieParser from "cookie-parser";
 import { sequelize, User } from "./models";
 import bcrypt from "bcrypt";
 import csrfMiddleware from "./middleware/csrfMiddleware";
-import { applicationHeader, CsrfName, instituteHeader } from "./constants";
+import {
+    applicationHeader,
+    CsrfName,
+    DIR_NAME,
+    instituteHeader,
+} from "./constants";
 import cluster from "cluster";
 import fs from "node:fs";
-import { join } from "node:path";
+import { resolve } from "node:path";
 import { destinations } from "./middleware/fileUpload";
+import { mkdirPossibleSync, writePossible } from "./utils/permChecker";
+import cleanUp from "./middleware/cleanUp";
 
 dotenv.config();
 
@@ -34,17 +41,36 @@ const prod = process.env.PROD === "1";
 function initFolders() {
     const folders = destinations;
 
+    const folderPath = resolve(DIR_NAME, "data");
+
     try {
-        for (const path of folders) {
-            fs.mkdirSync(join(__dirname, "data", path), { recursive: true });
+        if (mkdirPossibleSync(folderPath)) {
+            for (const path of folders) {
+                fs.mkdirSync(resolve(folderPath, path), {
+                    recursive: true,
+                });
+            }
+        } else {
+            console.warn("Invalid Perms for mkdir");
         }
 
-        fs.writeFileSync(
-            join(__dirname, "data", "template", "User_Register_Template.csv"),
-            "Sr. No.,Email ID,Role,Institution Name,Password"
+        const templatePath = resolve(
+            DIR_NAME,
+            "data",
+            "template",
+            "User_Register_Template.csv"
         );
+
+        if (writePossible(templatePath)) {
+            fs.writeFileSync(
+                templatePath,
+                "Sr. No.,Email ID,Role,Institution Name,Password"
+            );
+        } else {
+            console.warn("Invalid Perms for write");
+        }
     } catch (err) {
-        console.warn(`Error Creating Folders: ${err}`);
+        console.error("Failed init", err);
     }
 }
 
@@ -87,7 +113,7 @@ if (cluster.isMaster) {
         }
 
         cluster.on("exit", (worker) => {
-            console.log(`Worker ${worker.process.pid} died`);
+            serverLogger.info(`Worker ${worker.process.pid} died`);
             cluster.fork();
         });
     });
@@ -127,7 +153,7 @@ if (cluster.isMaster) {
     app.use("/sports-admin/data", sportsAdminRoutes);
     app.use("/research-admin/data", researchRoutes);
 
-    app.use(errorHandler);
+    app.use(cleanUp, errorHandler);
 
     const PORT = process.env.PORT || 5001;
 

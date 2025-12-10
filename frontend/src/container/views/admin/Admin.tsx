@@ -3,7 +3,7 @@ import SideBar from "@/components/SideBar";
 import Box from "@/components/status components/Box";
 import LineGraph from "@/components/status components/LineGraph";
 import Datagrid from "@/components/status components/Datagrid";
-import Piechart from "@/components/status components/Piechart";
+import PieChart from "@/components/status components/PieChart";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import Axios from "@/axios";
 import React from "react";
@@ -12,7 +12,7 @@ import HandleLogout from "@/container/Pages/Logout";
 const Admin = () => {
     const logout = HandleLogout();
 
-    const [pastData, setPastData] = useState<[]>([]);
+    const [pastData, setPastData] = useState<{ [key: string]: number }>({});
     const [rows, setRows] = useState<
         {
             [key: string]: [];
@@ -162,7 +162,7 @@ const Admin = () => {
                             <Datagrid rows={rows} />
                         </div>
                         <div className="w-[30%]">
-                            <Piechart data={pieData} />
+                            <PieChart data={pieData} />
                         </div>
                     </div>
                 </div>

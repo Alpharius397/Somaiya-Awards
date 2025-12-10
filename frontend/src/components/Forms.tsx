@@ -26,6 +26,21 @@ export type FormData = {
     [key: string]: string | File | number;
 };
 
+function youAreSpecial(
+    name: string,
+    value: string,
+    defaultValidator: z.ZodType
+) {
+    if (!["appointment_date", "date_of_appointment"].includes(name))
+        return defaultValidator;
+
+    if (value.startsWith("Promising")) {
+        return rangeDate(2, 3);
+    } else {
+        return lastDate(3);
+    }
+}
+
 export default function Forms(props: FormProps) {
     /**
      * Variables and States
@@ -102,8 +117,8 @@ export default function Forms(props: FormProps) {
         }
     };
 
-    const { setDisplay, display, getData, handleChange, data, setData } =
-        useData<z.infer<typeof props.validator>>(props.validator);
+    const { clearData, display, getData, handleChange, data, setData } =
+        useData<z.infer<typeof props.validator>>(props.validator, formName);
 
     const handleFieldChange = useCallback(
         (name: string, value: string | File, actionType: "add" | "delete") => {
@@ -166,7 +181,7 @@ export default function Forms(props: FormProps) {
             })
                 .then(() => {
                     if (!DISABLE_CLEAR_FORM) {
-                        localStorage.removeItem(formName);
+                        clearData();
                     }
                     navigate({
                         pathname: "/forms/cards",
@@ -216,21 +231,6 @@ export default function Forms(props: FormProps) {
      * Renderers
      */
 
-    function youAreSpecial(
-        name: string,
-        value: string,
-        defaultValidator: z.ZodType
-    ) {
-        if (!["appointment_date", "date_of_appointment"].includes(name))
-            return defaultValidator;
-
-        if (value.startsWith("Promising")) {
-            return rangeDate(2, 3);
-        } else {
-            return lastDate(3);
-        }
-    }
-
     const RenderFields = useMemo(() => {
         return props.data
             .filter((entry) => current === entry.page - 1)
@@ -258,13 +258,8 @@ export default function Forms(props: FormProps) {
     }, [props.data, current, display, formName, handleFieldChange]);
 
     useEffect(() => {
-        if (!localStorage.getItem(formName)) {
-            setData({});
-        } else {
-            setData(JSON.parse(localStorage.getItem(formName) || "{}"));
-            setDisplay(JSON.parse(localStorage.getItem(formName) || "{}"));
-        }
-    }, [formName, setData, setDisplay]);
+        setPercentage(Object.keys(data).length / props.data.length);
+    }, [data]);
 
     useEffect(() => {
         // is this necessary?

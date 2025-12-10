@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import sequelize from "sequelize";
 import { Research } from "../models";
+import { Request, Response, NextFunction } from "express";
 
 /**
  * @desc Get data of Research
@@ -8,20 +9,23 @@ import { Research } from "../models";
  * @method GET
  * @access Private
  */
-export const researchDataHandler = asyncHandler(async (_req, res) => {
-    const currentYear = new Date().getFullYear();
+export const researchDataHandler = asyncHandler(
+    async (_req: Request, res: Response, next: NextFunction) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Research.findAll({
-        where: sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("createdAt")),
-            currentYear
-        ),
-    });
+        const data = await Research.findAll({
+            where: sequelize.where(
+                sequelize.fn("YEAR", sequelize.col("createdAt")),
+                currentYear
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get data of Research
@@ -29,20 +33,23 @@ export const researchDataHandler = asyncHandler(async (_req, res) => {
  * @method PUT
  * @access Private
  */
-export const researchDataUpdater = asyncHandler(async (req, res) => {
-    const { applicationID } = req.body;
+export const researchDataUpdater = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const { applicationID } = req.body;
 
-    const applicationForm = await Research.findOne({
-        where: { id: applicationID },
-    });
-    if (!applicationForm) {
-        res.status(404);
-        throw new Error("Application not found");
+        const applicationForm = await Research.findOne({
+            where: { id: applicationID },
+        });
+        if (!applicationForm) {
+            res.status(404);
+            throw new Error("Application not found");
+        }
+
+        await applicationForm.update({ approved: true });
+
+        res.status(200).json({
+            message: "Update Successful",
+        });
+        next();
     }
-
-    await applicationForm.update({ approved: true });
-
-    res.status(200).json({
-        message: "Update Successful",
-    });
-});
+);

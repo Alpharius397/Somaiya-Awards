@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { AuthRequest } from "../types/request";
-import { House, NonTeaching, sequelize } from "../models";
+import { NonTeaching, sequelize } from "../models";
+import { Request, Response, NextFunction } from "express";
 import {
     OutstandingInstitution,
     Research,
@@ -15,23 +16,26 @@ import {
  * @method GET
  * @access Private
  */
-export const institutionDataHandler = asyncHandler(async (req, res) => {
-    const user_institution = (req as AuthRequest).user.institution;
+export const institutionDataHandler = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const user_institution = (req as AuthRequest).user.institution;
 
-    const currentYear = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
 
-    const data = await OutstandingInstitution.findAll({
-        where: sequelize.and(
-            // raw SQL query using and operator
-            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-            { institution_name: user_institution }
-        ),
-    });
+        const data = await OutstandingInstitution.findAll({
+            where: sequelize.and(
+                // raw SQL query using and operator
+                sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
+                { institution_name: user_institution }
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get data of Research
@@ -39,23 +43,26 @@ export const institutionDataHandler = asyncHandler(async (req, res) => {
  * @method GET
  * @access Private
  */
-export const researchDataHandler = asyncHandler(async (req, res) => {
-    const user_institution = (req as AuthRequest).user.institution;
+export const researchDataHandler = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const user_institution = (req as AuthRequest).user.institution;
 
-    const currentYear = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
 
-    const data = await Research.findAll({
-        where: sequelize.and(
-            // raw SQL query using and operator
-            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-            { institution_name: user_institution }
-        ),
-    });
+        const data = await Research.findAll({
+            where: sequelize.and(
+                // raw SQL query using and operator
+                sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
+                { institution_name: user_institution }
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get data of Sports
@@ -63,23 +70,26 @@ export const researchDataHandler = asyncHandler(async (req, res) => {
  * @method GET
  * @access Private
  */
-export const sportsDataHandler = asyncHandler(async (req, res) => {
-    const user_institution = (req as AuthRequest).user.institution;
+export const sportsDataHandler = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const user_institution = (req as AuthRequest).user.institution;
 
-    const currentYear = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
 
-    const data = await Sports.findAll({
-        where: sequelize.and(
-            // raw SQL query using and operator
-            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-            { institution_name: user_institution }
-        ),
-    });
+        const data = await Sports.findAll({
+            where: sequelize.and(
+                // raw SQL query using and operator
+                sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
+                { institution_name: user_institution }
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get data of Teaching
@@ -87,23 +97,26 @@ export const sportsDataHandler = asyncHandler(async (req, res) => {
  * @method GET
  * @access Private
  */
-export const teachingDataHandler = asyncHandler(async (req, res) => {
-    const user_institution = (req as AuthRequest).user.institution;
+export const teachingDataHandler = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const user_institution = (req as AuthRequest).user.institution;
 
-    const currentYear = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
 
-    const data = await Teaching.findAll({
-        where: sequelize.and(
-            // raw SQL query using and operator
-            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-            { institution_name: user_institution }
-        ),
-    });
+        const data = await Teaching.findAll({
+            where: sequelize.and(
+                // raw SQL query using and operator
+                sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
+                { institution_name: user_institution }
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Data of Non Teaching
@@ -111,23 +124,26 @@ export const teachingDataHandler = asyncHandler(async (req, res) => {
  * @method GET
  * @access Private
  */
-export const nonTeachingDataHandler = asyncHandler(async (req, res) => {
-    const user_institution = (req as AuthRequest).user.institution;
+export const nonTeachingDataHandler = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const user_institution = (req as AuthRequest).user.institution;
 
-    const currentYear = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
 
-    const data = await NonTeaching.findAll({
-        where: sequelize.and(
-            // raw SQL query using and operator
-            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-            { institution_name: user_institution }
-        ),
-    });
+        const data = await NonTeaching.findAll({
+            where: sequelize.and(
+                // raw SQL query using and operator
+                sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
+                { institution_name: user_institution }
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+        next();
+    }
+);
 
 /**
  * @desc Get data of Students
@@ -135,20 +151,23 @@ export const nonTeachingDataHandler = asyncHandler(async (req, res) => {
  * @method GET
  * @access Private
  */
-export const studentsDataHandler = asyncHandler(async (req, res) => {
-    const user_institution = (req as AuthRequest).user.institution;
+export const studentsDataHandler = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const user_institution = (req as AuthRequest).user.institution;
 
-    const currentYear = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
 
-    const data = await Students.findAll({
-        where: sequelize.and(
-            // raw SQL query using and operator
-            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-            { institution_name: user_institution }
-        ),
-    });
+        const data = await Students.findAll({
+            where: sequelize.and(
+                // raw SQL query using and operator
+                sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
+                { institution_name: user_institution }
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+        next();
+    }
+);

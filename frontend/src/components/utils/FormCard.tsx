@@ -9,7 +9,7 @@ type Prop = {
     link: string;
 };
 
-export default function FormCard(props: Prop) {
+function FormCard(props: Prop) {
     const [hovered, setHovered] = useState(false);
 
     const handleHover = () => {
@@ -63,3 +63,14 @@ export default function FormCard(props: Prop) {
         </div>
     );
 }
+
+function areEqual(prev: Prop, next: Prop) {
+    return (
+        prev.image === next.image &&
+        prev.title === next.title &&
+        prev.info === next.info &&
+        prev.link === next.link
+    );
+}
+
+export default React.memo(FormCard, areEqual);

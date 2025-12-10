@@ -7,6 +7,7 @@ import userAuthenticator from "../middleware/userAuthenticator";
 import roleMiddle from "../middleware/role";
 import { Role } from "../types/role";
 import csrfMiddleware from "../middleware/csrfMiddleware";
+import { ApplicationLoggerMiddleware } from "../middleware/logger";
 
 const router = express.Router();
 
@@ -24,5 +25,8 @@ router
         roleMiddle([Role.ResearchAdmin]),
         researchDataUpdater
     );
+
+router.use(ApplicationLoggerMiddleware);
+    
 
 export default router;

@@ -31,10 +31,10 @@ const ALLOWED_FILES = ["application/pdf", "image/jpeg"];
 
 function multerDiskStorageFactory(folderName: FolderName): DiskStorageOptions {
     return {
-        destination: (req, file, cb) => {
+        destination: (_req, _file, cb) => {
             cb(null, `data/${folderName}`);
         },
-        filename: (req, file, cb) => {
+        filename: (_req, file, cb) => {
             cb(null, Date.now() + path.extname(file.originalname));
         },
     };
@@ -43,7 +43,7 @@ function multerDiskStorageFactory(folderName: FolderName): DiskStorageOptions {
 function multerFactory(folder: FolderName) {
     return multer({
         storage: multer.diskStorage(multerDiskStorageFactory(folder)),
-        fileFilter: (req, file, cb) => {
+        fileFilter: (_req, file, cb) => {
             if (ALLOWED_FILES.includes(file.mimetype)) {
                 cb(null, true);
             } else {
