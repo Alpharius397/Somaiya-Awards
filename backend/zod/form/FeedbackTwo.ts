@@ -1,12 +1,12 @@
-import * as z from "zod";
+import z from "zod";
 import {
     arrayChoice,
     phoneNumber,
     somaiyaMail,
-    serverTextArea,
     validString,
-} from "../../zod";
-import { agreeList, feedTeacherCategory, ratingList } from "../../constants";
+} from "@/shared/zod";
+import { agreeList, feedTeacherCategory, ratingList } from "@/shared/constants";
+import { serverTextArea } from "@/zod";
 
 export const FeedbackTwoForm = z.object({
     rater_name: validString,

@@ -1,4 +1,4 @@
-import * as z from "zod";
+import z from "zod";
 import {
     arrayChoice,
     email,
@@ -9,9 +9,8 @@ import {
     validBoolean,
     validNumber,
     validString,
-} from "../../zod";
-
-import { NonTeachingAwardList } from "../../constants";
+} from "@/shared/zod";
+import { NonTeachingAwardList } from "@/shared/constants";
 
 export const NonTeachingForm = z.object({
     email_id: email,

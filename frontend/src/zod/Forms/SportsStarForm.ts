@@ -1,11 +1,6 @@
 import z from "zod";
-import {
-    arrayChoice,
-    email,
-    validFile,
-    validString,
-} from "@/backend/zod";
-import { options, Institutes } from "@/backend/constants";
+import { arrayChoice, email, validFile, validString } from "@/shared/zod";
+import { options, Institutes } from "@/shared/constants";
 import { clientTextArea } from "@/zod";
 
 export const SportsStarFormField = {

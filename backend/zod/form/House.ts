@@ -1,6 +1,11 @@
 import z from "zod";
-import { validBoolean, validString, arrayChoice, validNumber } from "../../zod";
-import { Houses } from "../../constants";
+import {
+    validBoolean,
+    validString,
+    arrayChoice,
+    validNumber,
+} from "@/shared/zod";
+import { Houses } from "@/shared/constants";
 
 const HouseForm = z.object({
     house_name: arrayChoice(Houses),

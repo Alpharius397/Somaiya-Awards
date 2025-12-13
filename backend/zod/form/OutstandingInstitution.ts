@@ -1,17 +1,17 @@
-import * as z from "zod";
+import z from "zod";
 import {
     arrayChoice,
     email,
     phoneNumber,
     somaiyaMail,
-    serverTextArea,
     validBoolean,
     validDate,
     validNumber,
     validString,
     validYear,
-} from "../../zod";
-import { OutstandingInstList, Institutes } from "../../constants";
+} from "@/shared/zod";
+import { OutstandingInstList, Institutes } from "@/shared/constants";
+import { serverTextArea } from "@/zod";
 
 export const OutstandingInstitutionForm = z.object({
     email_id: email,

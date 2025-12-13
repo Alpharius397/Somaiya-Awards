@@ -1,5 +1,5 @@
 import z from "zod";
-import { anyString, email } from "@/backend/zod";
+import { anyString, email } from "@/shared/zod";
 
 const LoginValidator = z.object({
     user_email: email,

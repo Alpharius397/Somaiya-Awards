@@ -3,8 +3,8 @@ import RequestFormatter, {
     ErrorJsonType,
     getErrorJson,
     StatusCode,
-} from "../utils/requestFormatter";
-import { serverLogger } from "./logger";
+} from "@/utils/requestFormatter";
+import { serverLogger } from "@/middleware/logger";
 
 function getErrorDebugJson(
     err: Error,

@@ -1,7 +1,7 @@
 import FormInfo from "@/components/FormInfo";
 import Forms from "@/components/Forms";
 import FeedbackTeachingPeerForm from "@/data/Forms/FeedbackTeachingPeerForm";
-import FeedbackPeerTeaching from "@/components/utils/data/FeedbackPeerTeaching";
+import { FeedbackPeerTeaching } from "@/components/utils/data";
 import Footer from "@/components/Footer";
 import React from "react";
 import FeedbackTeachingPeerValidator from "@/zod/Forms/FeedbackTeachingPeerForm";

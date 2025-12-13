@@ -1,3 +1,5 @@
+/* eslint-disable no-async-promise-executor */
+
 import { useEffect, useMemo, useState } from "react";
 import z from "zod";
 
@@ -14,26 +16,32 @@ class IndexDB {
     static readonly keyPath = "name";
 
     db?: IDBDatabase;
-    formName: string;
+    formName?: string;
 
-    constructor(formName: string) {
+    constructor(formName?: string) {
         this.formName = formName;
     }
 
-    private initDB(dbName: string) {
+    private initDB(dbName?: string) {
         return new Promise<IDBDatabase>((res, rej) => {
             if (this.db) {
-                res(this.db);
-                return;
+                return res(this.db);
+            }
+
+            if (!dbName) {
+                return rej(new Error("Db Name not specified"));
             }
 
             const request = indexedDB.open(dbName, IndexDB.version);
+
             request.onerror = (event) => {
-                rej((event.target as DbEvent).error);
+                return rej((event.target as DbEvent).error);
             };
+
             request.onsuccess = (event) => {
-                res((event.target as DbEvent).result);
+                return res((event.target as DbEvent).result);
             };
+
             request.onupgradeneeded = (event) => {
                 const objectStore = (
                     event.target as DbEvent
@@ -49,7 +57,11 @@ class IndexDB {
     }
 
     getData(name: string) {
-        return new Promise<IndexDbData | null>(async (res) => {
+        return new Promise<IndexDbData | null>(async (res, rej) => {
+            if (!this.formName) {
+                return rej(new Error("Db Name not specified"));
+            }
+
             const db: IDBDatabase = await this.initDB(this.formName);
 
             const store = db
@@ -61,19 +73,21 @@ class IndexDB {
 
                 if (cursor) {
                     if (cursor.value[IndexDB.keyPath] === name) {
-                        res(cursor.value);
-                        return;
+                        return res(cursor.value);
                     }
                     cursor.continue();
                 } else {
-                    res(null);
+                    return res(null);
                 }
             };
         });
     }
 
     getAllData() {
-        return new Promise<IndexDbData[] | []>(async (res) => {
+        return new Promise<IndexDbData[] | []>(async (res, rej) => {
+            if (!this.formName) {
+                return rej(new Error("Db Name not specified"));
+            }
             const data: IndexDbData[] = [];
 
             const db: IDBDatabase = await this.initDB(this.formName);
@@ -89,15 +103,17 @@ class IndexDB {
                     data.push(cursor.value);
                     cursor.continue();
                 } else {
-                    res(data);
-                    return;
+                    return res(data);
                 }
             };
         });
     }
 
     setData(name: string, data: string | File) {
-        return new Promise<boolean>(async (res) => {
+        return new Promise<boolean>(async (res, rej) => {
+            if (!this.formName) {
+                return rej(new Error("Db Name not specified"));
+            }
             const db: IDBDatabase = await this.initDB(this.formName);
 
             const store = db
@@ -112,7 +128,10 @@ class IndexDB {
     }
 
     deleteData(name: string) {
-        return new Promise<boolean>(async (res) => {
+        return new Promise<boolean>(async (res, rej) => {
+            if (!this.formName) {
+                return rej(new Error("Db Name not specified"));
+            }
             const db: IDBDatabase = await this.initDB(this.formName);
 
             const store = db
@@ -127,7 +146,10 @@ class IndexDB {
     }
 
     deleteAllData() {
-        return new Promise<boolean>(async (res) => {
+        return new Promise<boolean>(async (res, rej) => {
+            if (!this.formName) {
+                return rej(new Error("Db Name not specified"));
+            }
             const db: IDBDatabase = await this.initDB(this.formName);
 
             const store = db
@@ -141,15 +163,14 @@ class IndexDB {
                     cursor.delete();
                     cursor.continue();
                 } else {
-                    res(true);
-                    return;
+                    return res(true);
                 }
             };
         });
     }
 }
 
-export function useData<T>(validator: z.ZodType, formName: string) {
+export function useData<T>(validator: z.ZodType, formName?: string) {
     const [data, setData] = useState<T | object>({});
     const [display, setDisplay] = useState<{ [key: string]: string | File }>(
         {}
@@ -157,7 +178,7 @@ export function useData<T>(validator: z.ZodType, formName: string) {
 
     const indexDB = useMemo(() => new IndexDB(formName), [formName]);
 
-    useEffect(() => {
+    const initDb = () => {
         indexDB.getAllData().then((val) => {
             const rows: { [key: string]: string | File } = {};
 
@@ -168,6 +189,11 @@ export function useData<T>(validator: z.ZodType, formName: string) {
             setData(rows);
             setDisplay(rows);
         });
+    };
+
+    useEffect(() => {
+        initDb();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleChange = (

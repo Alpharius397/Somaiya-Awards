@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { upload11 } from "../middleware/fileUpload";
+import { upload11 } from "@/middleware/fileUpload";
 import {
     getCounts,
     getDaysCount,
@@ -28,12 +28,12 @@ import {
     getSportsCoachData,
     getUsersData,
     getInspiringCoachScorecard,
-} from "../controllers/adminController";
-import userAuthenticator from "../middleware/userAuthenticator";
-import { Role } from "../types/role";
-import roleMiddle from "../middleware/role";
-import csrfMiddleware from "../middleware/csrfMiddleware";
-import { AuthLoggerMiddleware } from "../middleware/logger";
+} from "@/controllers/adminController";
+import userAuthenticator from "@/middleware/userAuthenticator";
+import { Role } from "@/shared/types/role";
+import roleMiddle from "@/middleware/role";
+import csrfMiddleware from "@/middleware/csrfMiddleware";
+import { AuthLoggerMiddleware } from "@/middleware/logger";
 
 /** GET ROUTES */
 
@@ -160,6 +160,4 @@ router
         deleteUser
     );
 
-router.use(AuthLoggerMiddleware);
-    
 export default router;

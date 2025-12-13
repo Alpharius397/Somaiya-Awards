@@ -30,5 +30,5 @@ To run this project, you will need to add the following environment variables to
 **Server:** Node, Express, TypeScript, Zod, MYSQL  
 
 ### ENV Guide
-- AuthDisable: disables auth middleware completely
-- CsrfDisable: disables CSRF middleware completely
+- ~~AuthDisable: disables auth middleware completely~~
+- ~~CsrfDisable: disables CSRF middleware completely~~

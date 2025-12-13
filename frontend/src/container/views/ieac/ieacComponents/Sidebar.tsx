@@ -25,12 +25,10 @@ export default function SideBar() {
                     }}
                 >
                     <div className="p-4 text-2xl text-center mb-[1rem] font-Roboto ">
-                        <p>
-                            IEAC
-                            <div className="p-1 mt-3 text-xs font-Poppins text-center ">
-                                {localStorage.getItem("institution")}
-                            </div>
-                        </p>
+                        IEAC
+                        <div className="p-1 mt-3 text-xs font-Poppins text-center">
+                            {localStorage.getItem("institution")}
+                        </div>
                     </div>
                     <MenuItem
                         icon={<GavelRoundedIcon />}

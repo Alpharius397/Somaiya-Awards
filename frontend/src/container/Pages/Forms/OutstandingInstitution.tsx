@@ -1,7 +1,7 @@
 import FormInfo from "@/components/FormInfo";
 import Forms from "@/components/Forms";
 import OutstandingInstForm from "@/data/Forms/OutstandingInstForm";
-import OutsInstStages from "@/components/utils/data/OutsInstStages";
+import { OutsInstStages } from "@/components/utils/data";
 import OutstandingInstFormValidator from "@/zod/Forms/OutstandingInstForm";
 import React from "react";
 import SideBar from "@/components/hoi_components/SideBar";

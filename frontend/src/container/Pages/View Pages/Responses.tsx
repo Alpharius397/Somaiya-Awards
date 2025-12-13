@@ -18,14 +18,14 @@ import {
     columns11,
     columns12,
 } from "@/data/AnalysisData/ADMIN/structure";
-import { type DataType } from "@/backend/types/controllers/admin";
+import { type NonTeachingJuryData } from "@/shared/types/controllers/admin";
 import xlsx from "json-as-xlsx";
 import Axios from "@/axios";
-import React from "react";
 import {
     xlsxColumnsTeaching,
     xlsxColumnsNonTeaching,
 } from "@/container/Pages/View Pages/xlsxColumns";
+import React from "react";
 
 export default function Responses() {
     /**
@@ -153,10 +153,9 @@ export default function Responses() {
                         RTL: false,
                     };
 
-                    //@ts-expect-error Can break
                     xlsx(data, settings);
                 } else if (path === "non-teaching") {
-                    const content = res.data as DataType;
+                    const content = res.data as NonTeachingJuryData;
                     const data = [
                         {
                             sheet: "Outstanding Emp Inst",
@@ -247,7 +246,7 @@ export default function Responses() {
                         writeOptions: {},
                         RTL: false,
                     };
-                    //@ts-expect-error Me no like type
+                    //@ts-ignore
                     xlsx(data, settings);
                 }
             })
@@ -272,14 +271,12 @@ export default function Responses() {
                     {location.pathname.split("/responses/")[1] === "teaching" ||
                     location.pathname.split("/responses/")[1] ===
                         "non-teaching" ? (
-                        <div className="">
-                            <button
-                                onClick={handleJuryReporyDownload}
-                                className="px-3 py-2 bg-red-800 text-white font-Poppins my-5 rounded-full"
-                            >
-                                Jury Summary
-                            </button>
-                        </div>
+                        <button
+                            onClick={handleJuryReporyDownload}
+                            className="px-3 py-2 bg-red-800 text-white font-Poppins my-5 rounded-full"
+                        >
+                            Jury Summary
+                        </button>
                     ) : null}
                     <div className="my-5 overflow-y-scroll">
                         <DataGrid

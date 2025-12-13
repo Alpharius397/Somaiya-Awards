@@ -4,8 +4,8 @@ import {
     phoneNumber,
     somaiyaMail,
     validString,
-} from "@/backend/zod";
-import { agreeList, feedTeacherCategory, ratingList } from "@/backend/constants";
+} from "@/shared/zod";
+import { agreeList, feedTeacherCategory, ratingList } from "@/shared/constants";
 import { clientTextArea } from "@/zod";
 
 export const FeedbackTeachingPeerField = {

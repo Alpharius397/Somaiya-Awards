@@ -1,7 +1,7 @@
 import type { FormEntry } from "@/data/Forms/types";
 import { URL } from "@/axios";
 import { FeedbackSportsCoachField as v } from "@/zod/Forms/FeedbackSportsCoach";
-import { Institutes, options } from "@/backend/constants";
+import { Institutes, options } from "@/shared/constants";
 import fetchOptions from "@/data/Forms";
 
 /** add __*nominee_name*__ at runtime */

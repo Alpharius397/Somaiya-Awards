@@ -1,10 +1,22 @@
-import asyncHandler from "express-async-handler";
-import { AuthRequest, FileRequest } from "../types/request";
-import { NonTeaching, sequelize } from "../models";
-import { OutstandingInstitution, Teaching } from "../models";
+import asyncHandler from "@/utils/asyncHandler";
+import { AuthRequest, FileRequest } from "@/types/request";
+import { NonTeaching, sequelize } from "@/models";
+import { OutstandingInstitution, Teaching } from "@/models";
 import { Op } from "sequelize";
-import { instituteHeader } from "../constants";
-import { Request, Response, NextFunction } from "express";
+import { instituteHeader } from "@/shared/constants";
+import { Request, Response } from "express";
+import { ApplicationLogger } from "@/middleware/logger";
+import { checkObject } from ".";
+import {
+    teachingIEACScore,
+    TeachingIEACScoreType,
+} from "@/zod/form/TeachingIEACScore";
+import {
+    nonTeachingIEACScore,
+    NonTeachingIEACScoreType,
+} from "@/zod/form/NonTeachingIEACScore";
+
+const LogRequest = ApplicationLogger;
 
 /**
  * @desc Get data of OutstandingInstitution
@@ -13,7 +25,7 @@ import { Request, Response, NextFunction } from "express";
  * @access Private
  */
 export const institutionDataHandler = asyncHandler(
-    async (_req: Request, res: Response, next: NextFunction) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await OutstandingInstitution.findAll({
@@ -26,7 +38,6 @@ export const institutionDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );
 
@@ -37,7 +48,7 @@ export const institutionDataHandler = asyncHandler(
  * @access Private
  */
 export const teachingDataHandler = asyncHandler(
-    async (_req: Request, res: Response, next: NextFunction) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await Teaching.findAll({
@@ -50,7 +61,6 @@ export const teachingDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );
 
@@ -61,7 +71,7 @@ export const teachingDataHandler = asyncHandler(
  * @access Private
  */
 export const nonTeachingDataHandler = asyncHandler(
-    async (_req: Request, res: Response, next: NextFunction) => {
+    async (_req: Request, res: Response) => {
         const currentYear = new Date().getFullYear();
 
         const data = await NonTeaching.findAll({
@@ -74,7 +84,6 @@ export const nonTeachingDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );
 
@@ -84,29 +93,40 @@ export const nonTeachingDataHandler = asyncHandler(
  * @method PUT
  * @access Private
  */
-// TODO: add zod for this
-export const teachingDataUpdater = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
-        const { scoreA, scoreB, scoreC, recommended, applicationID } = req.body;
+export const teachingDataUpdater = LogRequest(
+    async (req: Request, res: Response) => {
+        const {
+            ieac_scoreA,
+            ieac_scoreB,
+            ieac_scoreC,
+            applicationID,
+            ieacApproved,
+        } = checkObject<TeachingIEACScoreType>(
+            req.body,
+
+            teachingIEACScore,
+            res
+        );
 
         const applicationForm = await Teaching.findOne({
             where: { id: applicationID },
         });
+
         if (!applicationForm) {
             res.status(404);
             throw new Error("Application not found");
         }
+
         await applicationForm.update({
-            ieac_scoreA: scoreA,
-            ieac_scoreB: scoreB,
-            ieac_scoreC: scoreC,
-            ieacApproved: recommended,
+            ieac_scoreA,
+            ieac_scoreB,
+            ieac_scoreC,
+            ieacApproved,
         });
 
         res.status(200).json({
             message: "Update Successful",
         });
-        next();
     }
 );
 
@@ -115,9 +135,15 @@ export const teachingDataUpdater = asyncHandler(
  * @route /ieac/data/teaching
  * @method PUT
  * @access Private
- */ export const nonTeachingDataUpdater = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
-        const { scoreA, scoreB, recommended, applicationID } = req.body;
+ */
+export const nonTeachingDataUpdater = LogRequest(
+    async (req: Request, res: Response) => {
+        const { ieac_scoreA, ieac_scoreB, applicationID, ieacApproved } =
+            checkObject<NonTeachingIEACScoreType>(
+                req.body,
+                nonTeachingIEACScore,
+                res
+            );
 
         const applicationForm = await NonTeaching.findOne({
             where: { id: applicationID },
@@ -128,15 +154,14 @@ export const teachingDataUpdater = asyncHandler(
         }
 
         await applicationForm.update({
-            ieac_scoreA: scoreA,
-            ieac_scoreB: scoreB,
-            ieacApproved: recommended,
+            ieac_scoreA,
+            ieac_scoreB,
+            ieacApproved,
         });
 
         res.status(200).json({
             message: "Update Successful",
         });
-        next();
     }
 );
 
@@ -146,8 +171,8 @@ export const teachingDataUpdater = asyncHandler(
  * @method POST
  * @access Private
  */
-export const teachingRecFileHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const teachingRecFileHandler = LogRequest(
+    async (req: Request, res: Response) => {
         const ieacApprovedFile = (req as FileRequest).file.path;
 
         await Teaching.update(
@@ -171,7 +196,6 @@ export const teachingRecFileHandler = asyncHandler(
             file: ieacApprovedFile,
             message: "File uploaded successfully!",
         });
-        next();
     }
 );
 
@@ -181,8 +205,8 @@ export const teachingRecFileHandler = asyncHandler(
  * @method POST
  * @access Private
  */
-export const nonTeachingRecFileHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const nonTeachingRecFileHandler = LogRequest(
+    async (req: Request, res: Response) => {
         const ieacApprovedFile = (req as FileRequest).file.path;
 
         await NonTeaching.update(
@@ -206,7 +230,6 @@ export const nonTeachingRecFileHandler = asyncHandler(
             file: ieacApprovedFile,
             message: "File uploaded successfully!",
         });
-        next();
     }
 );
 
@@ -217,7 +240,7 @@ export const nonTeachingRecFileHandler = asyncHandler(
  * @access Public
  */
 export const getNominatedTeacherNames = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const names = [];
 
         const institute_name = req.headers[instituteHeader];
@@ -268,7 +291,6 @@ export const getNominatedTeacherNames = asyncHandler(
         res.status(200).json({
             data: names,
         });
-        next();
     }
 );
 
@@ -279,7 +301,7 @@ export const getNominatedTeacherNames = asyncHandler(
  * @access Public
  */
 export const getNominatedStaffNames = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const names = [];
         const institute_name = req.headers[instituteHeader];
 
@@ -329,6 +351,5 @@ export const getNominatedStaffNames = asyncHandler(
         res.status(200).json({
             data: names,
         });
-        next();
     }
 );

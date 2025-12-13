@@ -1,11 +1,11 @@
 import FormInfo from "@/components/FormInfo";
 import Forms from "@/components/Forms";
 import PeerNonTeachingFeedbackForm from "@/data/Forms/PeerNonTeachingFeedbackForm";
-import FeedbackPeerNonTeaching from "@/components/utils/data/FeebackPeerNonTeaching";
+import { FeedbackPeerNonTeaching } from "@/components/utils/data";
 import Footer from "@/components/Footer";
-import React from "react";
 import PeerNonTeachingFeedbackFormValidator from "@/zod/Forms/PeerNonTeachingFeedbackForm";
 import Navbar from "@/components/Navbar";
+import React from "react";
 
 export default function FeedbackNonTeachingPR() {
     const title = "Peers Feedback Form for Non Teaching";

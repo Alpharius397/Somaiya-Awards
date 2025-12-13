@@ -1,25 +1,11 @@
-import asyncHandler from "express-async-handler";
-// import { authLogger } from "logger";
-import { User } from "../models";
-import { AccessCookie } from "../constants";
-import { AuthRequest } from "../types/request";
-import { getJwtToken } from "./jwt";
-import RequestFormatter from "../utils/requestFormatter";
+import asyncHandler from "@/utils/asyncHandler";
+import { User } from "@/models";
+import { AuthRequest } from "@/types/request";
+import { getJwtToken } from "@/middleware/jwt";
+import { AccessCookie } from "@/constants";
 
-/**
- * Auth Workflow:
- *   Header Token -> x-access (Main Token), x-refresh (Refresh Token to refresh access)
- * */
 const userAuthenticator = asyncHandler(async (req, res, next) => {
     const accessToken = req.cookies[AccessCookie];
-
-    /**
-     * WARN: (Don't Follow that):
-     *
-     * if something breaks remove this if statement due to token or userID while TESTING
-     * */
-    // Both absent
-    //
 
     const disable = process.env.AuthDisable === "1";
 
@@ -43,9 +29,7 @@ const userAuthenticator = asyncHandler(async (req, res, next) => {
         return;
     }
 
-    /**till here */
-
-    let access = getJwtToken(accessToken);
+    const access = getJwtToken(accessToken);
 
     if (access === null) {
         res.status(401).json({

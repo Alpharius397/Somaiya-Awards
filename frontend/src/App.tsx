@@ -49,7 +49,7 @@ import FeedbackSportsInc from "@/container/Pages/Forms/FeedbackSportsInc";
 import Tutorial from "@/components/Tutorial";
 import React, { useEffect } from "react";
 import { unauthorizedSwal } from "@/components/utils/swal";
-import { LoginCookie } from "@/backend/constants";
+import { LoginCookie } from "@/shared/constants";
 
 const noAuthNeeded = [
     "/results",

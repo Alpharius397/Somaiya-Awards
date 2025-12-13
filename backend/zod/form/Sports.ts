@@ -1,11 +1,6 @@
-import * as z from "zod";
-import {
-    email,
-    serverTextArea,
-    validBoolean,
-    validNumber,
-    validString,
-} from "../../zod";
+import z from "zod";
+import { email, validBoolean, validNumber, validString } from "@/shared/zod";
+import { serverTextArea } from "@/zod";
 
 export const SportsForm = z.object({
     email_id: email,

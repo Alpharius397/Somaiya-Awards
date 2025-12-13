@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { email, anyString } from "..";
+import { email, anyString } from "@/shared/zod";
 
 export const UserLogin = z.object({
     user_email: email,

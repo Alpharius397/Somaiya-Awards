@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { email, role, validNumber, validString } from "..";
+import { email, role, validNumber, validString } from "@/shared/zod";
 
 export const JwtForm = z.object({
     id: validNumber,

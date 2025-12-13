@@ -1,11 +1,6 @@
 import z from "zod";
-import {
-    arrayChoice,
-    somaiyaMail,
-    validFile,
-    validString,
-} from "@/backend/zod";
-import { Institutes, studentAwardList } from "@/backend/constants";
+import { arrayChoice, somaiyaMail, validFile, validString } from "@/shared/zod";
+import { Institutes, studentAwardList } from "@/shared/constants";
 import { clientTextArea } from "@/zod";
 
 export const StudentsFormDataField = {

@@ -1,7 +1,7 @@
-import asyncHandler from "express-async-handler";
+import asyncHandler from "../utils/asyncHandler";
 import { sequelize, FeedbackFive, Sports } from "../models";
 import { Op } from "sequelize";
-import { instituteHeader } from "../constants";
+import { instituteHeader } from "@/shared/constants";
 import {
     BoyData,
     CoachData,

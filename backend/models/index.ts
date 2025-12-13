@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import process from "process";
-import InitDB from "../models/tables";
+import InitDB from "@/models/tables";
 
 const prod = process.env.PROD === "1";
 

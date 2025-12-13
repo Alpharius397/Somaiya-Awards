@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
-import { Role } from "../../types/role";
+import { Role } from "@/shared/types/role";
 
 interface UserAttributes {
     id: number;

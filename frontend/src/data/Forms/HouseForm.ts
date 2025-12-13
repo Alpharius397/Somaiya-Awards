@@ -1,6 +1,7 @@
 import type { FormEntry } from "@/data/Forms/types";
-import { arrayChoice, textArea, validFile } from "@/backend/zod";
-import { Houses, options } from "@/backend/constants";
+import { arrayChoice, validFile } from "@/shared/zod";
+import { Houses, options } from "@/shared/constants";
+import { clientTextArea } from "@/zod";
 
 const HouseEvaluationForm: FormEntry[] = [
     // Page 1 - House Selection
@@ -214,7 +215,7 @@ const HouseEvaluationForm: FormEntry[] = [
         title: "Recommendation Note (Max 600 words )",
         name: "recommendation_note",
         type: "textarea",
-        validator: textArea({ maxLength: 600 }),
+        validator: clientTextArea({ maxLength: 600 }),
         required: true,
         page: 9,
         fieldsPerLine: 1,

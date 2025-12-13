@@ -1,8 +1,5 @@
-import { Institutes, studentAwardList } from "@/backend/constants";
-import {
-    StudentsFormDataField as v,
-} from "@/zod/Forms/StudentsFormData";
-
+import { Institutes, studentAwardList } from "@/shared/constants";
+import { StudentsFormDataField as v } from "@/zod/Forms/StudentsFormData";
 import type { FormEntry } from "@/data/Forms/types";
 
 const StudentsFormData: FormEntry[] = [
@@ -83,6 +80,6 @@ const StudentsFormData: FormEntry[] = [
         page: 3,
         fieldsPerLine: 1,
     },
-];
+] as const;
 
 export default StudentsFormData;

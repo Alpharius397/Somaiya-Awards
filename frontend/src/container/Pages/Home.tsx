@@ -5,12 +5,12 @@ import { OrbitControls, Environment } from "@react-three/drei";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Lottie from "lottie-react";
-import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import Certificate from "@/container/assets/certificate.json";
 import Money from "@/container/assets/money.json";
 import SkyFire from "@/container/assets/skyfire.hdr";
 import Trophy from "@/container/assets/trophy.json";
+import React from "react";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -35,11 +35,13 @@ export default function Home() {
                             }}
                         >
                             <OrbitControls />
+                            {/** @ts-expect-error Thanks r3f for types */}
                             <pointLight
                                 position={[0, 10, 0]}
                                 intensity={2.0}
                                 color="#ffffff"
                             />
+                            {/** @ts-expect-error Thanks r3f for types */}
                             <spotLight
                                 position={[0, 10, 5]}
                                 intensity={5.0}
@@ -47,14 +49,17 @@ export default function Home() {
                                 penumbra={0.1}
                                 color="#ff9900"
                             />
+                            {/** @ts-expect-error Thanks r3f for types */}
                             <directionalLight
                                 position={[-10, 5, -5]}
                                 intensity={1.5}
                                 color="#00ccff"
                             />
+                            {/** @ts-expect-error Thanks r3f for types */}
                             <ambientLight intensity={0.5} color="#ffffff" />
 
                             {/* Environment Map */}
+                            {/** @ts-expect-error Thanks r3f for types */}
                             <Environment files={SkyFire} intensity={2} />
 
                             <Model />

@@ -1,6 +1,6 @@
-import asyncHandler from "express-async-handler";
-import { AuthRequest } from "../types/request";
-import { Role } from "../types/role";
+import asyncHandler from "@/utils/asyncHandler";
+import { AuthRequest } from "@/types/request";
+import { Role } from "@/shared/types/role";
 
 /** Thanks ieac */
 export default function roleMiddle(roles: Role[]) {

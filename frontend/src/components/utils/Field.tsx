@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import "@/components/utils/css/config.css";
 import type { FormEntry } from "@/data/Forms/types";
-import * as z from "zod";
-import { NurgleTallyMan } from "@/backend/zod";
+import z from "zod";
+import { NurgleTallyMan } from "@/shared/zod";
 import { Eye, EyeOff } from "lucide-react";
 
 export type FieldProp = {
@@ -21,24 +21,25 @@ function Field({
     type,
     title,
     required,
-    //@ts-expect-error Prop mass definiton
+    //@ts-expect-error Prop mass definition
     options,
-    //@ts-expect-error Prop mass definiton
+    //@ts-expect-error Prop mass definition
     fetch,
     value,
     validator,
     link,
-    //@ts-expect-error Prop mass definiton
+    //@ts-expect-error Prop mass definition
     dropOpt,
-    //@ts-expect-error Prop mass definiton
+    //@ts-expect-error Prop mass definition
     dropdownHiddenItem,
-    //@ts-expect-error Prop mass definiton
+    //@ts-expect-error Prop mass definition
     accept,
     fieldsPerLine,
 
     onChange,
 }: FieldProp) {
     const [error, setError] = useState<string | null>(null);
+    const [objectURL, setURL] = useState<string | null>(null);
 
     const handleTextChange = useCallback(
         <T extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
@@ -47,9 +48,7 @@ function Field({
             const { name, value } = event.target;
             const res = validator.safeParse(value);
             if (!res.success) {
-                setError(
-                    z.treeifyError(res.error as z.ZodError).errors.join(", ")
-                );
+                setError(z.treeifyError(res.error).errors.join(", "));
                 onChange(name, value, "delete");
             } else {
                 setError(null);
@@ -65,6 +64,16 @@ function Field({
             if (!files) return;
             const file = files[0];
             const res = validator.safeParse(file);
+
+            setURL((prev) => {
+                if (prev) {
+                    URL.revokeObjectURL(prev);
+                }
+
+                const url = URL.createObjectURL(file);
+                return url;
+            });
+
             if (!res.success) {
                 setError(
                     z.treeifyError(res.error as z.ZodError).errors.join(", ")
@@ -111,6 +120,13 @@ function Field({
         if (!fetch) return;
 
         (fetch as Promise<string[]>).then(setData).catch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (type === "file" && value instanceof File) {
+            setURL(URL.createObjectURL(value));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -212,10 +228,21 @@ function Field({
                         />
                         {value instanceof File && (
                             <p className="p-2">
-                                <span className="text-red-700 font-semibold font-Poppins">
-                                    Selected File:
-                                </span>{" "}
-                                {value.name}
+                                {objectURL ? (
+                                    <>
+                                        <span className="text-red-700 font-semibold font-Poppins">
+                                            Selected File:
+                                        </span>{" "}
+                                        <a
+                                            href={`${objectURL}`}
+                                            target="_blank"
+                                            className="underline underline-offset-4 hover:text-blue-400 transition-all ease-in"
+                                        >
+                                            {" "}
+                                            {value.name}
+                                        </a>
+                                    </>
+                                ) : null}{" "}
                             </p>
                         )}
                     </>
@@ -246,28 +273,20 @@ function Field({
                 return (
                     <select
                         name={name}
-                        value={value as string}
                         onChange={handleTextChange}
                         required={required}
                         className="w-72 p-2 rounded-md shadow-lg active:shadow-2xl hover:w-full transition-all duration-500 outline-none"
+                        value={String(value)}
                     >
                         <option hidden>{dropdownHiddenItem}</option>
                         {dropOpt === "single"
                             ? (instituteOption || []).map((opt: string) => (
-                                  <option
-                                      key={opt}
-                                      value={opt}
-                                      selected={value === opt}
-                                  >
+                                  <option key={opt} value={opt}>
                                       {opt}
                                   </option>
                               ))
                             : dataOptions.map((opt) => (
-                                  <option
-                                      key={opt}
-                                      value={opt}
-                                      selected={value === opt}
-                                  >
+                                  <option key={opt} value={opt}>
                                       {opt}
                                   </option>
                               ))}

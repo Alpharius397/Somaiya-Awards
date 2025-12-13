@@ -2,12 +2,11 @@ import express from "express";
 import {
     researchDataHandler,
     researchDataUpdater,
-} from "../controllers/researchAdminController";
-import userAuthenticator from "../middleware/userAuthenticator";
-import roleMiddle from "../middleware/role";
-import { Role } from "../types/role";
-import csrfMiddleware from "../middleware/csrfMiddleware";
-import { ApplicationLoggerMiddleware } from "../middleware/logger";
+} from "@/controllers/researchAdminController";
+import userAuthenticator from "@/middleware/userAuthenticator";
+import roleMiddle from "@/middleware/role";
+import { Role } from "@/shared/types/role";
+import csrfMiddleware from "@/middleware/csrfMiddleware";
 
 const router = express.Router();
 
@@ -25,8 +24,5 @@ router
         roleMiddle([Role.ResearchAdmin]),
         researchDataUpdater
     );
-
-router.use(ApplicationLoggerMiddleware);
-    
 
 export default router;

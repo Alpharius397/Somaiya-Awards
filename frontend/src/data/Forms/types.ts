@@ -1,5 +1,3 @@
-import * as z from "zod";
-
 export type BaseFormEntry = {
     fieldsPerLine: number;
     required: boolean;
@@ -10,13 +8,14 @@ export type BaseFormEntry = {
 } & Validate;
 
 export type Validate = {
-    validator: z.ZodType;
+    /** Just assume this is a zod Validator */
+    validator: any;
 };
 
 export type FormEntry =
     | (BaseFormEntry & {
           type: "radio";
-          options: readonly string[] | readonly number[];
+          options: readonly string[];
       })
     | (BaseFormEntry &
           (

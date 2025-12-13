@@ -1,6 +1,11 @@
-import * as z from "zod";
-import { arrayChoice, validBoolean, validNumber, validString } from "../../zod";
-import { Institutes } from "../../constants";
+import z from "zod";
+import {
+    arrayChoice,
+    validBoolean,
+    validNumber,
+    validString,
+} from "@/shared/zod";
+import { Institutes } from "@/shared/constants";
 
 export const ResearchForm = z.object({
     faculty_name: validString,

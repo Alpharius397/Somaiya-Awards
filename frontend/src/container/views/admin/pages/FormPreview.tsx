@@ -9,7 +9,7 @@ import { useReactToPrint } from "react-to-print";
 import type { FormEntry } from "@/data/Forms/types";
 import Axios from "@/axios";
 import React from "react";
-import { applicationHeader } from "@/backend/constants";
+import { applicationHeader } from "@/shared/constants";
 
 type IdkData = {
     [key: string]: string;

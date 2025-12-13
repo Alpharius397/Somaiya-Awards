@@ -1,18 +1,18 @@
-import * as z from "zod";
+import z from "zod";
 import {
     arrayChoice,
     email,
     lastDate,
     phoneNumber,
     somaiyaMail,
-    serverTextArea,
     validBoolean,
     validNumber,
     validString,
-} from "../../zod";
-import { awards, Institutes } from "../../constants";
+} from "@/shared/zod";
+import { awards, Institutes } from "@/shared/constants";
+import { serverTextArea } from "@/zod";
 
-export const TeachingForm = z.object({
+export const TeachingValidator = {
     email_id: email,
     faculty_name: validString,
     awards_category: arrayChoice(awards),
@@ -52,6 +52,7 @@ export const TeachingForm = z.object({
     ieac_scoreB: validNumber.optional().nullable(),
     ieac_scoreC: validNumber.optional().nullable(),
     hr_approved: validBoolean.optional().nullable(),
-});
+};
+export const TeachingForm = z.object(TeachingValidator);
 
 export type TeachingType = z.infer<typeof TeachingForm>;

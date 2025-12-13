@@ -1,6 +1,6 @@
 import FormInfo from "@/components/FormInfo";
 import Forms from "@/components/Forms";
-import StudentNonTeachingFeedback from "@/components/utils/data/StudentNonTeachingFeedback";
+import { StudentNonTeachingFeedback } from "@/components/utils/data";
 import StudentNonTeachingFeedbackForm from "@/data/Forms/StudentNonTeachingFeedbackForm";
 import Footer from "@/components/Footer";
 import StudentNonTeachingFeedbackFormValidator from "@/zod/Forms/StudentNonTeachingFeedbackForm";

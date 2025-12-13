@@ -7,19 +7,29 @@
       "es2022",
       "DOM"
     ],
-    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "allowJs": false,
-    "outDir": "./dist",
+    "noEmit": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@/shared/*": [
+        "../shared/*"
+      ]
+    }
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "require": [
+      "tsconfig-paths/register"
+    ]
   },
   "include": [
     "./**/*.ts",
     "./*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules"
   ]
 }

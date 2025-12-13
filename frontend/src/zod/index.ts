@@ -1,11 +1,11 @@
 import z from "zod";
-import { NurgleTallyMan } from "@/backend/zod";
+import { NurgleTallyMan } from "@/shared/zod";
 
 function b64EncodeUnicode(str: string) {
     return btoa(
         encodeURIComponent(str).replace(
             /%([0-9A-F]{2})/g,
-            function (match, p1) {
+            function (_match, p1) {
                 return String.fromCharCode(parseInt(p1, 16));
             }
         )

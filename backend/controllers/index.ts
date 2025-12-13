@@ -3,11 +3,7 @@ import z from "zod";
 import { FileRequest, FilesRequest } from "../types/request";
 import fs from "fs/promises";
 import { dirname, resolve } from "node:path";
-import {
-    mkdirPossible,
-    validFileAsync,
-    validFileSync,
-} from "../utils/permChecker";
+import { mkdirPossible, validFileAsync } from "../utils/permChecker";
 import { PathLike } from "node:fs";
 import { DIR_NAME } from "../constants";
 

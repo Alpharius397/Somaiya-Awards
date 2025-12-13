@@ -5,11 +5,10 @@ import { useNavigate, createSearchParams } from "react-router-dom";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import Axios from "@/axios";
-import type { StagesType } from "@/components/utils/data/types";
 import swalAlert from "@/components/utils/swal";
 import type { FormEntry } from "@/data/Forms/types";
 import z from "zod";
-import { lastDate, rangeDate } from "@/backend/zod";
+import { lastDate, rangeDate } from "@/shared/zod";
 import { useData } from "@/hooks/data";
 import { DISABLE_CLEAR_FORM } from "@/constants";
 
@@ -17,7 +16,7 @@ export type FormProps = {
     pageCount: number;
     pageHeadings: string[];
     data: FormEntry[];
-    stages: StagesType[];
+    stages: number;
     message?: string;
     validator: z.ZodObject;
 };
@@ -42,10 +41,6 @@ function youAreSpecial(
 }
 
 export default function Forms(props: FormProps) {
-    /**
-     * Variables and States
-     */
-
     const limit = props.pageCount;
     const pageHeaders = props.pageHeadings;
     const navigate = useNavigate();
@@ -57,17 +52,13 @@ export default function Forms(props: FormProps) {
         []
     );
 
-    /**
-     * functions
-     */
-
     const handleNext = () => {
         for (const i of props.data) {
             if (
                 i.page - 1 === current &&
                 !i.validator.safeParse(data[i.name]).success
             ) {
-                swalAlert({
+                return swalAlert({
                     title: "Incomplete Form",
                     text: "Please fill out this page completely",
                     icon: "warning",
@@ -80,7 +71,6 @@ export default function Forms(props: FormProps) {
                         confirmButton: "gradient-button",
                     },
                 });
-                return;
             }
         }
         if (current < limit) {
@@ -96,7 +86,7 @@ export default function Forms(props: FormProps) {
                 i.page - 1 === current &&
                 !i.validator.safeParse(data[i.name]).success
             ) {
-                swalAlert({
+                return swalAlert({
                     title: "Incomplete Form",
                     text: "Please fill out this page completely",
                     icon: "warning",
@@ -109,7 +99,6 @@ export default function Forms(props: FormProps) {
                         confirmButton: "gradient-button",
                     },
                 });
-                return;
             }
         }
         if (current > 0) {
@@ -124,17 +113,12 @@ export default function Forms(props: FormProps) {
         (name: string, value: string | File, actionType: "add" | "delete") => {
             handleChange(name, value, actionType);
             setData((prev) => {
-                localStorage.setItem(formName, JSON.stringify(prev));
                 setPercentage(Object.keys(prev).length / props.data.length);
                 return prev;
             });
         },
-        [formName, handleChange, props.data.length, setData]
+        [handleChange, props.data.length, setData]
     );
-
-    /**
-     * @returns page number of field which is not present in formData state
-     */
 
     const missingFieldPage = () => {
         for (const field of props.data) {
@@ -147,9 +131,9 @@ export default function Forms(props: FormProps) {
     };
 
     const handleSubmit = () => {
-        const Data = getData();
+        const formData = getData();
 
-        if (!Data) {
+        if (!formData) {
             swalAlert({
                 title: "Incomplete Form",
                 text: "Please fill out the form completely",
@@ -172,7 +156,7 @@ export default function Forms(props: FormProps) {
             const formType = formName;
             const postUrl = `/forms/${formType}`;
 
-            Axios.post(postUrl, Data, {
+            Axios.post(postUrl, formData, {
                 headers: {
                     "Content-Type": formType.includes("feedback")
                         ? "application/json"
@@ -200,36 +184,11 @@ export default function Forms(props: FormProps) {
         }
     };
 
-    const colorChange = () => {
-        const stagesList = document.querySelectorAll(".stages");
-
-        for (const stages of stagesList) {
-            const stageNumber = Number(stages.innerHTML);
-
-            if (stageNumber < current + 1) {
-                stages.classList.add("bg-red-500");
-                stages.classList.add("text-white");
-                stages.classList.remove("bg-white");
-            } else {
-                stages.classList.remove("bg-red-500");
-                stages.classList.remove("text-white");
-                stages.classList.add("bg-white");
-            }
-        }
-    };
-
     const handleFormStageChange = (e: React.MouseEvent<HTMLElement>) => {
         //@ts-expect-error Event type matching ignore
         const value = Number(e.target.innerHTML) - 1;
-        setCurrent(value); // renders everything
-
-        // color change logic
-        colorChange();
+        setCurrent(value);
     };
-
-    /**
-     * Renderers
-     */
 
     const RenderFields = useMemo(() => {
         return props.data
@@ -248,8 +207,7 @@ export default function Forms(props: FormProps) {
                         key={entry.name}
                         {...entry}
                         value={value}
-                        //@ts-expect-error TODO: fix Validator type
-                        validator={validator}
+                        validator={validator as unknown as z.ZodType}
                         formType={formName}
                         onChange={handleFieldChange}
                     />
@@ -259,34 +217,15 @@ export default function Forms(props: FormProps) {
 
     useEffect(() => {
         setPercentage(Object.keys(data).length / props.data.length);
-    }, [data]);
-
-    useEffect(() => {
-        // is this necessary?
-
-        const stagesList = document.querySelectorAll(".stages");
-
-        for (const stages of stagesList) {
-            const stageNumber = Number(stages.innerHTML);
-
-            if (stageNumber < current + 1) {
-                stages.classList.add("bg-red-500");
-                stages.classList.remove("bg-white");
-                stages.classList.add("text-white");
-            } else {
-                stages.classList.remove("bg-red-500");
-                stages.classList.remove("text-white");
-                stages.classList.add("bg-white");
-            }
-        }
-    }, [current]);
-    /**
-     * Return Block
-     */
+    }, [data, props.data]);
 
     return (
         <div className="">
-            <FormStages stages={props.stages} onClick={handleFormStageChange} />
+            <FormStages
+                stages={props.stages}
+                onClick={handleFormStageChange}
+                selected={current}
+            />
 
             <div className="border-black border-[1] mx-auto rounded-xl shadow-2xl bg-0xFAF9F6 p-3 px-[5rem] w-[70%]">
                 <div className="w-full text-black text-center py-5  font-Roboto font-semibold text-2xl">

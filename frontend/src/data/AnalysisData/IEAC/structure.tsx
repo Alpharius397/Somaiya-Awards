@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 // column structures for HOI analysis part
 
 /**
@@ -20,44 +22,178 @@ import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import Swal from "sweetalert2";
 import Axios, { generateLink } from "@/axios";
 import React from "react";
+import jsxToHtml from "@/hooks/render";
+import {
+    teachingIEACScore,
+    TeachingIEACScoreType,
+} from "@/shared/zod/form/TeachingIEACScore";
+import {
+    nonTeachingIEACScore,
+    NonTeachingIEACScoreType,
+} from "@/shared/zod/form/NonTeachingIEACScore";
 
+function NonTeachingPreConfirm() {
+    const scoreA = parseInt(
+        (Swal.getPopup()?.querySelector("#score-A") as HTMLInputElement)?.value
+    );
+    const scoreB = parseInt(
+        (Swal.getPopup()?.querySelector("#score-B") as HTMLInputElement)?.value
+    );
+
+    const response = nonTeachingIEACScore.safeParse({
+        ieac_scoreA: scoreA,
+        ieac_scoreB: scoreB,
+    });
+
+    if (!response.success) {
+        Swal.showValidationMessage(
+            "All values must be filled and be in the range of 1 to 10"
+        );
+    }
+    return response;
+}
+
+function TeachingPreConfirm() {
+    const scoreA = parseInt(
+        (Swal.getPopup()?.querySelector("#score-A") as HTMLInputElement)?.value
+    );
+    const scoreB = parseInt(
+        (Swal.getPopup()?.querySelector("#score-B") as HTMLInputElement)?.value
+    );
+    const scoreC = parseInt(
+        (Swal.getPopup()?.querySelector("#score-C") as HTMLInputElement)?.value
+    );
+
+    const response = teachingIEACScore.safeParse({
+        ieac_scoreA: scoreA,
+        ieac_scoreB: scoreB,
+        ieac_scoreC: scoreC,
+    });
+
+    if (!response.success) {
+        Swal.showValidationMessage(
+            "All values must be filled and be in the range of 1 to 10"
+        );
+    }
+    return response;
+}
+
+function sendRequest(data: NonTeachingIEACScoreType | TeachingIEACScoreType) {
+    const path = window.location.href.split("/review/")[1];
+    Axios.put(`/ieac/data/${path}`, data)
+        .then(() => {
+            Swal.fire({
+                title: "Update Successful",
+                icon: "success",
+                confirmButtonColor: "rgb(185,28,28)",
+                confirmButtonText: "Okay",
+            }).then(() => {
+                window.location.reload();
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+type TeachingParams = { name: string };
+
+function TeachingIEAC({ name }: TeachingParams) {
+    return jsxToHtml(
+        <div>
+            <div className="my-3 text-center text-xl text-red-700 font-Poppins font-semibold">
+                <h2>{name}'s Score</h2>
+            </div>
+            <div className="text-sm text-left font-Poppins text-red-700 my-2">
+                <p> A. Pedagogical Competence Score </p>
+            </div>
+            <div className="flex justify-start my-1">
+                <input
+                    type="number"
+                    className="border-2 font-Poppins border-black shadow-lg rounded-xl p-2"
+                    id="score-A"
+                ></input>
+            </div>
+            <div className="text-sm text-left font-Poppins text-red-700 my-2">
+                <p>B.Beyond the classroom </p>
+            </div>
+            <div className="flex justify-start my-1">
+                <input
+                    type="number"
+                    className="border-2 font-Poppins border-black shadow-lg rounded-xl p-2"
+                    id="score-B"
+                ></input>
+            </div>
+            <div className="text-sm text-left font-Poppins text-red-700 my-2">
+                <p> C. Self and professional development </p>
+            </div>
+            <div className="flex justify-start my-1">
+                <input
+                    type="number"
+                    className="border-2 font-Poppins border-black shadow-lg rounded-xl p-2"
+                    id="score-C"
+                ></input>
+            </div>
+        </div>
+    );
+}
+
+type NonTeachingParams = { name: string };
+
+function NonTeachingIEAC({ name }: NonTeachingParams) {
+    return jsxToHtml(
+        <div>
+            <div className="my-3 text-center text-xl text-red-700 font-Poppins font-semibold">
+                <h2>{name}'s Score</h2>
+            </div>
+            <div className="text-sm text-left font-Poppins text-red-700 my-2">
+                <p> Part A Score</p>
+            </div>
+            <div className="flex justify-start my-1">
+                <input
+                    type="number"
+                    className="border-2 font-Poppins border-black shadow-lg rounded-xl p-2"
+                    id="score-A"
+                ></input>
+            </div>
+            <div className="text-sm text-left font-Poppins text-red-700 my-2">
+                <p>Part B Score </p>
+            </div>
+            <div className="flex justify-start my-1">
+                <input
+                    type="number"
+                    className="border-2 font-Poppins border-black shadow-lg rounded-xl p-2"
+                    id="score-B"
+                ></input>
+            </div>
+        </div>
+    );
+}
 /**
  * Handlers
  */
 
-/**
- * @deprecated : Permanently moved to Research Admin
- */
-const handleResearchChange = (params, event) => {
+/**Teaching Handles */
+
+const handleTeachRecommend = (params, event) => {
     if (event.target.checked == true) {
-        const approvedNomineeName = params.row["faculty_name"];
-
-        const data = {
-            applicationID: params.row["id"],
-        };
-
-        const path = window.location.href.split("/review/")[1];
-
         Swal.fire({
-            title: "Confirmation",
-            icon: "question",
-            text: `Do you to confirm your decision to approve ${approvedNomineeName} ?`,
-            showDenyButton: true,
+            title: "Score for Recommended",
             confirmButtonText: "Confirm",
-            denyButtonText: "Deny",
-            confirmButtonColor: "#4bb543",
+            confirmButtonColor: "rgb(185,28,28)",
+            html: TeachingIEAC({ name: params.row["faculty_name"] }),
+            preConfirm: TeachingPreConfirm,
         })
             .then((res) => {
                 if (res.isConfirmed == true) {
-                    //Axios put
-                    Axios.put(`/ieac/data/${path}`, data)
-                        .then((res) => {
-                            console.log(res);
-                            window.location.reload();
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                    const data: TeachingIEACScoreType = {
+                        ...res.value,
+                        ieacApproved: true,
+                        applicationID: params.row["id"],
+                    };
+
+                    // make a put request Axios
+                    sendRequest(data);
                 } else {
                     event.target.checked = false;
                 }
@@ -68,200 +204,25 @@ const handleResearchChange = (params, event) => {
     }
 };
 
-/**Teaching Handles */
-
-const handleTeachRecommend = (params, event) => {
-    if (event.target.checked == true) {
-        Swal.fire({
-            title: "Score for Recommended",
-            confirmButtonText: "Confirm",
-            confirmButtonColor: "rgb(185,28,28)",
-            html: `
-            <div>
-                <div class='my-3 text-center text-xl text-red-700 font-Poppins font-semibold'>
-                    <h2>
-                        ${params.row["faculty_name"]}'s Score
-                    </h2>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p> A. Pedagogical Competence Score </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-A'></input>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p>B.Beyond the classroom </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-B'></input>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p> C. Self and professional development </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-C'></input>
-                </div>
-            </div>
-            `,
-            preConfirm: () => {
-                const scoreA = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-A"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-                const scoreB = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-B"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-                const scoreC = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-C"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-
-                if (!scoreA || !scoreB || !scoreC) {
-                    Swal.showValidationMessage(`Please enter all fields !`);
-                }
-                if (scoreA > 10 || scoreB > 10 || scoreC > 10) {
-                    Swal.showValidationMessage(
-                        `Please Enter Score between 1 to 10 !`
-                    );
-                }
-                return { scoreA: scoreA, scoreB: scoreB, scoreC: scoreC };
-            },
-        }).then((res) => {
-            if (res.isConfirmed == true) {
-                const data = {
-                    scoreA: res.value.scoreA,
-                    scoreB: res.value.scoreB,
-                    scoreC: res.value.scoreC,
-                    recommended: true,
-                    applicationID: params.row["id"],
-                };
-
-                // make a put request Axios
-                const path = window.location.href.split("/review/")[1];
-                Axios.put(`/ieac/data/${path}`, data)
-                    .then(() => {
-                        Swal.fire({
-                            title: "Update Successful",
-                            icon: "success",
-                            confirmButtonColor: "rgb(185,28,28)",
-                            confirmButtonText: "Okay",
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            } else {
-                event.target.checked = false;
-            }
-        });
-    }
-};
-
 const handleTeachNotRecommend = (params, event) => {
     if (event.target.checked == true) {
         Swal.fire({
             title: "Score for Not Recommended",
             confirmButtonText: "Confirm",
             confirmButtonColor: "rgb(185,28,28)",
-            html: `
-            <div>
-                <div class='my-3 text-center text-xl text-red-700 font-Poppins font-semibold'>
-                    <h2>
-                        ${params.row["faculty_name"]}'s Score
-                    </h2>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p> A. Pedagogical Competence Score </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-A'></input>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p>B.Beyond the classroom </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-B'></input>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p> C. Self and professional development </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-C'></input>
-                </div>
-            </div>
-            `,
-            preConfirm: () => {
-                const scoreA = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-A"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-                const scoreB = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-B"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-                const scoreC = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-C"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-
-                if (!scoreA || !scoreB || !scoreC) {
-                    Swal.showValidationMessage(`Please enter all fields !`);
-                }
-                if (scoreA > 10 || scoreB > 10 || scoreC > 10) {
-                    Swal.showValidationMessage(
-                        `Please Enter Score between 1 to 10 !`
-                    );
-                }
-                return { scoreA: scoreA, scoreB: scoreB, scoreC: scoreC };
-            },
+            html: TeachingIEAC({ name: params.row["faculty_name"] }),
+            preConfirm: TeachingPreConfirm,
         }).then((res) => {
             if (res.isConfirmed == true) {
                 // creata a payload to pass
-                const data = {
-                    scoreA: res.value.scoreA,
-                    scoreB: res.value.scoreB,
-                    scoreC: res.value.scoreC,
-                    recommended: false,
+                const data: TeachingIEACScoreType = {
+                    ...res.value,
+                    ieacApproved: false,
                     applicationID: params.row["id"],
                 };
 
                 // make a put request Axios
-                const path = window.location.href.split("/review/")[1];
-                Axios.put(`/ieac/data/${path}`, data)
-                    .then(() => {
-                        Swal.fire({
-                            title: "Update Successful",
-                            icon: "success",
-                            confirmButtonColor: "rgb(185,28,28)",
-                            confirmButtonText: "Okay",
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                sendRequest(data);
             } else {
                 event.target.checked = false;
             }
@@ -276,79 +237,19 @@ const handleNonTeachRecommend = (params, event) => {
             title: "Score for Recommended",
             confirmButtonText: "Confirm",
             confirmButtonColor: "rgb(185,28,28)",
-            html: `
-            <div>
-                <div class='my-3 text-center text-xl text-red-700 font-Poppins font-semibold'>
-                    <h2>
-                        ${params.row["staff_name"]}'s Score
-                    </h2>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p> Part A Score</p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-A'></input>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p>Part B Score </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-B'></input>
-                </div>
-            </div>
-            `,
-            preConfirm: () => {
-                const scoreA = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-A"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-                const scoreB = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-B"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-
-                if (!scoreA || !scoreB) {
-                    Swal.showValidationMessage(`Please enter all fields !`);
-                }
-                if (scoreA > 10 || scoreB > 10) {
-                    Swal.showValidationMessage(
-                        `Please Enter Score between 1 to 10 !`
-                    );
-                }
-                return { scoreA: scoreA, scoreB: scoreB };
-            },
+            html: NonTeachingIEAC({ name: params.row["staff_name"] }),
+            preConfirm: NonTeachingPreConfirm,
         }).then((res) => {
             if (res.isConfirmed == true) {
                 // creata a payload to pass
-                const data = {
-                    scoreA: res.value.scoreA,
-                    scoreB: res.value.scoreB,
+                const data: NonTeachingIEACScoreType = {
+                    ...res.value,
                     recommended: true,
                     applicationID: params.row["id"],
                 };
 
                 // make a put request Axios
-                const path = window.location.href.split("/review/")[1];
-                Axios.put(`/ieac/data/${path}`, data)
-                    .then(() => {
-                        Swal.fire({
-                            title: "Update Successful",
-                            icon: "success",
-                            confirmButtonColor: "rgb(185,28,28)",
-                            confirmButtonText: "Okay",
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                sendRequest(data);
             } else {
                 event.target.checked = false;
             }
@@ -362,78 +263,19 @@ const handleNonTeachNotRecommend = (params, event) => {
             title: "Score for Not Recommended",
             confirmButtonText: "Confirm",
             confirmButtonColor: "rgb(185,28,28)",
-            html: `
-            <div>
-                <div class='my-3 text-center text-xl text-red-700 font-Poppins font-semibold'>
-                    <h2>
-                        ${params.row["staff_name"]}'s Score
-                    </h2>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p>Part A Score </p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-A'></input>
-                </div>
-                <div class='text-sm text-left font-Poppins text-red-700 my-2'>
-                    <p>Part B Score</p>
-                </div>
-                <div class="flex justify-start my-1">
-                    <input type='number' class='border-2 font-Poppins border-black shadow-lg rounded-xl p-2' id='score-B'></input>
-                </div>
-            </div>
-            `,
-            preConfirm: () => {
-                const scoreA = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-A"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-                const scoreB = parseInt(
-                    (
-                        Swal.getPopup()?.querySelector(
-                            "#score-B"
-                        ) as HTMLInputElement
-                    )?.value
-                );
-                if (!scoreA || !scoreB) {
-                    Swal.showValidationMessage(`Please enter all fields !`);
-                }
-                if (scoreA > 10 || scoreB > 10) {
-                    Swal.showValidationMessage(
-                        `Please Enter Score between 1 to 10 !`
-                    );
-                }
-                return { scoreA: scoreA, scoreB: scoreB };
-            },
+            html: NonTeachingIEAC({ name: params.row["staff_name"] }),
+            preConfirm: NonTeachingPreConfirm,
         }).then((res) => {
             if (res.isConfirmed == true) {
                 // creata a payload to pass
-                const data = {
-                    scoreA: res.value.scoreA,
-                    scoreB: res.value.scoreB,
-                    recommended: false,
+                const data: NonTeachingIEACScoreType = {
+                    ...res.value,
+                    ieacApproved: false,
                     applicationID: params.row["id"],
                 };
 
                 // make a put request Axios
-                const path = window.location.href.split("/review/")[1];
-                Axios.put(`/ieac/data/${path}`, data)
-                    .then(() => {
-                        Swal.fire({
-                            title: "Update Successful",
-                            icon: "success",
-                            confirmButtonColor: "rgb(185,28,28)",
-                            confirmButtonText: "Okay",
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                sendRequest(data);
             } else {
                 event.target.checked = false;
             }
@@ -531,238 +373,6 @@ const columns01: GridColDef[] = [
             );
         },
     },
-    // {
-    //     field: 'hr_approved', headerName: 'HR Approved', width: 150, renderCell: (params) => {
-    //         return params.value ?
-    //             (
-    //                 <CheckRoundedIcon style={{ color: '#15803d' }} />
-    //             ) :
-    //             (
-    //                 <CloseRoundedIcon style={{ color: 'rgb(185,28,28)' }} />
-    //             )
-    //     },
-    // },
-];
-
-/**
- * @deprecated : permanently moved to research Admin
- */
-const columns02: GridColDef[] = [
-    { field: "id", headerName: "Application ID", width: 150 },
-    { field: "faculty_name", headerName: "Faculty Name", width: 150 },
-    { field: "designation", headerName: "Designation", width: 150 },
-    { field: "institution", headerName: "Institution", width: 150 },
-    { field: "department", headerName: "Department", width: 150 },
-    { field: "tenure", headerName: "Tenure", width: 150 },
-    {
-        field: "org_articles_count",
-        headerName: "Org Articles Count",
-        width: 150,
-    },
-    {
-        field: "review_papers_count",
-        headerName: "Review Papers Count",
-        width: 150,
-    },
-    { field: "letters_count", headerName: "Letters Count", width: 150 },
-    {
-        field: "case_studies_count",
-        headerName: "Case Studies Count",
-        width: 150,
-    },
-    { field: "books_count", headerName: "Books Count", width: 150 },
-    { field: "chapters_count", headerName: "Chapters Count", width: 150 },
-    {
-        field: "presentations_international_count",
-        headerName: "Presentations International Count",
-        width: 200,
-    },
-    {
-        field: "presentation_national_count",
-        headerName: "Presentation National Count",
-        width: 200,
-    },
-    {
-        field: "international_seminar_count",
-        headerName: "International Seminar Count",
-        width: 200,
-    },
-    {
-        field: "national_seminar_count",
-        headerName: "National Seminar Count",
-        width: 200,
-    },
-    {
-        field: "international_workshops_count",
-        headerName: "International Workshops Count",
-        width: 200,
-    },
-    {
-        field: "national_workshops_count",
-        headerName: "National Workshops Count",
-        width: 200,
-    },
-    {
-        field: "completed_minorp_count",
-        headerName: "Completed Minorp Count",
-        width: 200,
-    },
-    {
-        field: "ongoing_minorp_count",
-        headerName: "Ongoing Minorp Count",
-        width: 200,
-    },
-    {
-        field: "completed_majorp_count",
-        headerName: "Completed Majorp Count",
-        width: 200,
-    },
-    {
-        field: "ongoing_majorp_count",
-        headerName: "Ongoing Majorp Count",
-        width: 200,
-    },
-    {
-        field: "completed_consultancy_count",
-        headerName: "Completed Consultancy Count",
-        width: 200,
-    },
-    {
-        field: "ongoing_consultancy_count",
-        headerName: "Ongoing Consultancy Count",
-        width: 200,
-    },
-    {
-        field: "revenue_from_projects",
-        headerName: "Revenue from Projects",
-        width: 200,
-    },
-    {
-        field: "granted_patents_count",
-        headerName: "Granted Patents Count",
-        width: 200,
-    },
-    {
-        field: "filed_patents_count",
-        headerName: "Filed Patents Count",
-        width: 200,
-    },
-    {
-        field: "granted_copyrights_count",
-        headerName: "Granted Copyrights Count",
-        width: 200,
-    },
-    {
-        field: "filed_copyrights_count",
-        headerName: "Filed Copyrights Count",
-        width: 200,
-    },
-    {
-        field: "granted_industrial_designs_count",
-        headerName: "Granted Industrial Designs Count",
-        width: 250,
-    },
-    {
-        field: "filed_industrial_designs_count",
-        headerName: "Filed Industrial Designs Count",
-        width: 250,
-    },
-    {
-        field: "international_awards_won_count",
-        headerName: "International Awards Won Count",
-        width: 250,
-    },
-    {
-        field: "national_awards_won_count",
-        headerName: "National Awards Won Count",
-        width: 250,
-    },
-    {
-        field: "evidence_of_research",
-        headerName: "Evidence of Research",
-        width: 200,
-        renderCell: (params) => {
-            return (
-                <a
-                    href={generateLink(params.value)}
-                    className="p-2 rounded-2xl cursor-pointer bg-red-700 text-white font-Poppins"
-                    download
-                >
-                    Download
-                </a>
-            );
-        },
-    },
-    {
-        field: "evidence_of_data_provided",
-        headerName: "Evidence of Data Provided",
-        width: 200,
-        renderCell: (params) => {
-            return (
-                <a
-                    href={generateLink(params.value)}
-                    className="p-2 rounded-2xl cursor-pointer bg-red-700 text-white font-Poppins"
-                    download
-                >
-                    Download
-                </a>
-            );
-        },
-    },
-    {
-        field: "confirmation_of_trueData",
-        headerName: "Confirmation of True Data",
-        width: 200,
-    },
-    {
-        field: "ieacApproved",
-        headerName: "IEAC Approved",
-        type: "boolean",
-        width: 150,
-        renderCell: (params) => {
-            return params.value ? (
-                <CheckRoundedIcon style={{ color: "#15803d" }} />
-            ) : (
-                <CloseRoundedIcon style={{ color: "rgb(185,28,28)" }} />
-            );
-        },
-    },
-    {
-        field: "recommended",
-        headerName: "Recommended",
-        width: 150,
-        align: "center",
-        renderCell: (params) => {
-            return params.row["ieacApproved"] ? (
-                params.row["ieacApprovedFile"] == null ? (
-                    "Upload Pending"
-                ) : (
-                    <a
-                        className="p-2 bg-red-700 rounded-xl shadow-red-100 text-white"
-                        href={generateLink(params.value)}
-                    >
-                        Download
-                    </a>
-                )
-            ) : (
-                <input
-                    type="checkbox"
-                    onChange={(event) => handleResearchChange(params, event)}
-                ></input>
-            );
-        },
-    },
-    // {
-    //     field: 'hr_approved', headerName: 'HR Approved', type: 'boolean', width: 150, renderCell: (params) => {
-    //         return params.value ?
-    //             (
-    //                 <CheckRoundedIcon style={{ color: '#15803d' }} />
-    //             ) :
-    //             (
-    //                 <CloseRoundedIcon style={{ color: 'rgb(185,28,28)' }} />
-    //             )
-    //     },
-    // },
 ];
 
 const columns04: GridColDef[] = [
@@ -900,17 +510,6 @@ const columns04: GridColDef[] = [
             );
         },
     },
-    // {
-    //     field: 'hr_approved', headerName: 'HR Approved', type: 'boolean', width: 150, renderCell: (params) => {
-    //         return params.value ?
-    //             (
-    //                 <CheckRoundedIcon style={{ color: '#15803d' }} />
-    //             ) :
-    //             (
-    //                 <CloseRoundedIcon style={{ color: 'rgb(185,28,28)' }} />
-    //             )
-    //     },
-    // },
 ];
 
 const columns05: GridColDef[] = [
@@ -1049,17 +648,6 @@ const columns05: GridColDef[] = [
             );
         },
     },
-    // {
-    //     field: 'hr_approved', headerName: 'HR Approved', type: 'boolean', width: 150, renderCell: (params) => {
-    //         return params.value ?
-    //             (
-    //                 <CheckRoundedIcon style={{ color: '#15803d' }} />
-    //             ) :
-    //             (
-    //                 <CloseRoundedIcon style={{ color: 'rgb(185,28,28)' }} />
-    //             )
-    //     },
-    // },
 ];
 
-export { columns01, columns02, columns04, columns05 };
+export { columns01, columns04, columns05 };

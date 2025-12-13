@@ -12,7 +12,7 @@ import {
     submitFeedback_03,
     submitFeedback_04,
     submitFeedback_05,
-} from "../controllers/formController";
+} from "@/controllers/formController";
 import {
     upload01,
     upload02,
@@ -20,10 +20,10 @@ import {
     upload04,
     upload05,
     upload10,
-} from "../middleware/fileUpload";
-import roleMiddle from "../middleware/role";
-import { Role } from "../types/role";
-import { ApplicationLoggerMiddleware } from "../middleware/logger";
+} from "@/middleware/fileUpload";
+import roleMiddle from "@/middleware/role";
+import { Role } from "@/shared/types/role";
+import { ApplicationLoggerMiddleware } from "@/middleware/logger";
 
 /**
  * Support note:

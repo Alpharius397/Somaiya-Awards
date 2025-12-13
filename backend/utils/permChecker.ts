@@ -1,8 +1,8 @@
 import fs from "fs/promises";
 import { PathLike, constants, accessSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { destinations } from "../middleware/fileUpload";
-import { DIR_NAME } from "../constants";
+import { destinations } from "@/middleware/fileUpload";
+import { DIR_NAME } from "@/constants";
 
 const MODIFY_DIR = constants.X_OK | constants.W_OK;
 const MODIFY_FILE = constants.R_OK | constants.W_OK;
@@ -45,7 +45,6 @@ export function writePossible(path: PathLike) {
 }
 
 function checkDir(dir: string) {
-
     const dataDir = resolve(DIR_NAME, "data");
     const target = resolve(dir);
     for (const uploadPath of destinations) {
@@ -59,12 +58,11 @@ function checkDir(dir: string) {
 
 export function validFileSync(path: PathLike) {
     try {
-        const absPath = resolve(String(path))
+        const absPath = resolve(String(path));
         const stat = statSync(absPath);
         const dir = dirname(absPath);
-        
-        return stat.isFile() && checkDir(dir);
 
+        return stat.isFile() && checkDir(dir);
     } catch (err) {
         return false;
     }
@@ -72,7 +70,7 @@ export function validFileSync(path: PathLike) {
 
 export async function validFileAsync(path: PathLike) {
     try {
-        const absPath = resolve(String(path))
+        const absPath = resolve(String(path));
         const stat = await fs.stat(absPath);
         const dir = dirname(absPath);
 

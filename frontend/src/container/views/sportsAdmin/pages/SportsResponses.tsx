@@ -20,7 +20,7 @@ import {
     CoachData,
     GirlData,
     SportsExcelType,
-} from "@/backend/types/controllers/sports";
+} from "@/shared/types/controllers/sports";
 
 export default function SportsResponses() {
     const [rows, setRows] = useState([]);
@@ -91,7 +91,6 @@ export default function SportsResponses() {
                         RTL: false,
                     };
 
-                    //@ts-expect-error Can break
                     xlsx(data, settings);
                 } else if (path === "sports-star-boy") {
                     const content: SportsExcelType<BoyData> = res.data;
@@ -116,7 +115,6 @@ export default function SportsResponses() {
                         RTL: false,
                     };
 
-                    //@ts-expect-error Can break
                     xlsx(data, settings);
                 } else if (path === "inspiring-coach") {
                     const content: SportsExcelType<CoachData> = res.data;
@@ -141,7 +139,6 @@ export default function SportsResponses() {
                         RTL: false,
                     };
 
-                    //@ts-expect-error Can break
                     xlsx(data, settings);
                 }
             })

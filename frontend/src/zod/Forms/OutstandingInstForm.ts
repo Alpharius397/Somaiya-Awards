@@ -8,8 +8,8 @@ import {
     validFile,
     validString,
     validYear,
-} from "@/backend/zod";
-import { Institutes, OutstandingInstList } from "@/backend/constants";
+} from "@/shared/zod";
+import { Institutes, OutstandingInstList } from "@/shared/constants";
 import { clientTextArea } from "@/zod";
 
 export const OutstandingInstFormField = {

@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import {
     OutstandingInstitutionForm,
     OutstandingInstitutionType,
-} from "../zod/form/OutstandingInstitution";
+} from "@/zod/form/OutstandingInstitution";
 import {
     FeedbackOne,
     FeedbackTwo,
@@ -15,27 +15,26 @@ import {
     Sports,
     Students,
     Teaching,
-} from "../models";
-
-import asyncHandler from "express-async-handler";
-import { FileRequest } from "../types/request";
-import { checkFiles, checkObject } from "../controllers";
-import { ResearchForm, ResearchType } from "../zod/form/Research";
-import { SportsForm, SportsType } from "../zod/form/Sports";
-import { sequelize } from "../models";
-import { TeachingForm, TeachingType } from "../zod/form/Teaching";
-import { NonTeachingForm, NonTeachingType } from "../zod/form/NonTeaching";
-import { StudentsForm, StudentsType } from "../zod/form/Students";
-import { FeedbackOneType } from "../zod/form/FeedbackOne";
-import { FeedbackOneForm } from "../zod/form/FeedbackOneForm";
-import { FeedbackTwoForm, FeedbackTwoType } from "../zod/form/FeedbackTwo";
-import { FeedbackThreeType } from "../zod/form/FeedbackThree";
-import { FeedbackThreeForm } from "../zod/form/FeedbackThreeForm";
-import { FeedbackFourForm, FeedbackFourType } from "../zod/form/FeedbackFour";
-import { FeedbackFiveForm, FeedbackFiveType } from "../zod/form/FeedbackFive";
+} from "@/models";
+import { FileRequest } from "@/types/request";
+import { checkFiles, checkObject } from "@/controllers";
+import { ResearchForm, ResearchType } from "@/zod/form/Research";
+import { SportsForm, SportsType } from "@/zod/form/Sports";
+import { sequelize } from "@/models";
+import { TeachingForm, TeachingType } from "@/zod/form/Teaching";
+import { NonTeachingForm, NonTeachingType } from "@/zod/form/NonTeaching";
+import { StudentsForm, StudentsType } from "@/zod/form/Students";
+import { FeedbackOneType } from "@/zod/form/FeedbackOne";
+import { FeedbackOneForm } from "@/zod/form/FeedbackOneForm";
+import { FeedbackTwoForm, FeedbackTwoType } from "@/zod/form/FeedbackTwo";
+import { FeedbackThreeType } from "@/zod/form/FeedbackThree";
+import { FeedbackThreeForm } from "@/zod/form/FeedbackThreeForm";
+import { FeedbackFourForm, FeedbackFourType } from "@/zod/form/FeedbackFour";
+import { FeedbackFiveForm, FeedbackFiveType } from "@/zod/form/FeedbackFive";
 import z from "zod";
-import { validString, email } from "../zod";
-import { Request, Response, NextFunction } from "express";
+import { validString, email } from "@/shared/zod";
+import { Request, Response } from "express";
+import { logToLoggerMiddleware } from "@/middleware/logger";
 
 /**
  * @desc Handle OutstandingInstitution form submission
@@ -43,8 +42,8 @@ import { Request, Response, NextFunction } from "express";
  * @method POST
  * @access Private
  */
-export const submitForm_01 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitForm_01 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const supportings = (req as FileRequest).file?.path;
         const response = checkObject<OutstandingInstitutionType>(
             {
@@ -55,25 +54,12 @@ export const submitForm_01 = asyncHandler(
             res
         );
 
-        var result: unknown;
-        try {
-            result = await OutstandingInstitution.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await OutstandingInstitution.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -83,8 +69,8 @@ export const submitForm_01 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitForm_02 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitForm_02 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const files = checkFiles(req, res);
 
         const evidence_of_research = files.evidence_of_research[0]?.path;
@@ -101,25 +87,12 @@ export const submitForm_02 = asyncHandler(
             res
         );
 
-        var result: unknown;
-        try {
-            result = await Research.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await Research.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -129,8 +102,8 @@ export const submitForm_02 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitForm_03 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitForm_03 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const files = checkFiles(req, res);
 
         const nominee_coach_photo = files.nominee_coach_photo[0]?.path;
@@ -159,25 +132,12 @@ export const submitForm_03 = asyncHandler(
             res
         );
 
-        var result: unknown;
-        try {
-            result = await Sports.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await Sports.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -187,8 +147,8 @@ export const submitForm_03 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitForm_04 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitForm_04 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const quick = z.object({
             somaiya_mail_id: email,
             awards_category: validString,
@@ -201,28 +161,27 @@ export const submitForm_04 = asyncHandler(
         );
 
         // Check if an entry with the same year, email, and awards category already exists
-        // const existingTeachingEntry = await Teaching.findOne({
-        //     where: {
-        //         [Op.and]: [
-        //             { somaiya_mail_id: somaiya_mail_id },
-        //             { awards_category: awards_category },
-        //             sequelize.literal("YEAR(createdAt) = YEAR(CURDATE())"),
-        //         ],
-        //     },
-        // });
+        const existingTeachingEntry = await Teaching.findOne({
+            where: {
+                [Op.and]: [
+                    { somaiya_mail_id: somaiya_mail_id },
+                    { awards_category: awards_category },
+                    sequelize.literal("YEAR(createdAt) = YEAR(CURDATE())"),
+                ],
+            },
+        });
 
-        // if (existingTeachingEntry) {
-        //     res.status(400).json({
-        //         message:
-        //             "A duplicate entry already exists for this year, email, and awards category.",
-        //         submitted: false,
-        //         data: existingTeachingEntry,
-        //     });
-        //     return;
-        // }
-        let { ip, baseUrl, url, file, files, headers } = req;
-        console.log(JSON.stringify({ ip, baseUrl, url, file, files, headers }));
-        files = checkFiles(req, res);
+        if (existingTeachingEntry) {
+            res.status(400).json({
+                message:
+                    "A duplicate entry already exists for this year, email, and awards category.",
+                submitted: false,
+                data: existingTeachingEntry,
+            });
+            return;
+        }
+
+        const files = checkFiles(req, res);
 
         const data_evidence = files.data_evidence[0]?.path;
         const profile_photograph = files.profile_photograph[0]?.path;
@@ -233,26 +192,12 @@ export const submitForm_04 = asyncHandler(
             res
         );
 
-        console.log(response);
-        var result: unknown;
-        try {
-            result = await Teaching.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await Teaching.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -262,8 +207,8 @@ export const submitForm_04 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitForm_05 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitForm_05 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         let quick = z.object({
             somaiya_email_id: email,
             award_category: validString,
@@ -304,25 +249,12 @@ export const submitForm_05 = asyncHandler(
             res
         );
 
-        var result: unknown;
-        try {
-            result = await NonTeaching.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await NonTeaching.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -332,8 +264,8 @@ export const submitForm_05 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitForm_10 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitForm_10 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const supportings = (req as FileRequest).file?.path;
         const response = checkObject<StudentsType>(
             { ...req.body, supportings },
@@ -341,25 +273,12 @@ export const submitForm_10 = asyncHandler(
             res
         );
 
-        var result: unknown;
-        try {
-            result = await Students.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await Students.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -369,32 +288,20 @@ export const submitForm_10 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitFeedback_01 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitFeedback_01 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const response = checkObject<FeedbackOneType>(
             req.body,
             FeedbackOneForm,
             res
         );
-        var result: unknown;
-        try {
-            result = await FeedbackOne.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
 
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await FeedbackOne.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -404,32 +311,20 @@ export const submitFeedback_01 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitFeedback_02 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitFeedback_02 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const response = checkObject<FeedbackTwoType>(
             req.body,
             FeedbackTwoForm,
             res
         );
-        var result: unknown;
-        try {
-            result = await FeedbackTwo.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
 
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await FeedbackTwo.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -439,32 +334,20 @@ export const submitFeedback_02 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitFeedback_03 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitFeedback_03 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const response = checkObject<FeedbackThreeType>(
             req.body,
             FeedbackThreeForm,
             res
         );
-        var result: unknown;
-        try {
-            result = await FeedbackThree.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
 
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await FeedbackThree.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -474,33 +357,20 @@ export const submitFeedback_03 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitFeedback_04 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitFeedback_04 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const response = checkObject<FeedbackFourType>(
             req.body,
             FeedbackFourForm,
             res
         );
 
-        var result: unknown;
-        try {
-            result = await FeedbackFour.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await FeedbackFour.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );
 
@@ -510,31 +380,18 @@ export const submitFeedback_04 = asyncHandler(
  * @method POST
  * @access Private
  */
-export const submitFeedback_05 = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+export const submitFeedback_05 = logToLoggerMiddleware(
+    async (req: Request, res: Response) => {
         const response = checkObject<FeedbackFiveType>(
             req.body,
             FeedbackFiveForm,
             res
         );
-        var result: unknown;
-        try {
-            result = await FeedbackFive.create(response);
-        } catch (err: unknown) {
-            res.status(500);
-            throw err;
-        }
-
-        if (!result) {
-            // throw error
-            res.status(500);
-            throw new Error("Failed to accept your response");
-        }
+        await FeedbackFive.create(response);
 
         res.status(200).json({
             message: "Form submitted successfully",
             submitted: true,
         });
-        next();
     }
 );

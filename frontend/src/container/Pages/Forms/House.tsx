@@ -2,7 +2,7 @@ import SideBar from "@/components/hoi_components/SideBar";
 import FormInfo from "@/components/FormInfo";
 import Forms from "@/components/Forms";
 import HouseEvaluationForm from "@/data/Forms/HouseForm";
-import HouseEvaluationStages from "@/components/utils/data/HouseStages";
+import { HouseEvaluationStage } from "@/components/utils/data";
 import React from "react";
 import HouseEvaluationValidator from "@/zod/Forms/HouseForm";
 
@@ -41,7 +41,7 @@ export default function HouseEvaluation() {
                         pageHeadings={headings}
                         pageCount={limit}
                         data={HouseEvaluationForm}
-                        stages={HouseEvaluationStages}
+                        stages={HouseEvaluationStage}
                         message={message}
                         validator={HouseEvaluationValidator}
                     />

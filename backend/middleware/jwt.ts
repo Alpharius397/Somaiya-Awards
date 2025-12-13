@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { JwtForm, JwtType } from "../zod/auth/jwt";
+import { JwtForm, JwtType } from "@/zod/auth/jwt";
 import { Model } from "sequelize";
 
 export function getJwtToken(token: string): JwtType | null {

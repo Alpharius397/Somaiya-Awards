@@ -1,6 +1,6 @@
 import z from "zod";
-import { arrayChoice, email, validString, validYear } from "@/backend/zod";
-import { good, options } from "@/backend/constants";
+import { arrayChoice, email, validString, validYear } from "@/shared/zod";
+import { good, options } from "@/shared/constants";
 import { clientTextArea } from "@/zod";
 
 export const StudentTeachingFeedbackFormField = {

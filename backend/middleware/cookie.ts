@@ -1,7 +1,8 @@
 import { CookieOptions, Response } from "express";
-import { AccessCookie, LoginCookie, RefreshCookie } from "../constants";
-import { JwtTimeout } from "../middleware/jwt";
-import { randomString } from "../middleware/csrfMiddleware";
+import { LoginCookie } from "@/shared/constants";
+import { JwtTimeout } from "@/middleware/jwt";
+import { randomString } from "@/middleware/csrfMiddleware";
+import { AccessCookie, RefreshCookie } from "@/constants";
 
 export type setCookieType = {
     timeout: JwtTimeout | "0s";

@@ -1,14 +1,14 @@
-import asyncHandler from "express-async-handler";
-import { AuthRequest } from "../types/request";
-import { NonTeaching, sequelize } from "../models";
-import { Request, Response, NextFunction } from "express";
+import asyncHandler from "@/utils/asyncHandler";
+import { AuthRequest } from "@/types/request";
+import { NonTeaching, sequelize } from "@/models";
+import { Request, Response } from "express";
 import {
     OutstandingInstitution,
     Research,
     Sports,
     Students,
     Teaching,
-} from "../models";
+} from "@/models";
 
 /**
  * @desc Get data of OutstandingInstitution
@@ -17,7 +17,7 @@ import {
  * @access Private
  */
 export const institutionDataHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const user_institution = (req as AuthRequest).user.institution;
 
         const currentYear = new Date().getFullYear();
@@ -33,7 +33,6 @@ export const institutionDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );
 
@@ -44,7 +43,7 @@ export const institutionDataHandler = asyncHandler(
  * @access Private
  */
 export const researchDataHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const user_institution = (req as AuthRequest).user.institution;
 
         const currentYear = new Date().getFullYear();
@@ -60,7 +59,6 @@ export const researchDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );
 
@@ -70,26 +68,23 @@ export const researchDataHandler = asyncHandler(
  * @method GET
  * @access Private
  */
-export const sportsDataHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
-        const user_institution = (req as AuthRequest).user.institution;
+export const sportsDataHandler = asyncHandler(async (req: Request, res: Response) => {
+    const user_institution = (req as AuthRequest).user.institution;
 
-        const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear();
 
-        const data = await Sports.findAll({
-            where: sequelize.and(
-                // raw SQL query using and operator
-                sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
-                { institution_name: user_institution }
-            ),
-        });
+    const data = await Sports.findAll({
+        where: sequelize.and(
+            // raw SQL query using and operator
+            sequelize.literal(`YEAR(createdAt) = ${currentYear}`), // match current Year
+            { institution_name: user_institution }
+        ),
+    });
 
-        res.status(200).json({
-            data: data,
-        });
-        next();
-    }
-);
+    res.status(200).json({
+        data: data,
+    });
+});
 
 /**
  * @desc Get data of Teaching
@@ -98,7 +93,7 @@ export const sportsDataHandler = asyncHandler(
  * @access Private
  */
 export const teachingDataHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const user_institution = (req as AuthRequest).user.institution;
 
         const currentYear = new Date().getFullYear();
@@ -114,7 +109,6 @@ export const teachingDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );
 
@@ -125,7 +119,7 @@ export const teachingDataHandler = asyncHandler(
  * @access Private
  */
 export const nonTeachingDataHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const user_institution = (req as AuthRequest).user.institution;
 
         const currentYear = new Date().getFullYear();
@@ -141,7 +135,6 @@ export const nonTeachingDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );
 
@@ -152,7 +145,7 @@ export const nonTeachingDataHandler = asyncHandler(
  * @access Private
  */
 export const studentsDataHandler = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const user_institution = (req as AuthRequest).user.institution;
 
         const currentYear = new Date().getFullYear();
@@ -168,6 +161,5 @@ export const studentsDataHandler = asyncHandler(
         res.status(200).json({
             data: data,
         });
-        next();
     }
 );

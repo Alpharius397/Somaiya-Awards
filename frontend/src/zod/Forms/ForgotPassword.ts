@@ -1,9 +1,9 @@
 import z from "zod";
-import { anyString, email } from "@/backend/zod";
+import { anyString, email } from "@/shared/zod";
 
 const ForgotValidator = z.object({
-    user_email: email,
-    user_password_new: anyString,
+    user_email: email as unknown as z.ZodType,
+    user_password_new: anyString as unknown as z.ZodType,
 });
 
 export default ForgotValidator;

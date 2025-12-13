@@ -1,6 +1,6 @@
 import FormInfo from "@/components/FormInfo";
 import Forms from "@/components/Forms";
-import StudentTeachingFeedback from "@/components/utils/data/StudentTeachingFeedback";
+import { StudentTeachingFeedback } from "@/components/utils/data";
 import StudentTeachingFeedbackForm from "@/data/Forms/StudentTeachingFeedbackForm";
 import Footer from "@/components/Footer";
 import React from "react";

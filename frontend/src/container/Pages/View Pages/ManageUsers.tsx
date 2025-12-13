@@ -8,19 +8,27 @@ import { csvReader } from "@/zod/Auth/register";
 import { Dropzone, FileMosaic } from "@files-ui/react";
 import Papa from "papaparse";
 import Axios, { DATA_URL } from "@/axios";
-import { Institutes } from "@/backend/constants";
-import { arrayChoice, email, anyString } from "@/backend/zod";
+import { Institutes } from "@/shared/constants";
+import { arrayChoice, email, anyString } from "@/shared/zod";
 import { useData } from "@/hooks/data";
 import swalAlert from "@/components/utils/swal";
 import { Download } from "lucide-react";
 
+type DropZoneFile = {
+    file: File;
+    id: Number;
+    name: string;
+    size: number;
+    type: "text/csv";
+    valid: true;
+};
+
 export default function ManageUsers() {
     const institutionOptions = Institutes;
-    // for password checks
 
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<DropZoneFile[]>([]);
 
-    const updateFiles = (incomingFiles: File[]) => {
+    const updateFiles = (incomingFiles: DropZoneFile[]) => {
         setFiles(incomingFiles);
     };
 
@@ -29,7 +37,7 @@ export default function ManageUsers() {
     };
 
     const handleUpload = async () => {
-        const file: File = files[0];
+        const file: DropZoneFile = files[0];
 
         if (!file) {
             swalAlert({
@@ -104,8 +112,7 @@ export default function ManageUsers() {
             });
     };
 
-    const { display, setDisplay, setData, handleChange, getData } =
-        useData(PasswordValid);
+    const { display, setData, handleChange, getData } = useData(PasswordValid);
 
     const handleSubmit = async () => {
         const data = getData();
@@ -124,7 +131,6 @@ export default function ManageUsers() {
         } else {
             await Axios.post("/auth/register", display)
                 .then(() => {
-                    setDisplay({});
                     setData({});
                     toast.success("User created successfully", {
                         position: "bottom-right",

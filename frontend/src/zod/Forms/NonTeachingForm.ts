@@ -8,8 +8,8 @@ import {
     somaiyaMail,
     validFile,
     validString,
-} from "@/backend/zod";
-import { NonTeachingAwardList, options } from "@/backend/constants";
+} from "@/shared/zod";
+import { NonTeachingAwardList, options } from "@/shared/constants";
 
 export const NonTeachingField = {
     email_id: email,

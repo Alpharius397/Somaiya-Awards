@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
-import { applicationHeader, CsrfName, instituteHeader } from "../constants";
-import { User } from "../models/tables/User";
-import { AuthRequest } from "../types/request";
-import { JSONCookie } from "cookie-parser";
+import {
+    applicationHeader,
+    CsrfName,
+    instituteHeader,
+} from "@/shared/constants";
+import { User } from "@/models/tables/User";
+import { AuthRequest } from "@/types/request";
 
 const ALLOWED_HEADERS = [CsrfName, instituteHeader, applicationHeader] as const;
 

@@ -1,5 +1,5 @@
-import * as z from "zod";
-import { institute, somaiyaMail, validNumber, validString } from "../../zod";
+import z from "zod";
+import { institute, somaiyaMail, validNumber, validString } from "@/shared/zod";
 
 export const FeedbackFiveForm = z.object({
     rater_name: validString,

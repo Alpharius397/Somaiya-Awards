@@ -1,5 +1,5 @@
 import type { FormEntry } from "@/data/Forms/types";
-import { agreeList } from "@/backend/constants";
+import { agreeList } from "@/shared/constants";
 import { StudentNonTeachingFeedbackFormField as v } from "@/zod/Forms/StudentNonTeachingFeedbackForm";
 import fetchOptions from "@/data/Forms";
 import { URL } from "@/axios";
@@ -119,6 +119,6 @@ const StudentNonTeachingFeedbackForm: FormEntry[] = [
         page: 4,
         fieldsPerLine: 1,
     },
-];
+] as const;
 
 export default StudentNonTeachingFeedbackForm;

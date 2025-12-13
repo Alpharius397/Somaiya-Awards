@@ -1,8 +1,13 @@
-import type { FormEntry } from "@/data/Forms/types";
 import { FeedbackTeachingPeerField as v } from "@/zod/Forms/FeedbackTeachingPeerForm";
-import { agreeList, Institutes, peerTeachingOption, ratingList } from "@/backend/constants";
+import {
+    agreeList,
+    Institutes,
+    peerTeachingOption,
+    ratingList,
+} from "@/shared/constants";
 import fetchOptions from "@/data/Forms";
 import { URL } from "@/axios";
+import { FormEntry } from "./types";
 
 /** add __*teacher_name*__ at runtime */
 const FeedbackTeachingPeerForm: FormEntry[] = [

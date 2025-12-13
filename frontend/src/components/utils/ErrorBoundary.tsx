@@ -25,7 +25,7 @@ export function EmptyData() {
 }
 
 export default class ErrorBoundary extends React.Component {
-    state: { hasError: boolean };
+    declare state: { hasError: boolean };
 
     declare props: {
         children: React.JSX.Element;

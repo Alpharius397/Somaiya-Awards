@@ -6,7 +6,7 @@ import {
     Institutes,
     PeerNonTeachingFeedbackList,
     ratingList,
-} from "@/backend/constants";
+} from "@/shared/constants";
 import fetchOptions from "@/data/Forms";
 
 /** add __*nominee_name*__ at runtime */
@@ -180,6 +180,6 @@ const PeerNonTeachingFeedbackForm: FormEntry[] = [
         page: 3,
         fieldsPerLine: 1,
     },
-];
+] as const;
 
 export default PeerNonTeachingFeedbackForm;

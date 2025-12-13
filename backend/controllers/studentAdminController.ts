@@ -1,4 +1,4 @@
-import asyncHandler from "express-async-handler";
+import asyncHandler from "../utils/asyncHandler";
 import { NextFunction, Request, Response } from "express";
 import sequelize, { Op } from "sequelize";
 import { Students } from "../models";

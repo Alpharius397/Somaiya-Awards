@@ -1,12 +1,7 @@
-import * as z from "zod";
-import {
-    email,
-    validYear,
-    validString,
-    arrayChoice,
-    serverTextArea,
-} from "../../zod";
-import { agreeList } from "../../constants";
+import z from "zod";
+import { email, validYear, validString, arrayChoice } from "@/shared/zod";
+import { agreeList } from "@/shared/constants";
+import { serverTextArea } from "@/zod";
 
 export const FeedbackThreeForm = z.object({
     email_id: email,

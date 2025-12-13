@@ -1,6 +1,7 @@
 import winston from "winston";
-import asyncHandler from "express-async-handler";
-import RequestFormatter, { AllowedMethods } from "../utils/requestFormatter";
+import asyncHandler from "@/utils/asyncHandler";
+import RequestFormatter, { AllowedMethods } from "@/utils/requestFormatter";
+import { Request, Response, NextFunction } from "express";
 
 const dashLine = Array.from({ length: 100 })
     .map(() => "-")
@@ -57,7 +58,6 @@ const applicationLogger = winston.createLogger({
 const METHOD_TO_LOG: AllowedMethods[] = ["DELETE", "PUT", "POST"];
 
 function LoggerMiddleware(logger: winston.Logger) {
-    logger.transports;
     return asyncHandler((req, res, next) => {
         if (METHOD_TO_LOG.includes(req.method as AllowedMethods))
             logger.info(JSON.stringify(RequestFormatter(req, res)));
@@ -68,3 +68,32 @@ function LoggerMiddleware(logger: winston.Logger) {
 export const ApplicationLoggerMiddleware = LoggerMiddleware(applicationLogger);
 export const AuthLoggerMiddleware = LoggerMiddleware(authLogger);
 export const ServerLoggerMiddleware = LoggerMiddleware(serverLogger);
+
+/** Async Handler that logs request to a logger */
+export default function LogRequest(logger: winston.Logger) {
+    return function (
+        controller: (req: Request, res: Response) => Promise<void>
+    ) {
+        return asyncHandler(async (req: Request, res: Response) => {
+            await controller(req, res);
+            if (METHOD_TO_LOG.includes(req.method as AllowedMethods))
+                logger.info(JSON.stringify(RequestFormatter(req, res)));
+        });
+    };
+}
+
+export const ApplicationLogger = LogRequest(applicationLogger);
+export const AuthLogger = LogRequest(authLogger);
+export const ServerLogger = LogRequest(serverLogger);
+
+/** Async Handler that logs request using LoggerMiddleware. __[Ensure that LoggerMiddleware is used]__ */
+export function logToLoggerMiddleware(
+    controller: (req: Request, res: Response) => Promise<void>
+) {
+    return asyncHandler(
+        async (req: Request, res: Response, next: NextFunction) => {
+            await controller(req, res);
+            return next();
+        }
+    );
+}

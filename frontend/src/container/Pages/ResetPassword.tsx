@@ -5,7 +5,7 @@ import Wave from "react-wavify";
 import Field from "@/components/utils/Field";
 import React from "react";
 import ForgotValidator, { ForgotType } from "@/zod/Forms/ForgotPassword";
-import { email, anyString } from "@/backend/zod";
+import { email, anyString } from "@/shared/zod";
 import Axios from "@/axios";
 import { useData } from "@/hooks/data";
 

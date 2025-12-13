@@ -5,7 +5,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import BarGraph, {
     type AvgScore,
 } from "@/container/views/admin/components/BarGraph";
-//@ts-expect-error Sometime this breaks
 import Logo from "/logo.png";
 import Axios from "@/axios";
 import React from "react";
@@ -16,7 +15,7 @@ import {
     FinalScoreHighlight,
     ScoreRow,
 } from "../../admin/components/ScoreCard";
-import { applicationHeader } from "@/backend/constants";
+import { applicationHeader } from "@/shared/constants";
 
 export default function ScoreCard() {
     const cardRef = useRef(null);

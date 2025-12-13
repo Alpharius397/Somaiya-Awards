@@ -1,7 +1,7 @@
 import FormInfo from "@/components/FormInfo";
 import Forms from "@/components/Forms";
 import SportsStarForm from "@/data/Forms/SportsStarForm";
-import SportsStarStages from "@/components/utils/data/SportsStarStages";
+import { SportsStarStages } from "@/components/utils/data";
 import React from "react";
 import SportsStarFormValidator from "@/zod/Forms/SportsStarForm";
 import SideBar from "@/components/hoi_components/SideBar";

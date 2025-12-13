@@ -1,12 +1,7 @@
 import z from "zod";
-import {
-    validString,
-    somaiyaMail,
-    institute,
-    arrayChoice,
-} from "@/backend/zod";
+import { validString, somaiyaMail, institute, arrayChoice } from "@/shared/zod";
 
-import { options } from "@/backend/constants";
+import { options } from "@/shared/constants";
 
 export const FeedbackSportsCoachField = {
     rater_name: validString,

@@ -8,12 +8,12 @@ import {
     getSportsBoyExcelData,
     getSportsCoachExcelData,
     getSportsGirlExcelData,
-} from "../controllers/sportsAdminController";
-import csrfMiddleware from "../middleware/csrfMiddleware";
-import roleMiddle from "../middleware/role";
-import userAuthenticator from "../middleware/userAuthenticator";
-import { Role } from "../types/role";
-import { ApplicationLoggerMiddleware } from "../middleware/logger";
+} from "@/controllers/sportsAdminController";
+import csrfMiddleware from "@/middleware/csrfMiddleware";
+import roleMiddle from "@/middleware/role";
+import userAuthenticator from "@/middleware/userAuthenticator";
+import { Role } from "@/shared/types/role";
+
 const router = express.Router();
 
 /**GET REQUEST */
@@ -38,6 +38,4 @@ router
         sportsDataUpdater
     );
 
-router.use(ApplicationLoggerMiddleware);
-    
 export default router;

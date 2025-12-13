@@ -1,6 +1,6 @@
 import Axios from "@/axios";
-import { instituteHeader } from "@/backend/constants";
-import { anyString } from "@/backend/zod";
+import { instituteHeader } from "@/shared/constants";
+import { anyString } from "@/shared/zod";
 import z from "zod";
 
 const validator = z.object({ data: z.array(anyString) });

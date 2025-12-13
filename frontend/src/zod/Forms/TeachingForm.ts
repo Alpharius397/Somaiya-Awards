@@ -6,11 +6,11 @@ import {
     phoneNumber,
     validFile,
     lastDate,
-} from "@/backend/zod";
+} from "@/shared/zod";
 
-import { awards, Institutes } from "@/backend/constants";
+import { awards, Institutes } from "@/shared/constants";
 import z from "zod";
-import { options } from "@/backend/constants";
+import { options } from "@/shared/constants";
 import { clientTextArea } from "@/zod";
 
 export const TeachingFormField = {

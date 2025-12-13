@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Wave from "react-wavify";
 import Field from "@/components/utils/Field";
-import React from "react";
-import { anyString, email } from "@/backend/zod";
+import { anyString, email } from "@/shared/zod";
 import Axios from "@/axios";
 import LoginValidator, { type LoginType } from "@/zod/Forms/Login";
 import swalAlert from "@/components/utils/swal";
 import { useData } from "@/hooks/data";
+import React from "react";
 
 export default function Login() {
     const navigate = useNavigate();

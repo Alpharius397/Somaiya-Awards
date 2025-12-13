@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { cleanUpFile, cleanUpFiles, CleanUpFileType } from "../controllers";
-import { FileRequest, FilesRequest } from "../types/request";
-import { serverLogger } from "./logger";
+import { cleanUpFile, cleanUpFiles, CleanUpFileType } from "@/controllers";
+import { FileRequest, FilesRequest } from "@/types/request";
+import { serverLogger } from "@/middleware/logger";
 
 type CleanJson = {
     FilesRemoved: string[];

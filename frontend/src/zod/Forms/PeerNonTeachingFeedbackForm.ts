@@ -4,8 +4,8 @@ import {
     phoneNumber,
     somaiyaMail,
     validString,
-} from "@/backend/zod";
-import { agreeList, PeerNonTeachingFeedbackList } from "@/backend/constants";
+} from "@/shared/zod";
+import { agreeList, PeerNonTeachingFeedbackList } from "@/shared/constants";
 import { clientTextArea } from "@/zod";
 
 export const PeerNonTeachingFeedbackFormField = {

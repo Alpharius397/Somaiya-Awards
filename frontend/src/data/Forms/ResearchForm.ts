@@ -1,4 +1,4 @@
-import { Institutes } from "@/backend/constants";
+import { Institutes } from "@/shared/constants";
 import { ResearchFormField as v } from "@/zod/Forms/ResearchForm";
 import type { FormEntry } from "@/data/Forms/types";
 
@@ -12,6 +12,7 @@ const ResearchForm: FormEntry[] = [
         page: 1,
         fieldsPerLine: 2,
     },
+
     {
         title: "Designation",
         name: "designation",
@@ -324,6 +325,6 @@ const ResearchForm: FormEntry[] = [
         page: 7,
         fieldsPerLine: 1,
     },
-];
+] as const;
 
 export default ResearchForm;

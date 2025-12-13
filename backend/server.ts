@@ -1,36 +1,36 @@
 import express from "express";
 import os from "os";
-import authRoute from "./routes/authRoutes";
-import formRoute from "./routes/formRoutes";
-import hoiRoutes from "./routes/hoiRoutes";
-import ieacRoutes from "./routes/ieacRoutes";
-import adminRoutes from "./routes/adminRoutes";
-import studentAdminRoutes from "./routes/studentAdminRoutes";
-import sportsAdminRoutes from "./routes/sportsAdminRoutes";
-import researchRoutes from "./routes/researchAdminRoutes";
-import errorHandler from "./middleware/errorHandler";
+import authRoute from "@/routes/authRoutes";
+import formRoute from "@/routes/formRoutes";
+import hoiRoutes from "@/routes/hoiRoutes";
+import ieacRoutes from "@/routes/ieacRoutes";
+import adminRoutes from "@/routes/adminRoutes";
+import studentAdminRoutes from "@/routes/studentAdminRoutes";
+import sportsAdminRoutes from "@/routes/sportsAdminRoutes";
+import researchRoutes from "@/routes/researchAdminRoutes";
+import errorHandler from "@/middleware/errorHandler";
 import cors from "cors";
-import { serverLogger } from "./middleware/logger";
-import { Role } from "./types/role";
+import { serverLogger } from "@/middleware/logger";
+import { Role } from "@/shared/types/role";
 import dotenv from "dotenv";
-import userAuthenticator from "./middleware/userAuthenticator";
-import roleMiddle from "./middleware/role";
+import userAuthenticator from "@/middleware/userAuthenticator";
+import roleMiddle from "@/middleware/role";
 import cookieParser from "cookie-parser";
-import { sequelize, User } from "./models";
+import { sequelize, User } from "@/models";
 import bcrypt from "bcrypt";
-import csrfMiddleware from "./middleware/csrfMiddleware";
+import csrfMiddleware from "@/middleware/csrfMiddleware";
 import {
     applicationHeader,
     CsrfName,
-    DIR_NAME,
     instituteHeader,
-} from "./constants";
+} from "@/shared/constants";
 import cluster from "cluster";
 import fs from "node:fs";
 import { resolve } from "node:path";
 import { destinations } from "./middleware/fileUpload";
 import { mkdirPossibleSync, writePossible } from "./utils/permChecker";
 import cleanUp from "./middleware/cleanUp";
+import { DIR_NAME } from "@/constants";
 
 dotenv.config();
 

@@ -1,6 +1,6 @@
 import Forms from "@/components/Forms";
 import StudentsFormData from "@/data/Forms/StudentsFormData";
-import StudentsFormStages from "@/components/utils/data/StudentsFormStages";
+import { StudentsFormStages } from "@/components/utils/data";
 import FormInfo from "@/components/FormInfo";
 import React from "react";
 import StudentsFormDataValidator from "@/zod/Forms/StudentsFormData";

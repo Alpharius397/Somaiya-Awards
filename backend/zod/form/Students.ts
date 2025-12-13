@@ -1,12 +1,12 @@
-import * as z from "zod";
+import z from "zod";
 import {
     arrayChoice,
     somaiyaMail,
-    serverTextArea,
     validBoolean,
     validString,
-} from "../../zod";
-import { studentAwardList, Institutes } from "../../constants";
+} from "@/shared/zod";
+import { studentAwardList, Institutes } from "@/shared/constants";
+import { serverTextArea } from "@/zod";
 
 export const StudentsForm = z.object({
     email_id: somaiyaMail,

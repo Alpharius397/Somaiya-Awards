@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { anyString, email, institute, role } from "..";
+import { anyString, email, institute, role } from "@/shared/zod";
 
 export const Register = z.object({
     user_email_id: email,

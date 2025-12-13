@@ -90,54 +90,48 @@ export default function Review() {
     };
 
     return (
-        <div>
-            <div className="flex h-screen">
-                <SideBar />
+        <div className="flex h-screen">
+            <SideBar />
 
-                <div className="flex p-5 flex-col w-full font-Poppins overflow-y-scroll">
-                    <h2 className="text-xl font-semibold">
-                        {title.toUpperCase()} Form Responses
-                    </h2>
-                    <div className="mt-[3rem] p-2">
-                        <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            density="comfortable"
-                            slots={{ toolbar: GridToolbar }}
-                            slotProps={{
-                                toolbar: {
-                                    showQuickFilter: true,
-                                    quickFilterProps: {
-                                        debounceMs: 500,
-                                    },
+            <div className="flex p-5 flex-col w-full font-Poppins overflow-y-scroll">
+                <h2 className="text-xl font-semibold">
+                    {title.toUpperCase()} Form Responses
+                </h2>
+                <div className="mt-[3rem] p-2">
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        density="comfortable"
+                        slots={{ toolbar: GridToolbar }}
+                        slotProps={{
+                            toolbar: {
+                                showQuickFilter: true,
+                                quickFilterProps: {
+                                    debounceMs: 500,
                                 },
-                            }}
-                            sx={{
-                                boxShadow: 2,
-                                padding: 2,
-                            }}
-                        />
-                    </div>
-                    {!window["SECRET_FLAG"] && rows[0] ? (
-                        rows[0]?.ieacApprovedFile != null ? null : (
-                            <div>
-                                <input
-                                    type="file"
-                                    name="approvalFile"
-                                    onChange={handleFileChange}
-                                ></input>
-                            </div>
-                        )
-                    ) : (
-                        <div>
-                            <input
-                                type="file"
-                                name="approvalFile"
-                                onChange={handleFileChange}
-                            ></input>
-                        </div>
-                    )}
+                            },
+                        }}
+                        sx={{
+                            boxShadow: 2,
+                            padding: 2,
+                        }}
+                    />
                 </div>
+                {!window["SECRET_FLAG"] && rows[0] ? (
+                    rows[0]?.ieacApprovedFile != null ? null : (
+                        <input
+                            type="file"
+                            name="approvalFile"
+                            onChange={handleFileChange}
+                        />
+                    )
+                ) : (
+                    <input
+                        type="file"
+                        name="approvalFile"
+                        onChange={handleFileChange}
+                    />
+                )}
             </div>
         </div>
     );

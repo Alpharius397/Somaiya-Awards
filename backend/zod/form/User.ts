@@ -1,5 +1,5 @@
-import * as z from "zod";
-import { email, role, validString, anyString } from "../../zod";
+import z from "zod";
+import { email, role, validString, anyString } from "@/shared/zod";
 
 export const UserForm = z.object({
     email_id: email,

@@ -1,6 +1,6 @@
 import type { FormEntry } from "@/data/Forms/types";
 import { NonTeachingField as v } from "@/zod/Forms/NonTeachingForm";
-import { Institutes, options, NonTeachingAwardList } from "@/backend/constants";
+import { Institutes, options, NonTeachingAwardList } from "@/shared/constants";
 
 const NonTeachingForm: FormEntry[] = [
     {

@@ -1,5 +1,4 @@
 import express from "express";
-const router = express.Router();
 import {
     institutionDataHandler,
     researchDataHandler,
@@ -7,9 +6,10 @@ import {
     teachingDataHandler,
     nonTeachingDataHandler,
     studentsDataHandler,
-} from "../controllers/hoiController";
+} from "@/controllers/hoiController";
 
 // all hoi accessible routes;
+const router = express.Router();
 
 //get institution form data
 

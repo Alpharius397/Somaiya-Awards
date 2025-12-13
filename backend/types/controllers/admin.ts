@@ -1,18 +1,18 @@
 import z from "zod";
-import { validBoolean, validNumber, validString } from "../../zod";
-import { OutstandingInstitution } from "../../models/tables/OutstandingInstitution";
-import { Research } from "../../models/tables/Research";
-import { Results } from "../../models/tables/Results";
-import { User } from "../../models/tables/User";
-import { Sports } from "../../models/tables/Sports";
-import { Teaching } from "../../models/tables/Teaching";
-import { NonTeaching } from "../../models/tables/NonTeaching";
-import { Students } from "../../models/tables/Students";
-import { FeedbackOne } from "../../models/tables/FeedbackOne";
-import { FeedbackTwo } from "../../models/tables/FeedbackTwo";
-import { FeedbackThree } from "../../models/tables/FeedbackThree";
-import { FeedbackFour } from "../../models/tables/FeedbackFour";
-import { FeedbackFive } from "../../models/tables/FeedbackFive";
+import { validBoolean, validNumber, validString } from "@/shared/zod";
+import { OutstandingInstitution } from "@/models/tables/OutstandingInstitution";
+import { Research } from "@/models/tables/Research";
+import { Results } from "@/models/tables/Results";
+import { User } from "@/models/tables/User";
+import { Sports } from "@/models/tables/Sports";
+import { Teaching } from "@/models/tables/Teaching";
+import { NonTeaching } from "@/models/tables/NonTeaching";
+import { Students } from "@/models/tables/Students";
+import { FeedbackOne } from "@/models/tables/FeedbackOne";
+import { FeedbackTwo } from "@/models/tables/FeedbackTwo";
+import { FeedbackThree } from "@/models/tables/FeedbackThree";
+import { FeedbackFour } from "@/models/tables/FeedbackFour";
+import { FeedbackFive } from "@/models/tables/FeedbackFive";
 
 export const countAllResponse = z.object({
     institutionFormCount: validNumber,
@@ -275,17 +275,3 @@ export const NonTeachingScore = z.object({
     peers_avg: validNumber,
 });
 
-export type DataType = {
-    [K in
-        | "OEI_3"
-        | "PEI_23"
-        | "OEST"
-        | "OESVU"
-        | "PEST"
-        | "PESVU"
-        | "OESH"
-        | "PESH"]: {
-        OK: unknown[];
-        NO: unknown[];
-    };
-};

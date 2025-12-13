@@ -1,4 +1,4 @@
-import { Institutes, options } from "@/backend/constants";
+import { Institutes, options } from "@/shared/constants";
 import { SportsStarFormField as v } from "@/zod/Forms/SportsStarForm";
 import type { FormEntry } from "@/data/Forms/types";
 
@@ -418,6 +418,6 @@ const SportsStarForm: FormEntry[] = [
         page: 8,
         fieldsPerLine: 1,
     },
-];
+] as const;
 
 export default SportsStarForm;

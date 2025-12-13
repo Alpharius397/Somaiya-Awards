@@ -1,6 +1,6 @@
 import z from "zod";
-import { institute, email, anyString } from "@/backend/zod";
-import { Role } from "@/backend/types/role";
+import { institute, email, anyString } from "@/shared/zod";
+import { Role } from "@/shared/types/role";
 
 /**
  * Email ID, Role,	Institute Name, Password

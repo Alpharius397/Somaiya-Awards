@@ -4,11 +4,10 @@ import { Download, User, Building2, Award } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import BarGraph, { type AvgScore } from "./BarGraph";
-//@ts-expect-error Sometime this breaks
 import Logo from "/logo.png";
 import Axios from "@/axios";
 import React from "react";
-import { applicationHeader } from "@/backend/constants";
+import { applicationHeader } from "@/shared/constants";
 
 type CompleteData = {
     name: string;
@@ -246,20 +245,20 @@ export type NumberScore = {
 };
 
 export function ScoreRow({ label, value, loading }: NumberScore) {
-    return (
-        <div className="flex justify-between items-center">
-            <span className="text-xs sm:text-sm text-gray-600">{label}</span>
-            <span className="font-semibold text-blue-800 text-sm sm:text-base">
-                {loading ? (
-                    <Skeleton width={50} />
-                ) : value != null ? (
-                    value.toFixed(2)
-                ) : (
-                    "N/A"
-                )}
-            </span>
-        </div>
-    );
+  return (
+      <div className="flex justify-between items-center">
+          <span className="text-xs sm:text-sm text-gray-600">{label}</span>
+          <span className="font-semibold text-blue-800 text-sm sm:text-base">
+              {loading ? (
+                  <Skeleton width={50} />
+              ) : value != null ? (
+                  value.toFixed(2)
+              ) : (
+                  "N/A"
+              )}
+          </span>
+      </div>
+  );
 }
 
 export function ApplicationScoreHighlight({
@@ -286,39 +285,35 @@ export function ApplicationScoreHighlight({
 }
 
 export function FeedbackScoreHighlight({ label, value, loading }: NumberScore) {
-    return (
-        <div className="bg-green-100 text-green-800 p-3 rounded-lg flex justify-between items-center">
-            <span className="font-medium text-sm sm:text-base pr-5">
-                {label}
-            </span>
-            <span className="text-lg sm:text-xl font-bold">
-                {loading ? (
-                    <Skeleton width={50} />
-                ) : value != null ? (
-                    value.toFixed(2)
-                ) : (
-                    "N/A"
-                )}
-            </span>
-        </div>
-    );
+  return (
+      <div className="bg-green-100 text-green-800 p-3 rounded-lg flex justify-between items-center">
+          <span className="font-medium text-sm sm:text-base pr-5">{label}</span>
+          <span className="text-lg sm:text-xl font-bold">
+              {loading ? (
+                  <Skeleton width={50} />
+              ) : value != null ? (
+                  value.toFixed(2)
+              ) : (
+                  "N/A"
+              )}
+          </span>
+      </div>
+  );
 }
 
 export function FinalScoreHighlight({ label, value, loading }: NumberScore) {
-    return (
-        <div className="bg-red-800 text-white p-3 rounded-lg flex justify-between items-center">
-            <span className="font-medium text-sm sm:text-base pr-3">
-                {label}
-            </span>
-            <span className="text-lg sm:text-xl font-bold">
-                {loading ? (
-                    <Skeleton width={50} />
-                ) : value != null ? (
-                    value.toFixed(2)
-                ) : (
-                    "N/A"
-                )}
-            </span>
-        </div>
-    );
+  return (
+      <div className="bg-red-800 text-white p-3 rounded-lg flex justify-between items-center">
+          <span className="font-medium text-sm sm:text-base pr-3">{label}</span>
+          <span className="text-lg sm:text-xl font-bold">
+              {loading ? (
+                  <Skeleton width={50} />
+              ) : value != null ? (
+                  value.toFixed(2)
+              ) : (
+                  "N/A"
+              )}
+          </span>
+      </div>
+  );
 }
