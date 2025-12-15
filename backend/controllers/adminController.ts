@@ -141,10 +141,10 @@ export const getCounts = asyncHandler(async (_req: Request, res: Response) => {
 function getLastDate(days: number) {
     let currentYear = new Date().getFullYear(),
         currentMonth = new Date().getMonth(),
-        currentDate = new Date().getDay() - days;
+        currentDate = new Date().getDate() - days;
 
     if (currentDate < 1) {
-        currentMonth--; // year changes accordingly, but not date
+        currentMonth--; // year changes accordingly, but not month
     }
 
     return new Date(currentYear, currentMonth, currentDate);
@@ -431,134 +431,136 @@ function groupCountMethod(
  * @method GET
  * @access Private
  */
-export const getGroupWiseCount = asyncHandler(async (_req: Request, res: Response) => {
-    let conditions = sequelInstitute();
+export const getGroupWiseCount = asyncHandler(
+    async (_req: Request, res: Response) => {
+        let conditions = sequelInstitute();
 
-    const institutionData = (await OutstandingInstitution.findAll(
-        conditions
-    )) as unknown as InstituteCount[];
+        const institutionData = (await OutstandingInstitution.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
-    //get research data
+        //get research data
 
-    const researchData = (await Research.findAll(
-        conditions
-    )) as unknown as InstituteCount[];
+        const researchData = (await Research.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
-    //get sports data
+        //get sports data
 
-    const sportsData = (await Sports.findAll(
-        conditions
-    )) as unknown as InstituteCount[];
+        const sportsData = (await Sports.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
-    //get teaching data
+        //get teaching data
 
-    const teachingData = (await Teaching.findAll(
-        conditions
-    )) as unknown as InstituteCount[];
+        const teachingData = (await Teaching.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
-    //get Non Teaching Data
+        //get Non Teaching Data
 
-    const nonTeachingData = (await NonTeaching.findAll(
-        conditions
-    )) as unknown as InstituteCount[];
+        const nonTeachingData = (await NonTeaching.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
-    // get feedback One Data
+        // get feedback One Data
 
-    const studentsData = (await Students.findAll(
-        conditions
-    )) as unknown as InstituteCount[];
+        const studentsData = (await Students.findAll(
+            conditions
+        )) as unknown as InstituteCount[];
 
-    // get feedback One Data
+        // get feedback One Data
 
-    //group count logic
+        //group count logic
 
-    const groupCount: groupCountType = {
-        data: [
-            {
-                group: "A",
-                formsFilled: 0,
-            },
-            {
-                group: "B",
-                formsFilled: 0,
-            },
-            {
-                group: "C",
-                formsFilled: 0,
-            },
-            {
-                group: "D",
-                formsFilled: 0,
-            },
-            {
-                group: "E",
-                formsFilled: 0,
-            },
-        ],
-    };
+        const groupCount: groupCountType = {
+            data: [
+                {
+                    group: "A",
+                    formsFilled: 0,
+                },
+                {
+                    group: "B",
+                    formsFilled: 0,
+                },
+                {
+                    group: "C",
+                    formsFilled: 0,
+                },
+                {
+                    group: "D",
+                    formsFilled: 0,
+                },
+                {
+                    group: "E",
+                    formsFilled: 0,
+                },
+            ],
+        };
 
-    // institute forms
+        // institute forms
 
-    for (const response of institutionData) {
-        const validGroups: Group = Groups[response.institution_name] || [];
+        for (const response of institutionData) {
+            const validGroups: Group = Groups[response.institution_name] || [];
 
-        for (let group of validGroups) {
-            groupCountMethod(groupCount.data, group, response.formsFilled);
+            for (let group of validGroups) {
+                groupCountMethod(groupCount.data, group, response.formsFilled);
+            }
         }
-    }
 
-    //sports
+        //sports
 
-    for (const response of sportsData) {
-        const validGroups: Group = Groups[response.institution_name] || [];
+        for (const response of sportsData) {
+            const validGroups: Group = Groups[response.institution_name] || [];
 
-        for (let group of validGroups) {
-            groupCountMethod(groupCount.data, group, response.formsFilled);
+            for (let group of validGroups) {
+                groupCountMethod(groupCount.data, group, response.formsFilled);
+            }
         }
-    }
 
-    //research
+        //research
 
-    for (const response of researchData) {
-        const validGroups: Group = Groups[response.institution_name] || [];
+        for (const response of researchData) {
+            const validGroups: Group = Groups[response.institution_name] || [];
 
-        for (let group of validGroups) {
-            groupCountMethod(groupCount.data, group, response.formsFilled);
+            for (let group of validGroups) {
+                groupCountMethod(groupCount.data, group, response.formsFilled);
+            }
         }
-    }
 
-    //teaching
+        //teaching
 
-    for (const response of teachingData) {
-        const validGroups: Group = Groups[response.institution_name] || [];
+        for (const response of teachingData) {
+            const validGroups: Group = Groups[response.institution_name] || [];
 
-        for (let group of validGroups) {
-            groupCountMethod(groupCount.data, group, response.formsFilled);
+            for (let group of validGroups) {
+                groupCountMethod(groupCount.data, group, response.formsFilled);
+            }
         }
-    }
 
-    //non teaching
+        //non teaching
 
-    for (const response of nonTeachingData) {
-        const validGroups: Group = Groups[response.institution_name] || [];
+        for (const response of nonTeachingData) {
+            const validGroups: Group = Groups[response.institution_name] || [];
 
-        for (let group of validGroups) {
-            groupCountMethod(groupCount.data, group, response.formsFilled);
+            for (let group of validGroups) {
+                groupCountMethod(groupCount.data, group, response.formsFilled);
+            }
         }
-    }
 
-    // students
+        // students
 
-    for (const response of studentsData) {
-        const validGroups: Group = Groups[response.institution_name] || [];
+        for (const response of studentsData) {
+            const validGroups: Group = Groups[response.institution_name] || [];
 
-        for (let group of validGroups) {
-            groupCountMethod(groupCount.data, group, response.formsFilled);
+            for (let group of validGroups) {
+                groupCountMethod(groupCount.data, group, response.formsFilled);
+            }
         }
-    }
 
-    res.status(200).json(groupCount);
-});
+        res.status(200).json(groupCount);
+    }
+);
 
 /**
  * RESPONSES SECTION
@@ -595,25 +597,27 @@ export const getInstitutionData = asyncHandler(
  * @method GET
  * @access Private
  */
-export const getResearchData = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getResearchData = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Research.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { approved: true },
-            ],
-        },
-    });
+        const data = await Research.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { approved: true },
+                ],
+            },
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+    }
+);
 
 /**
  * @desc Get records of sports admin aprroved Sports Girl form of current year
@@ -621,51 +625,54 @@ export const getResearchData = asyncHandler(async (_req: Request, res: Response)
  * @method GET
  * @access
  */
-export const getSportsGirlData = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getSportsGirlData = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const rawData = await Sports.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { isApprovedSportsGirl: true },
-            ],
-        },
-    });
+        const rawData = await Sports.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { isApprovedSportsGirl: true },
+                ],
+            },
+        });
 
-    const data: SportsGirlType = {
-        data: [],
-    };
-
-    for (const response of rawData) {
-        const object = {
-            id: response.id,
-            email_id: response.email_id,
-            institution_name: response.institution_name,
-            nominee_ss_girl: response.nominee_ss_girl,
-            nominee_ss_girl_sport: response.nominee_ss_girl_sport,
-            nominee_ss_girl_photo: response.nominee_ss_girl_photo,
-            nominee_ss_girl_supportings: response.nominee_ss_girl_supportings,
-            isApprovedSportsGirl: response.isApprovedSportsGirl,
-            q_21: response.q_21,
-            q_22: response.q_22,
-            q_23: response.q_23,
-            q_24: response.q_24,
-            final_score:
-                response.q_21 * 0.4 +
-                response.q_23 * 0.3 +
-                response.q_23 * 0.2 +
-                response.q_24 * 0.1,
+        const data: SportsGirlType = {
+            data: [],
         };
 
-        data.data.push(object);
-    }
+        for (const response of rawData) {
+            const object = {
+                id: response.id,
+                email_id: response.email_id,
+                institution_name: response.institution_name,
+                nominee_ss_girl: response.nominee_ss_girl,
+                nominee_ss_girl_sport: response.nominee_ss_girl_sport,
+                nominee_ss_girl_photo: response.nominee_ss_girl_photo,
+                nominee_ss_girl_supportings:
+                    response.nominee_ss_girl_supportings,
+                isApprovedSportsGirl: response.isApprovedSportsGirl,
+                q_21: response.q_21,
+                q_22: response.q_22,
+                q_23: response.q_23,
+                q_24: response.q_24,
+                final_score:
+                    response.q_21 * 0.4 +
+                    response.q_23 * 0.3 +
+                    response.q_23 * 0.2 +
+                    response.q_24 * 0.1,
+            };
 
-    res.status(200).json(data);
-});
+            data.data.push(object);
+        }
+
+        res.status(200).json(data);
+    }
+);
 
 /**
  * @desc Get records of sports admin approved Sports Boy form of current year
@@ -673,49 +680,51 @@ export const getSportsGirlData = asyncHandler(async (_req: Request, res: Respons
  * @method GET
  * @access Private
  */
-export const getSportsBoyData = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getSportsBoyData = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const rawData = await Sports.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { isApprovedSportsBoy: true },
-            ],
-        },
-    });
+        const rawData = await Sports.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { isApprovedSportsBoy: true },
+                ],
+            },
+        });
 
-    const data: SportsBoyType = { data: [] };
+        const data: SportsBoyType = { data: [] };
 
-    for (const response of rawData) {
-        const object = {
-            id: response.id,
-            email_id: response.email_id,
-            institution_name: response.institution_name,
-            nominee_ss_boy: response.nominee_ss_boy,
-            nominee_ss_boy_sport: response.nominee_ss_boy_sport,
-            nominee_ss_boy_photo: response.nominee_ss_boy_photo,
-            nominee_ss_boy_supportings: response.nominee_ss_boy_supportings,
-            isApprovedSportsBoy: response.isApprovedSportsBoy,
-            q_25: response.q_25,
-            q_26: response.q_26,
-            q_27: response.q_27,
-            q_28: response.q_28,
-            final_score:
-                response.q_25 * 0.4 +
-                response.q_26 * 0.3 +
-                response.q_27 * 0.2 +
-                response.q_28 * 0.1,
-        };
+        for (const response of rawData) {
+            const object = {
+                id: response.id,
+                email_id: response.email_id,
+                institution_name: response.institution_name,
+                nominee_ss_boy: response.nominee_ss_boy,
+                nominee_ss_boy_sport: response.nominee_ss_boy_sport,
+                nominee_ss_boy_photo: response.nominee_ss_boy_photo,
+                nominee_ss_boy_supportings: response.nominee_ss_boy_supportings,
+                isApprovedSportsBoy: response.isApprovedSportsBoy,
+                q_25: response.q_25,
+                q_26: response.q_26,
+                q_27: response.q_27,
+                q_28: response.q_28,
+                final_score:
+                    response.q_25 * 0.4 +
+                    response.q_26 * 0.3 +
+                    response.q_27 * 0.2 +
+                    response.q_28 * 0.1,
+            };
 
-        data.data.push(object);
+            data.data.push(object);
+        }
+
+        res.status(200).json(data);
     }
-
-    res.status(200).json(data);
-});
+);
 
 /**
  * @desc Get records of sports admin approved Sports Coach form of current year
@@ -807,24 +816,26 @@ export const getSportsCoachData = asyncHandler(
  * @method GET
  * @access Private
  */
-export const getStudentsData = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getStudentsData = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Students.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-            ],
-        },
-    });
+        const data = await Students.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                ],
+            },
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+    }
+);
 
 /**
  * @desc Get records of IEAC approved Teaching form of current year
@@ -832,25 +843,27 @@ export const getStudentsData = asyncHandler(async (_req: Request, res: Response)
  * @method GET
  * @access Private
  */
-export const getTeachingData = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getTeachingData = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await Teaching.findAll({
-        where: {
-            [Op.and]: [
-                sequelize.where(
-                    sequelize.fn("YEAR", sequelize.col("createdAt")),
-                    currentYear
-                ),
-                { ieacApproved: true },
-            ],
-        },
-    });
+        const data = await Teaching.findAll({
+            where: {
+                [Op.and]: [
+                    sequelize.where(
+                        sequelize.fn("YEAR", sequelize.col("createdAt")),
+                        currentYear
+                    ),
+                    { ieacApproved: true },
+                ],
+            },
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+    }
+);
 
 /**
  * @desc Get records of IEAC approved NonTeaching form of current year
@@ -886,20 +899,22 @@ export const getNonTeachingData = asyncHandler(
  * @method GET
  * @access Private
  */
-export const getFeedback01Data = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getFeedback01Data = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await FeedbackOne.findAll({
-        where: sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("createdAt")),
-            currentYear
-        ),
-    });
+        const data = await FeedbackOne.findAll({
+            where: sequelize.where(
+                sequelize.fn("YEAR", sequelize.col("createdAt")),
+                currentYear
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+    }
+);
 
 /**
  * @desc Get records of feedback-02 form of current uear
@@ -907,20 +922,22 @@ export const getFeedback01Data = asyncHandler(async (_req: Request, res: Respons
  * @method GET
  * @access Private
  */
-export const getFeedback02Data = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getFeedback02Data = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await FeedbackTwo.findAll({
-        where: sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("createdAt")),
-            currentYear
-        ),
-    });
+        const data = await FeedbackTwo.findAll({
+            where: sequelize.where(
+                sequelize.fn("YEAR", sequelize.col("createdAt")),
+                currentYear
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+    }
+);
 
 /**
  * @desc Get records of feedback-03 form of current uear
@@ -928,20 +945,22 @@ export const getFeedback02Data = asyncHandler(async (_req: Request, res: Respons
  * @method GET
  * @access Private
  */
-export const getFeedback03Data = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getFeedback03Data = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await FeedbackThree.findAll({
-        where: sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("createdAt")),
-            currentYear
-        ),
-    });
+        const data = await FeedbackThree.findAll({
+            where: sequelize.where(
+                sequelize.fn("YEAR", sequelize.col("createdAt")),
+                currentYear
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+    }
+);
 
 /**
  * @desc Get records of feedback-04 form of current uear
@@ -949,20 +968,22 @@ export const getFeedback03Data = asyncHandler(async (_req: Request, res: Respons
  * @method GET
  * @access Private
  */
-export const getFeedback04Data = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getFeedback04Data = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const data = await FeedbackFour.findAll({
-        where: sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("createdAt")),
-            currentYear
-        ),
-    });
+        const data = await FeedbackFour.findAll({
+            where: sequelize.where(
+                sequelize.fn("YEAR", sequelize.col("createdAt")),
+                currentYear
+            ),
+        });
 
-    res.status(200).json({
-        data: data,
-    });
-});
+        res.status(200).json({
+            data: data,
+        });
+    }
+);
 
 /**
  * Score Card Data API methods
@@ -1468,20 +1489,22 @@ export const resultsDataHandler = LogRequest(
  * @method GET
  * @access Public
  */
-export const getResultsData = asyncHandler(async (_req: Request, res: Response) => {
-    const currentYear = new Date().getFullYear();
+export const getResultsData = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const currentYear = new Date().getFullYear();
 
-    const result = await Results.findAll({
-        where: sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("createdAt")),
-            currentYear
-        ),
-    });
+        const result = await Results.findAll({
+            where: sequelize.where(
+                sequelize.fn("YEAR", sequelize.col("createdAt")),
+                currentYear
+            ),
+        });
 
-    res.status(200).json({
-        data: result,
-    });
-});
+        res.status(200).json({
+            data: result,
+        });
+    }
+);
 
 /**
  * @desc Get all users
@@ -1489,17 +1512,19 @@ export const getResultsData = asyncHandler(async (_req: Request, res: Response) 
  * @method GET
  * @access Private
  */
-export const getUsersData = asyncHandler(async (_req: Request, res: Response) => {
-    const result = await User.findAll({
-        attributes: {
-            exclude: ["password"], // why was this not excluded??
-        },
-    });
+export const getUsersData = asyncHandler(
+    async (_req: Request, res: Response) => {
+        const result = await User.findAll({
+            attributes: {
+                exclude: ["password"], // why was this not excluded??
+            },
+        });
 
-    res.status(200).json({
-        data: result,
-    });
-});
+        res.status(200).json({
+            data: result,
+        });
+    }
+);
 
 /**
  * @desc Get form preview data
@@ -1507,131 +1532,133 @@ export const getUsersData = asyncHandler(async (_req: Request, res: Response) =>
  * @method GET
  * @access Private
  */
-export const getFormPreviewData = asyncHandler(async (req: Request, res: Response) => {
-    const formType = req.params.formtype;
-    const applicationID = req.headers[applicationHeader];
+export const getFormPreviewData = asyncHandler(
+    async (req: Request, res: Response) => {
+        const formType = req.params.formtype;
+        const applicationID = req.headers[applicationHeader];
 
-    let application: MyModel | null = null;
+        let application: MyModel | null = null;
 
-    switch (formType) {
-        case "outstanding-institution":
-            application = await OutstandingInstitution.findOne({
-                where: { id: applicationID },
-            });
-            break;
+        switch (formType) {
+            case "outstanding-institution":
+                application = await OutstandingInstitution.findOne({
+                    where: { id: applicationID },
+                });
+                break;
 
-        case "research":
-            application = await Research.findOne({
-                where: { id: applicationID },
-            });
-            break;
+            case "research":
+                application = await Research.findOne({
+                    where: { id: applicationID },
+                });
+                break;
 
-        case "sports-boy":
-            application = await Sports.findOne({
-                where: { id: applicationID },
-                attributes: {
-                    include: [
-                        "id",
-                        "email_id",
-                        "institution_name",
-                        "nominee_ss_boy",
-                        "nominee_ss_boy_sport",
-                        "nominee_ss_boy_supportings",
-                        "q_25",
-                        "q_26",
-                        "q_27",
-                        "q_28",
-                    ],
-                },
-            });
-            break;
+            case "sports-boy":
+                application = await Sports.findOne({
+                    where: { id: applicationID },
+                    attributes: {
+                        include: [
+                            "id",
+                            "email_id",
+                            "institution_name",
+                            "nominee_ss_boy",
+                            "nominee_ss_boy_sport",
+                            "nominee_ss_boy_supportings",
+                            "q_25",
+                            "q_26",
+                            "q_27",
+                            "q_28",
+                        ],
+                    },
+                });
+                break;
 
-        case "sports-girl":
-            application = await Sports.findOne({
-                where: { id: applicationID },
-                attributes: {
-                    include: [
-                        "id",
-                        "email_id",
-                        "institution_name",
-                        "nominee_ss_girl",
-                        "nominee_ss_girl_sport",
-                        "nominee_ss_girl_photo",
-                        "nominee_ss_girl_supportings",
-                        "q_21",
-                        "q_22",
-                        "q_23",
-                        "q_24",
-                    ],
-                },
-            });
+            case "sports-girl":
+                application = await Sports.findOne({
+                    where: { id: applicationID },
+                    attributes: {
+                        include: [
+                            "id",
+                            "email_id",
+                            "institution_name",
+                            "nominee_ss_girl",
+                            "nominee_ss_girl_sport",
+                            "nominee_ss_girl_photo",
+                            "nominee_ss_girl_supportings",
+                            "q_21",
+                            "q_22",
+                            "q_23",
+                            "q_24",
+                        ],
+                    },
+                });
 
-            break;
+                break;
 
-        case "sports-coach":
-            application = await Sports.findOne({
-                where: { id: applicationID },
-                attributes: {
-                    include: [
-                        "id",
-                        "email_id",
-                        "institution_name",
-                        "nominee_inspiring_coach",
-                        "nominee_coach_comments",
-                        "nominee_coach_photo",
-                        "nominee_coach_supportings",
-                        "q_01",
-                        "q_02",
-                        "q_03",
-                        "q_04",
-                        "q_05",
-                        "q_06",
-                        "q_07",
-                        "q_08",
-                        "q_09",
-                        "q_10",
-                        "q_11",
-                        "q_12",
-                        "q_13",
-                        "q_14",
-                        "q_15",
-                        "q_16",
-                        "q_17",
-                        "q_18",
-                        "q_19",
-                        "q_20",
-                    ],
-                },
-            });
+            case "sports-coach":
+                application = await Sports.findOne({
+                    where: { id: applicationID },
+                    attributes: {
+                        include: [
+                            "id",
+                            "email_id",
+                            "institution_name",
+                            "nominee_inspiring_coach",
+                            "nominee_coach_comments",
+                            "nominee_coach_photo",
+                            "nominee_coach_supportings",
+                            "q_01",
+                            "q_02",
+                            "q_03",
+                            "q_04",
+                            "q_05",
+                            "q_06",
+                            "q_07",
+                            "q_08",
+                            "q_09",
+                            "q_10",
+                            "q_11",
+                            "q_12",
+                            "q_13",
+                            "q_14",
+                            "q_15",
+                            "q_16",
+                            "q_17",
+                            "q_18",
+                            "q_19",
+                            "q_20",
+                        ],
+                    },
+                });
 
-            break;
+                break;
 
-        case "students":
-            application = await Students.findOne({
-                where: { id: applicationID },
-            });
-            break;
+            case "students":
+                application = await Students.findOne({
+                    where: { id: applicationID },
+                });
+                break;
 
-        case "teaching":
-            application = await Teaching.findOne({
-                where: { id: applicationID },
-            });
-            break;
+            case "teaching":
+                application = await Teaching.findOne({
+                    where: { id: applicationID },
+                });
+                break;
 
-        case "non-teaching":
-            application = await NonTeaching.findOne({
-                where: { id: applicationID },
-            });
-            break;
+            case "non-teaching":
+                application = await NonTeaching.findOne({
+                    where: { id: applicationID },
+                });
+                break;
 
-        default:
-            break;
+            default:
+                break;
+        }
+
+        res.status(200).json({
+            data: application,
+        });
     }
-
-    res.status(200).json({
-        data: application,
-    });
-});
+);
 
 /**
  * @desc Get Jury summary data for teaching
