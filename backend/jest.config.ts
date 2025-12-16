@@ -12,7 +12,7 @@ const config: Config = {
     clearMocks: true,
 
     transform: {
-        "^.+\\.ts$": ["ts-jest", { isolatedModules: true }],
+        "^.+\\.ts$": "ts-jest",
     },
 
     moduleNameMapper: {

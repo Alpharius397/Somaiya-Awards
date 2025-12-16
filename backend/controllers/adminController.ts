@@ -44,6 +44,7 @@ import {
 } from "@/shared/constants";
 import { AuthLogger } from "@/middleware/logger";
 import { type NonTeachingJuryData } from "@/shared/types/controllers/admin";
+import { getLastDate } from "@/utils/lastDate";
 
 function textToScore(text: string) {
     switch (text) {
@@ -133,22 +134,6 @@ export const getCounts = asyncHandler(async (_req: Request, res: Response) => {
 
     res.status(200).json({ data: countData });
 });
-
-/**
- * Returns the date, `days` days ago.
- * Eg: days = 15, returns the date 15 days ago
- */
-function getLastDate(days: number) {
-    let currentYear = new Date().getFullYear(),
-        currentMonth = new Date().getMonth(),
-        currentDate = new Date().getDate() - days;
-
-    if (currentDate < 1) {
-        currentMonth--; // year changes accordingly, but not month
-    }
-
-    return new Date(currentYear, currentMonth, currentDate);
-}
 
 /**
  * NOTE: raw: false, gives the class back. To access any new aggregation field use the dataValues field
