@@ -220,14 +220,14 @@ export default function Forms(props: FormProps) {
     }, [data, props.data]);
 
     return (
-        <div className="">
+        <div>
             <FormStages
                 stages={props.stages}
                 onClick={handleFormStageChange}
                 selected={current}
             />
 
-            <div className="border-black border-[1] mx-auto rounded-xl shadow-2xl bg-0xFAF9F6 p-3 px-[5rem] w-[70%]">
+            <div className="border-black border-[1] mx-auto rounded-xl shadow-2xl bg-0xFAF9F6 p-3 px-[4rem] w-[70%]">
                 <div className="w-full text-black text-center py-5  font-Roboto font-semibold text-2xl">
                     {pageHeaders[current]}
                 </div>

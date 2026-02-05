@@ -227,7 +227,7 @@ function Field({
                             className={`focus:outline-none color-red-400 }`}
                         />
                         {value instanceof File && (
-                            <p className="p-2">
+                            <p className="py-2">
                                 {objectURL ? (
                                     <>
                                         <span className="text-red-700 font-semibold font-Poppins">

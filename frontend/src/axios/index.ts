@@ -5,7 +5,7 @@ import { LOCAL_DEVELOPMENT } from "@/constants";
 
 let url: string;
 
-if (LOCAL_DEVELOPMENT) {
+if (LOCAL_DEVELOPMENT && !import.meta.env.PROD) {
     url = "http://localhost:5001";
 } else {
     url = "https://apisomaiyaawards.somaiya.edu";

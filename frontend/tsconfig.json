@@ -23,6 +23,9 @@
     },
     "rootDirs": [
       "./src"
+    ],
+    "types": [
+      "vite/client"
     ]
   },
   "include": [

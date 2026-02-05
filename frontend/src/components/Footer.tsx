@@ -67,7 +67,10 @@ function Footer() {
                                 </a>
                             </td>
                             <td>
-                                <a href="" target="_blank">
+                                <a
+                                    href="https://www.linkedin.com/in/aarti-sahitya-01175b128/"
+                                    target="_blank"
+                                >
                                     Ms. Aarti Sahitya
                                 </a>
                             </td>
@@ -75,7 +78,6 @@ function Footer() {
                     </table>
                     <br></br>
                     <h2 className="font-bold text-lg">Developed by</h2>
-                    {/* <br></br> */}
                     <div className="grid grid-cols-1  md:grid-cols-4 gap-6 my-2">
                         <div>
                             <a
@@ -93,7 +95,7 @@ function Footer() {
                                 Hitanshu Gandhi
                             </a>
                         </div>
-                        <div className=" ">
+                        <div>
                             <a
                                 href="https://linkedin.com/in/riya-kapadia-a571401bb/"
                                 target="_blank"
@@ -102,7 +104,7 @@ function Footer() {
                             </a>
                         </div>
 
-                        <div className=" ">
+                        <div>
                             <a
                                 href="https://linkedin.com/in/jash-joshi01/"
                                 target="_blank"
@@ -116,7 +118,10 @@ function Footer() {
                     {/* <br></br> */}
                     <div className="grid grid-cols-1  md:grid-cols-3 gap-6 my-2">
                         <div>
-                            <a href="" target="_blank">
+                            <a
+                                href="https://www.linkedin.com/in/aryan-mandke-2a16ba25a/"
+                                target="_blank"
+                            >
                                 Aryan Mandke
                             </a>
                         </div>
@@ -126,12 +131,18 @@ function Footer() {
                             </a>
                         </div>
                         <div>
-                            <a href="" target="_blank">
+                            <a
+                                href="https://www.linkedin.com/in/pranavlohar/"
+                                target="_blank"
+                            >
                                 Pranav Lohar
                             </a>
                         </div>
                         <div>
-                            <a href="" target="_blank">
+                            <a
+                                href="https://www.linkedin.com/in/pratul-jagtap-3636a7256/"
+                                target="_blank"
+                            >
                                 Pratul Jagtap
                             </a>
                         </div>
@@ -141,7 +152,10 @@ function Footer() {
                             </a>
                         </div>
                         <div>
-                            <a href="" target="_blank">
+                            <a
+                                href="https://www.linkedin.com/in/raj-m-7007b72a7/"
+                                target="_blank"
+                            >
                                 Raj More
                             </a>
                         </div>
