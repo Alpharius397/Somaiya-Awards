@@ -14,7 +14,8 @@
     "test": "npm run test -w backend",
     "build:test": "npm run build:test --workspaces",
     "build": "npm run build -w frontend",
-    "dev": "npm run dev -w frontend && npm run dev --w backend"
+    "dev": "npm run dev -w frontend && npm run dev --w backend",
+    "lint": "npm run lint -w frontend"
   },
   "dependencies": {
     "typescript": "^5.9.3",

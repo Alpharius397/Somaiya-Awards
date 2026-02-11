@@ -9,6 +9,7 @@ export type BaseFormEntry = {
 
 export type Validate = {
     /** Just assume this is a zod Validator */
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     validator: any;
 };
 

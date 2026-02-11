@@ -18,7 +18,6 @@ import {
     columns11,
     columns12,
 } from "@/data/AnalysisData/ADMIN/structure";
-import { type NonTeachingJuryData } from "@/shared/types/controllers/admin";
 import xlsx from "json-as-xlsx";
 import Axios from "@/axios";
 import {
@@ -155,7 +154,7 @@ export default function Responses() {
 
                     xlsx(data, settings);
                 } else if (path === "non-teaching") {
-                    const content = res.data as NonTeachingJuryData;
+                    const content = res.data;
                     const data = [
                         {
                             sheet: "Outstanding Emp Inst",
@@ -246,7 +245,7 @@ export default function Responses() {
                         writeOptions: {},
                         RTL: false,
                     };
-                    //@ts-ignore
+
                     xlsx(data, settings);
                 }
             })

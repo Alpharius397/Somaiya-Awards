@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PasswordValid from "@/zod/Forms/Password";
 import { csvReader } from "@/zod/Auth/register";
+/** No .d.ts for this */
 import { Dropzone, FileMosaic } from "@files-ui/react";
 import Papa from "papaparse";
 import Axios, { DATA_URL } from "@/axios";
@@ -16,7 +17,7 @@ import { Download } from "lucide-react";
 
 type DropZoneFile = {
     file: File;
-    id: Number;
+    id: number;
     name: string;
     size: number;
     type: "text/csv";
