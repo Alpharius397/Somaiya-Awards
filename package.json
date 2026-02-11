@@ -1,0 +1,27 @@
+{
+  "name": "somaiya-awards",
+  "version": "1.0.0",
+  "description": "Main root of the somaiya-awards system",
+  "license": "ISC",
+  "author": "Alpharius397",
+  "type": "commonjs",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "test": "npm run test -w backend",
+    "build:test": "npm run build:test --workspaces",
+    "build": "npm run build -w frontend",
+    "dev": "npm run dev -w frontend && npm run dev --w backend"
+  },
+  "dependencies": {
+    "typescript": "^5.9.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0"
+  }
+}

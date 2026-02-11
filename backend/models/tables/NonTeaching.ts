@@ -1,3 +1,4 @@
+import { InstitutesType } from "@/shared/constants";
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
 interface NonTeachingAttributes {
@@ -5,7 +6,7 @@ interface NonTeachingAttributes {
     email_id: string;
     staff_name: string;
     award_category: string;
-    institution_name: string;
+    institution_name: InstitutesType;
     department: string;
     designation: string;
     appointment_date: Date;
@@ -37,8 +38,8 @@ interface NonTeachingAttributes {
     q_24: number;
     proof_docs: string;
     nominee_photograph: string;
-    ieacApproved: boolean;
-    hr_approved: boolean;
+    ieacApproved: boolean | null;
+    hr_approved: boolean | null;
     ieac_scoreA: number | null;
     ieac_scoreB: number | null;
     ieacApprovedFile: string | null;
@@ -46,16 +47,15 @@ interface NonTeachingAttributes {
     updatedAt?: Date;
 }
 
-interface NonTeachingCreationAttributes
-    extends Optional<
-        NonTeachingAttributes,
-        | "id"
-        | "createdAt"
-        | "updatedAt"
-        | "ieac_scoreA"
-        | "ieac_scoreB"
-        | "ieacApprovedFile"
-    > {}
+interface NonTeachingCreationAttributes extends Optional<
+    NonTeachingAttributes,
+    | "id"
+    | "createdAt"
+    | "updatedAt"
+    | "ieac_scoreA"
+    | "ieac_scoreB"
+    | "ieacApprovedFile"
+> {}
 
 export class NonTeaching
     extends Model<NonTeachingAttributes, NonTeachingCreationAttributes>
@@ -65,7 +65,7 @@ export class NonTeaching
     declare email_id: string;
     declare staff_name: string;
     declare award_category: string;
-    declare institution_name: string;
+    declare institution_name: InstitutesType;
     declare department: string;
     declare designation: string;
     declare appointment_date: Date;
@@ -97,8 +97,8 @@ export class NonTeaching
     declare q_24: number;
     declare proof_docs: string;
     declare nominee_photograph: string;
-    declare ieacApproved: boolean;
-    declare hr_approved: boolean;
+    declare ieacApproved: boolean | null;
+    declare hr_approved: boolean | null;
     declare ieac_scoreA: number | null;
     declare ieac_scoreB: number | null;
     declare ieacApprovedFile: string | null;

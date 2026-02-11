@@ -2,6 +2,7 @@ import z from "zod";
 import {
     arrayChoice,
     email,
+    institute,
     phoneNumber,
     somaiyaMail,
     validBoolean,
@@ -10,13 +11,13 @@ import {
     validString,
     validYear,
 } from "@/shared/zod";
-import { OutstandingInstList, Institutes } from "@/shared/constants";
+import { OutstandingInstList } from "@/shared/constants";
 import { serverTextArea } from "@/zod";
 
 export const OutstandingInstitutionForm = z.object({
     email_id: email,
     nomination_category: arrayChoice(OutstandingInstList),
-    institution_name: arrayChoice(Institutes),
+    institution_name: institute,
     established_In: validYear,
     head_of_institution: validString,
     hoi_designation: validString,

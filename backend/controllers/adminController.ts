@@ -40,6 +40,7 @@ import {
     Group,
     Groups,
     Institutes,
+    InstitutesType,
     NonTeachingAward,
 } from "@/shared/constants";
 import { AuthLogger } from "@/middleware/logger";
@@ -325,7 +326,10 @@ export const getInstitutionWiseCount = asyncHandler(
 
         //process th data to extract just dates
 
-        let countObject: instituteCountType = {};
+        //@ts-expect-error This will be initialized later
+        const countObject: {
+            [key in InstitutesType]: instituteCountType;
+        } = {};
 
         for (const i of Institutes) {
             countObject[i] = {
@@ -343,7 +347,8 @@ export const getInstitutionWiseCount = asyncHandler(
             const institute = data.institution_name;
 
             if (!countObject.hasOwnProperty(institute)) continue;
-            countObject[institute].institution_form += data.formsFilled;
+            countObject[institute as InstitutesType].institution_form +=
+                data.formsFilled;
         }
 
         // research form Counter
@@ -352,7 +357,8 @@ export const getInstitutionWiseCount = asyncHandler(
             const institute = data.institution_name;
 
             if (!countObject.hasOwnProperty(institute)) continue;
-            countObject[institute].research_form += data.formsFilled;
+            countObject[institute as InstitutesType].research_form +=
+                data.formsFilled;
         }
         // sports form Counter
 
@@ -360,7 +366,8 @@ export const getInstitutionWiseCount = asyncHandler(
             const institute = data.institution_name;
 
             if (!countObject.hasOwnProperty(institute)) continue;
-            countObject[institute].sports_form += data.formsFilled;
+            countObject[institute as InstitutesType].sports_form +=
+                data.formsFilled;
         }
 
         // teaching form Counter
@@ -369,7 +376,8 @@ export const getInstitutionWiseCount = asyncHandler(
             const institute = data.institution_name;
 
             if (!countObject.hasOwnProperty(institute)) continue;
-            countObject[institute].teaching_form += data.formsFilled;
+            countObject[institute as InstitutesType].teaching_form +=
+                data.formsFilled;
         }
 
         // non teaching form Counter
@@ -378,7 +386,8 @@ export const getInstitutionWiseCount = asyncHandler(
             const institute = data.institution_name;
 
             if (!countObject.hasOwnProperty(institute)) continue;
-            countObject[institute].non_teaching_form += data.formsFilled;
+            countObject[institute as InstitutesType].non_teaching_form +=
+                data.formsFilled;
         }
 
         // students form counter
@@ -387,15 +396,11 @@ export const getInstitutionWiseCount = asyncHandler(
             const institute = data.institution_name;
 
             if (!countObject.hasOwnProperty(institute)) continue;
-            countObject[institute].students_form += data.formsFilled;
+            countObject[institute as InstitutesType].students_form +=
+                data.formsFilled;
         }
-        let array: instituteCountArrayType = { data: [] };
 
-        Object.keys(countObject).forEach((key) => {
-            array.data.push(countObject[key]);
-        });
-
-        res.status(200).json(array);
+        res.status(200).json({ data: Object.values(countObject) });
     }
 );
 

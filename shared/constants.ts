@@ -56,7 +56,7 @@ export const Groups = {
     "Dr. Shantilal K. Somaiya School of Commerce and Business Studies": [2],
     "K. J. Somaiya Medical College": [3],
     "K. J. Somaiya Hospital": [3],
-} as const;
+};
 
 export type Group = (typeof Groups)[keyof typeof Groups];
 export type InstitutesType = keyof typeof Groups;

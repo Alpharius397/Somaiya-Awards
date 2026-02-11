@@ -4,9 +4,8 @@
  */
 export function getLastDate(days: number, date?: Date) {
     const current = date || new Date();
-    const currentYear = current.getFullYear(),
-        currentMonth = current.getMonth(),
-        currentDate = current.getDate() - days;
+    
+    current.setDate(current.getDate() - days);
 
-    return new Date(currentYear, currentMonth, currentDate);
+    return current;
 }

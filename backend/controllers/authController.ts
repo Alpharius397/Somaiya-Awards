@@ -252,6 +252,13 @@ export const changePassword = LogRequest(
             throw new Error("Unauthorized access!");
         }
 
+            if (Array.isArray(token)) {
+                res.status(400).json({
+                    error: "Received Multiple Tokens",
+                });
+                return;
+            }
+
         const secret = process.env.JWT_RESET_SECRET + user.password;
         const verify = jwt.verify(token, secret);
 

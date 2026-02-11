@@ -13,6 +13,7 @@ import { FeedbackTwo } from "@/models/tables/FeedbackTwo";
 import { FeedbackThree } from "@/models/tables/FeedbackThree";
 import { FeedbackFour } from "@/models/tables/FeedbackFour";
 import { FeedbackFive } from "@/models/tables/FeedbackFive";
+import { InstitutesType } from "@/shared/constants";
 
 export const countAllResponse = z.object({
     institutionFormCount: validNumber,
@@ -47,13 +48,13 @@ export const instituteCount = z.record(
 );
 
 export interface instituteCountType {
-    institution_name?: string;
-    institution_form?: number;
-    research_form?: number;
-    sports_form?: number;
-    teaching_form?: number;
-    non_teaching_form?: number;
-    students_form?: number;
+    institution_name: string;
+    institution_form: number;
+    research_form: number;
+    sports_form: number;
+    teaching_form: number;
+    non_teaching_form: number;
+    students_form: number;
 }
 
 export const instituteCountArray = z.object({
@@ -103,7 +104,7 @@ export type NonTeachingJuryScore = {
 };
 
 export type InstituteCount = {
-    institution_name: string;
+    institution_name: InstitutesType;
     formsFilled: number;
 };
 
@@ -178,7 +179,7 @@ export const SportsGirl = z.object({
             nominee_ss_girl_sport: validString,
             nominee_ss_girl_photo: validString,
             nominee_ss_girl_supportings: validString,
-            isApprovedSportsGirl: validBoolean,
+            isApprovedSportsGirl: validBoolean.nullable(),
             q_21: validNumber,
             q_22: validNumber,
             q_23: validNumber,
@@ -200,7 +201,7 @@ export const SportsBoy = z.object({
             nominee_ss_boy_sport: validString,
             nominee_ss_boy_photo: validString,
             nominee_ss_boy_supportings: validString,
-            isApprovedSportsBoy: validBoolean,
+            isApprovedSportsBoy: validBoolean.nullable(),
             q_25: validNumber,
             q_26: validNumber,
             q_27: validNumber,
@@ -222,7 +223,7 @@ export const Coach = z.object({
             nominee_coach_comments: validString,
             nominee_coach_photo: validString,
             nominee_coach_supportings: validString,
-            isApprovedCoach: validBoolean,
+            isApprovedCoach: validBoolean.nullable(),
             q_01: validNumber,
             q_02: validNumber,
             q_03: validNumber,

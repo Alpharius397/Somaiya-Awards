@@ -1,10 +1,11 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 import { Role } from "@/shared/types/role";
+import { InstitutesType } from "@/shared/constants";
 
 interface UserAttributes {
     id: number;
     email_id: string;
-    institution: string | null;
+    institution: InstitutesType | null;
     password: string;
     role: Role | null;
     createdAt?: Date;
@@ -23,7 +24,7 @@ export class User
 {
     declare id: number;
     declare email_id: string;
-    declare institution: string | null;
+    declare institution: InstitutesType | null;
     declare password: string;
     declare role: Role | null;
     declare readonly createdAt?: Date;

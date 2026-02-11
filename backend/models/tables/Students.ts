@@ -1,3 +1,4 @@
+import { InstitutesType } from "@/shared/constants";
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
 interface StudentsAttributes {
@@ -6,17 +7,19 @@ interface StudentsAttributes {
     student_name: string;
     students_class: string;
     course: string;
-    institution_name: string;
+    institution_name: InstitutesType;
     nomination_category: string;
     recommendation_note: string;
     supportings: string;
-    approved: boolean;
-    createdAt?: Date,
-    updatedAt?: Date,
+    approved: boolean | null;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-interface StudentCreationAttributes
-    extends Optional<StudentsAttributes, "id" | "createdAt" | "updatedAt"> {}
+interface StudentCreationAttributes extends Optional<
+    StudentsAttributes,
+    "id" | "createdAt" | "updatedAt"
+> {}
 
 export class Students
     extends Model<StudentsAttributes, StudentCreationAttributes>
@@ -27,11 +30,11 @@ export class Students
     declare student_name: string;
     declare students_class: string;
     declare course: string;
-    declare institution_name: string;
+    declare institution_name: InstitutesType;
     declare nomination_category: string;
     declare recommendation_note: string;
     declare supportings: string;
-    declare approved: boolean;
+    declare approved: boolean | null;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }

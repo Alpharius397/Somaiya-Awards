@@ -6,7 +6,7 @@ export const teachingIEACScore = z.object({
     ieac_scoreB: validNumberRange(1, 10),
     ieac_scoreC: validNumberRange(1, 10),
     ieacApproved: validBoolean.optional().nullable(),
-    applicationID: validNumber.optional().nullable(),
+    applicationID: validNumber,
 });
 
 export type TeachingIEACScoreType = z.infer<typeof teachingIEACScore>;

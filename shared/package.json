@@ -4,15 +4,10 @@
   "description": "Shared Library for Somaiya Awards System",
   "author": "Alpharius397",
   "license": "ISC",
-  "dependencies": {
-    "zod": "^4.1.12"
-  },
   "scripts": {
     "build:test": "npx tsc -p ./tsconfig.json"
   },
   "devDependencies": {
-    "node": "^24.12.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "ts-node": "^10.9.2"
   }
 }

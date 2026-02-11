@@ -2,6 +2,7 @@ import z from "zod";
 import {
     arrayChoice,
     email,
+    institute,
     lastDate,
     phoneNumber,
     somaiyaMail,
@@ -9,14 +10,14 @@ import {
     validNumber,
     validString,
 } from "@/shared/zod";
-import { awards, Institutes } from "@/shared/constants";
+import { awards } from "@/shared/constants";
 import { serverTextArea } from "@/zod";
 
 export const TeachingValidator = {
     email_id: email,
     faculty_name: validString,
     awards_category: arrayChoice(awards),
-    institution_name: arrayChoice(Institutes),
+    institution_name: institute,
     department: validString,
     designation: validString,
     date_of_appointment: lastDate(2), // Remember, its always greater than or equal to 2

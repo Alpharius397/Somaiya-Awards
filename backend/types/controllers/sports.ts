@@ -1,12 +1,14 @@
+import { InstitutesType } from "@/shared/constants";
+
 export type GirlData = {
     id: number;
     email_id: string;
-    institute_name: string;
+    institute_name: InstitutesType;
     nominee_ss_girl: string;
     nominee_ss_girl_sport: string;
     nominee_ss_girl_photo: string;
     nominee_ss_girl_supportings: string;
-    isApprovedSportsGirl: boolean;
+    isApprovedSportsGirl: boolean | null;
     q_21: number;
     q_22: number;
     q_23: number;
@@ -17,12 +19,12 @@ export type GirlData = {
 export type BoyData = {
     id: number;
     email_id: string;
-    institute_name: string;
+    institute_name: InstitutesType;
     nominee_ss_boy: string;
     nominee_ss_boy_sport: string;
     nominee_ss_boy_photo: string;
     nominee_ss_boy_supportings: string;
-    isApprovedSportsBoy: boolean;
+    isApprovedSportsBoy: boolean | null;
     q_25: number;
     q_26: number;
     q_27: number;
@@ -33,12 +35,12 @@ export type BoyData = {
 export type CoachData = {
     id: number;
     email_id: string;
-    institute_name: string;
+    institute_name: InstitutesType;
     nominee_inspiring_coach: string;
     nominee_coach_comments: string;
     nominee_coach_photo: string;
     nominee_coach_supportings: string;
-    isApprovedCoach: boolean;
+    isApprovedCoach: boolean | null;
     q_01: number;
     q_02: number;
     q_03: number;

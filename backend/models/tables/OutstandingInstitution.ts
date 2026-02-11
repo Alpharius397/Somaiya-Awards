@@ -1,10 +1,11 @@
+import { InstitutesType } from "@/shared/constants";
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
 interface OutstandingInstitutionAttributes {
     id: number;
     email_id: string;
     nomination_category: string;
-    institution_name: string;
+    institution_name: InstitutesType;
     established_In: string;
     head_of_institution: string;
     hoi_designation: string;
@@ -51,14 +52,16 @@ interface OutstandingInstitutionAttributes {
     q_37: string;
     q_38: string;
     supportings: string;
-    ieac_approved: boolean;
-    hr_approved: boolean;
-    createdAt?: Date,
-    updatedAt?: Date,
+    ieac_approved: boolean | null;
+    hr_approved: boolean | null;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-interface OutstandingInstitutionCreationAttributes
-    extends Optional<OutstandingInstitutionAttributes, "id" | "createdAt" | "updatedAt"> {}
+interface OutstandingInstitutionCreationAttributes extends Optional<
+    OutstandingInstitutionAttributes,
+    "id" | "createdAt" | "updatedAt"
+> {}
 
 export class OutstandingInstitution
     extends Model<
@@ -70,7 +73,7 @@ export class OutstandingInstitution
     declare id: number;
     declare email_id: string;
     declare nomination_category: string;
-    declare institution_name: string;
+    declare institution_name: InstitutesType;
     declare established_In: string;
     declare head_of_institution: string;
     declare hoi_designation: string;
@@ -117,8 +120,8 @@ export class OutstandingInstitution
     declare q_37: string;
     declare q_38: string;
     declare supportings: string;
-    declare ieac_approved: boolean;
-    declare hr_approved: boolean;
+    declare ieac_approved: boolean | null;
+    declare hr_approved: boolean | null;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }

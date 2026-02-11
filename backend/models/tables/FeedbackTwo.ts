@@ -1,9 +1,10 @@
+import { InstitutesType } from "@/shared/constants";
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
 interface FeedbackTwoAttributes {
     id: number;
     rater_name: string;
-    institution_name: string;
+    institution_name: InstitutesType;
     department_name: string;
     designation: string;
     somaiya_mail_id: string;
@@ -20,12 +21,14 @@ interface FeedbackTwoAttributes {
     q_08: string;
     q_09: string;
     nomination_reason: string;
-    createdAt?: Date,
-    updatedAt?: Date,
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-interface FeedbackTwoCreationAttributes
-    extends Optional<FeedbackTwoAttributes, "id" | "createdAt" | "updatedAt"> {}
+interface FeedbackTwoCreationAttributes extends Optional<
+    FeedbackTwoAttributes,
+    "id" | "createdAt" | "updatedAt"
+> {}
 
 export class FeedbackTwo
     extends Model<FeedbackTwoAttributes, FeedbackTwoCreationAttributes>
@@ -33,7 +36,7 @@ export class FeedbackTwo
 {
     declare id: number;
     declare rater_name: string;
-    declare institution_name: string;
+    declare institution_name: InstitutesType;
     declare department_name: string;
     declare designation: string;
     declare somaiya_mail_id: string;

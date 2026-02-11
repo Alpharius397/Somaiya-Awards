@@ -1,9 +1,10 @@
+import { InstitutesType } from "@/shared/constants";
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
 interface SportsAttributes {
     id: number;
     email_id: string;
-    institution_name: string;
+    institution_name: InstitutesType;
     nominee_inspiring_coach: string;
     nominee_coach_comments: string;
     nominee_coach_photo: string;
@@ -28,7 +29,7 @@ interface SportsAttributes {
     q_18: number;
     q_19: number;
     q_20: number;
-    isApprovedCoach: boolean;
+    isApprovedCoach: boolean | null;
     nominee_ss_girl: string;
     nominee_ss_girl_sport: string;
     nominee_ss_girl_photo: string;
@@ -37,7 +38,7 @@ interface SportsAttributes {
     q_22: number;
     q_23: number;
     q_24: number;
-    isApprovedSportsGirl: boolean;
+    isApprovedSportsGirl: boolean | null;
     nominee_ss_boy: string;
     nominee_ss_boy_sport: string;
     nominee_ss_boy_photo: string;
@@ -46,13 +47,15 @@ interface SportsAttributes {
     q_26: number;
     q_27: number;
     q_28: number;
-    isApprovedSportsBoy: boolean;
-    createdAt?: Date,
-    updatedAt?: Date,
-
+    isApprovedSportsBoy: boolean | null;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-interface StudentCreationAttributes extends Optional<SportsAttributes, "id" | "createdAt" | "updatedAt"> {}
+interface StudentCreationAttributes extends Optional<
+    SportsAttributes,
+    "id" | "createdAt" | "updatedAt"
+> {}
 
 export class Sports
     extends Model<SportsAttributes, StudentCreationAttributes>
@@ -60,7 +63,7 @@ export class Sports
 {
     declare id: number;
     declare email_id: string;
-    declare institution_name: string;
+    declare institution_name: InstitutesType;
     declare nominee_inspiring_coach: string;
     declare nominee_coach_comments: string;
     declare nominee_coach_photo: string;
@@ -85,7 +88,7 @@ export class Sports
     declare q_18: number;
     declare q_19: number;
     declare q_20: number;
-    declare isApprovedCoach: boolean;
+    declare isApprovedCoach: boolean | null;
     declare nominee_ss_girl: string;
     declare nominee_ss_girl_sport: string;
     declare nominee_ss_girl_photo: string;
@@ -94,7 +97,7 @@ export class Sports
     declare q_22: number;
     declare q_23: number;
     declare q_24: number;
-    declare isApprovedSportsGirl: boolean;
+    declare isApprovedSportsGirl: boolean | null;
     declare nominee_ss_boy: string;
     declare nominee_ss_boy_sport: string;
     declare nominee_ss_boy_photo: string;
@@ -103,7 +106,7 @@ export class Sports
     declare q_26: number;
     declare q_27: number;
     declare q_28: number;
-    declare isApprovedSportsBoy: boolean;
+    declare isApprovedSportsBoy: boolean | null;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }

@@ -1,10 +1,11 @@
+import { InstitutesType } from "@/shared/constants";
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
 interface ResearchAttributes {
     id: number;
     faculty_name: string;
     designation: string;
-    institution_name: string;
+    institution_name: InstitutesType;
     department: string;
     tenure: string;
     org_articles_count: number;
@@ -36,14 +37,16 @@ interface ResearchAttributes {
     national_awards_won_count: number;
     evidence_of_research: string;
     evidence_of_data_provided: string;
-    confirmation_of_trueData: string;
-    approved: boolean;
-    createdAt?: Date,
-    updatedAt?: Date,
+    confirmation_of_trueData: string | null;
+    approved: boolean | null;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-interface ResearchCreationAttributes
-    extends Optional<ResearchAttributes, "id" | "createdAt" | "updatedAt"> {}
+interface ResearchCreationAttributes extends Optional<
+    ResearchAttributes,
+    "id" | "createdAt" | "updatedAt"
+> {}
 
 export class Research
     extends Model<ResearchAttributes, ResearchCreationAttributes>
@@ -52,7 +55,7 @@ export class Research
     declare id: number;
     declare faculty_name: string;
     declare designation: string;
-    declare institution_name: string;
+    declare institution_name: InstitutesType;
     declare department: string;
     declare tenure: string;
     declare org_articles_count: number;
@@ -84,8 +87,8 @@ export class Research
     declare national_awards_won_count: number;
     declare evidence_of_research: string;
     declare evidence_of_data_provided: string;
-    declare confirmation_of_trueData: string;
-    declare approved: boolean;
+    declare confirmation_of_trueData: string | null;
+    declare approved: boolean | null;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }

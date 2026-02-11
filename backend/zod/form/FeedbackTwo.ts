@@ -1,6 +1,7 @@
 import z from "zod";
 import {
     arrayChoice,
+    institute,
     phoneNumber,
     somaiyaMail,
     validString,
@@ -10,7 +11,7 @@ import { serverTextArea } from "@/zod";
 
 export const FeedbackTwoForm = z.object({
     rater_name: validString,
-    institution_name: validString,
+    institution_name: institute,
     department_name: validString,
     designation: validString,
     somaiya_mail_id: somaiyaMail,
